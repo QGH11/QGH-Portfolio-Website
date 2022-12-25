@@ -1,0 +1,124 @@
+/* Base Setting  */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Georgia', 'serif';
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    overflow: hidden;
+}
+
+:root {
+    --body-bg: #f6f3ed;
+    --app-bg: #f7f3ec;
+    --menu-bg: #fff5ee;
+    --menu-hover-bg: #cc6666;
+    --menu-item-hover-bg: #ffffff;
+    --menu-a: #090c12;
+
+    --bt-border: #738276;
+    --bt-bg: #738276;
+
+    --room-bg: #f5f3ee;
+    --room-bg-hover: #cc6666;
+
+    --chat-me-bg: #1f8eed;
+    --chat-bg: #f2f2f2;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    font-size: 14px;
+    font-family: 'Georgia', 'serif';
+    /* background-image: linear-gradient( 95.2deg, var(--body-bg) 26.8%, rgba(192,229,246,1) 64% ); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button{
+    width:20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    padding: 10px 25px;
+    border: 2px solid var(--bt-border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    background: var(--bt-bg);
+}
+
+    button:hover {
+        color: #090c12;
+        background: rgba(255,255,255,0.35);
+        transition: all .4s ease;
+        -webkit-transition: all .4s ease; 
+    }
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Navbar --------------------- */
+.navBar {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1.5rem 2rem;
+}
+
+.nav-logo {
+    letter-spacing: 0.2rem;
+    font-size: large;
+    font-weight: 600;
+}
+
+.nav-logo a{
+    color: #cc6666;
+}
+
+.nav-logo a:hover{
+    color: black;
+}
+
+.menu-container {
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.menu li {
+    padding-left: 1rem;
+}
+
+.menu li a {
+    color: #cc6666;
+}
+
+.menu li a:hover {
+    color: black;
+}
+
+
+/* Navbar End------------------ */
