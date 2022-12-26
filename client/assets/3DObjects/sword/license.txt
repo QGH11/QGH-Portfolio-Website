@@ -1,0 +1,11 @@
+Model Information:
+* title:	Sword
+* source:	https://sketchfab.com/3d-models/sword-d6944e586ade41b9b75c8ca03d1e1400
+* author:	coin911 (https://sketchfab.com/coin911)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Sword" (https://sketchfab.com/3d-models/sword-d6944e586ade41b9b75c8ca03d1e1400) by coin911 (https://sketchfab.com/coin911) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
