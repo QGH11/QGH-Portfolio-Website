@@ -1,18 +1,18 @@
 
 /*  */
 class IntroAnimation {
-    constructor(scene, camera, renderer, sword) {
+    constructor(scene, camera, renderer, swordScene) {
         this.scene = scene;
         this.camera = camera;   
         this.renderer = renderer;
-        this.initializeScene();
+        this.initializeCoinScene();
 
         this.coin1 = null;
         this.coin2 = null;
 
-        this.sword = sword;
+        this.swordScene = swordScene;
 
-        // this.coin1Control = new THREE_ADDONS.OrbitControls(this.camera, this.renderer.domElement);
+        this.control = new THREE_ADDONS.OrbitControls(this.camera, this.renderer.domElement);
 
         // dynamically changed scene sizes when window resizes
         window.addEventListener( 'resize', onWindowResize, false );
@@ -25,26 +25,29 @@ class IntroAnimation {
         }
     }
 
-    initializeScene() {
+    initializeCoinScene() {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        // this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 1;
         document.getElementById("intro-scene").appendChild(this.renderer.domElement);
-        this.scene.background = new THREE.Color( 0x000000);
+        this.scene.background = new THREE.Color( 0xdddddd);
     }
 
     /* 
      */
     coinFlip() {
-        // Adding ambient lighting
-        this.scene.add(new THREE.AmbientLight(0xffffff,0.5));
-
         // Left point light
         const pointLightLeft = new THREE.PointLight(0xff4422, 1);
         pointLightLeft.position.set(-1,-1,3);
+        pointLightLeft.name = "coin_pointLightLeft";
         this.scene.add(pointLightLeft);
 
         // Right point light
         const pointLightRight = new THREE.PointLight(0x44ff88, 1);
         pointLightRight.position.set(1,2,3);
+        pointLightRight.name = "coin_pointLightLeft"
         this.scene.add(pointLightRight);
 
         // Top point light
@@ -65,12 +68,14 @@ class IntroAnimation {
         var geometry1 = new THREE.CylinderGeometry(3, 3, 0.4, 100, 3, false, 1, Math.PI);
         this.coin1 = new THREE.Mesh(geometry1, material);
         this.coin1.material.color.setHex(0xffffff);
+        this.coin1.name = "coin1";
 
         var geometry2 = new THREE.CylinderGeometry(3, 3, 0.4, 100, 3, false, 1+Math.PI, Math.PI);
         this.coin2 = new THREE.Mesh(geometry2, material);
 
-        this.scene.add( this.coin1);
-        this.scene.add( this.coin2);
+        this.scene.add(this.coin1);
+        console.log(this.scene.children)
+        this.scene.add(this.coin2);
         this.camera.position.set(0,0,100);
 
         this.coin1.rotation.x = 2;
@@ -78,10 +83,7 @@ class IntroAnimation {
 
         this.coin2.rotation.x = 2;
         this.coin2.rotation.y = 1.5;
-    }
 
-    sceneControl() {
-        // camera
         var self = this;
 
         function animate()
@@ -101,36 +103,49 @@ class IntroAnimation {
         }
 
         animate()
+    }
 
+    sceneControl() {
+        // camera
         var t1 = gsap.timeline();
         t1.to(this.camera.position, {duration: 3, z: 5});
+        t1.add(this.swordScene.loadCharacter(this.scene, this.camera, this.renderer, "./assets/3DObjects/rose_quartzs_sword/scene.gltf"));
         t1.to(this.coin1.position, {duration: 1, x: -30}, "start")
-          .to(this.coin2.position, {duration: 1, x: 30}, "start");
+          .to(this.coin2.position, {duration: 1, x: 30}, "start")
     }
+
+    
 }
 
 /* 
  */
 class SwordCharacter {
-    constructor(scene, camera, renderer) {
-        // Instantiate a loader
-        this.loadCharacter(scene, camera, renderer, "./assets/3DObjects/sword/scene.gltf")
+    constructor() {
+        this.sword = null;
     }
 
     loadCharacter(scene, camera, renderer, path) {
         // Instantiate a loader
         const loader = new THREE.GLTFLoader();
+
+        var self = this;
         // Load a glTF resource
         loader.load(
             // resource URL
             path,
             // called when the resource is loaded
             function (gltf) {
-                
-                gltf.scene.position.x = 0;
-                gltf.scene.position.y = 0;
-                gltf.scene.position.z = -10;
-                scene.add( gltf.scene );
+                self.sword = gltf.scene.children[0];
+                self.sword.scale.set(5,5,5);
+
+                self.sword.position.x = 0;
+                self.sword.position.y = 0;
+                self.sword.position.z = -3;
+
+                self.sword.rotation.x = 90;
+                self.sword.rotation.y = 45;
+                self.sword.rotation.z = 90;
+                scene.add(gltf.scene);
             },
             // called while loading is progressing
             function ( xhr ) {
@@ -150,10 +165,9 @@ window.addEventListener('load', main);
 function main() {  
     var scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(125, window.innerWidth/window.innerHeight, 0.1, 1000);    
-    this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
-    var Sword = new SwordCharacter(scene, camera, renderer);
-    var QGHIntro = new IntroAnimation(scene, camera, renderer, Sword);
-
+    this.renderer = new THREE.WebGLRenderer({antialias: true});
+    var swordScene = new SwordCharacter();
+    var QGHIntro = new IntroAnimation(scene, camera, renderer, swordScene);
 
     QGHIntro.coinFlip();
     QGHIntro.sceneControl();
