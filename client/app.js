@@ -1,7 +1,6 @@
-
 /*  */
 class IntroAnimation {
-    constructor(scene, camera, renderer, swordScene) {
+    constructor(scene, camera, renderer) {
         this.scene = scene;
         this.camera = camera;   
         this.renderer = renderer;
@@ -9,8 +8,6 @@ class IntroAnimation {
 
         this.coin1 = null;
         this.coin2 = null;
-
-        this.swordScene = swordScene;
 
         this.control = new THREE_ADDONS.OrbitControls(this.camera, this.renderer.domElement);
 
@@ -25,6 +22,7 @@ class IntroAnimation {
         }
     }
 
+    /*  */
     initializeCoinScene() {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.shadowMap.enabled = true;
@@ -47,12 +45,13 @@ class IntroAnimation {
         // Right point light
         const pointLightRight = new THREE.PointLight(0x44ff88, 1);
         pointLightRight.position.set(1,2,3);
-        pointLightRight.name = "coin_pointLightLeft"
+        pointLightRight.name = "coin_pointLightLeft";
         this.scene.add(pointLightRight);
 
         // Top point light
         const pointLightTop = new THREE.PointLight(0xdd3311, 1);
         pointLightTop.position.set(0,3,2);
+        pointLightLeft.name = "coin_pointLightLeft";
         this.scene.add(pointLightTop);
 
         THREE.ImageUtils.crossOrigin = '';
@@ -72,9 +71,9 @@ class IntroAnimation {
 
         var geometry2 = new THREE.CylinderGeometry(3, 3, 0.4, 100, 3, false, 1+Math.PI, Math.PI);
         this.coin2 = new THREE.Mesh(geometry2, material);
+        this.coin2.name = "coin2";
 
         this.scene.add(this.coin1);
-        console.log(this.scene.children)
         this.scene.add(this.coin2);
         this.camera.position.set(0,0,100);
 
@@ -105,80 +104,80 @@ class IntroAnimation {
         animate()
     }
 
-    sceneControl() {
+    /*  */
+    sceneControl(sword) {
         // camera
-        var t1 = gsap.timeline();
-        t1.to(this.camera.position, {duration: 3, z: 5});
-        t1.add(this.swordScene.loadCharacter(this.scene, this.camera, this.renderer, "./assets/3DObjects/rose_quartzs_sword/scene.gltf"));
-        t1.to(this.coin1.position, {duration: 1, x: -30}, "start")
-          .to(this.coin2.position, {duration: 1, x: 30}, "start")
-    }
-
-    
-}
-
-/* 
- */
-class SwordCharacter {
-    constructor() {
-        this.sword = null;
-    }
-
-    loadCharacter(scene, camera, renderer, path) {
-        // Instantiate a loader
-        const loader = new THREE.GLTFLoader();
-
         var self = this;
-        // Load a glTF resource
-        loader.load(
-            // resource URL
-            path,
-            // called when the resource is loaded
-            function (gltf) {
-                self.sword = gltf.scene.children[0];
-                self.sword.scale.set(5,5,5);
+        var t1 = gsap.timeline();
+        t1  .to(this.camera.position, {duration: 3, z: 5}, "flipCoin")
+            .to(sword.position, {duration: 3, z: -2}, "flipCoin");
+        t1  .to(this.coin1.position, {duration: 1, x: -30}, "sliceCoin")
+            .to(this.coin2.position, {duration: 1, x: 30}, "sliceCoin")
+            .to(sword.position, {duration: 0.5, x: -20, y: -20}, "sliceCoin");
+        t1  .call(function() {
+                self.scene.remove(self.coin1);
+                self.scene.remove(self.coin2);
+            }, null)
+            .to(sword.position, {duration: 0.5, x: 0, y: 0})
+            .to(sword.rotation, {duration: 0.5, x: 0, y: 0, z:0}, "positionSword")
+            .to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0}, "positionSword");
 
-                self.sword.position.x = 0;
-                self.sword.position.y = 0;
-                self.sword.position.z = -3;
-
-                self.sword.rotation.x = 90;
-                self.sword.rotation.y = 45;
-                self.sword.rotation.z = 90;
-                scene.add(gltf.scene);
-            },
-            // called while loading is progressing
-            function ( xhr ) {
-                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-            },
-            // called when loading has errors
-            function ( error ) {
-                console.log( 'An error happened: ' + error );
-            }
-        );
-    }
+        // dynamically changed object position based window/canvas size
+        window.addEventListener( 'resize', onWindowResize, false );
+        function onWindowResize(){
+            t1.to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0});
+        }
+    }   
 }
-
 
 window.addEventListener('load', main);
 
+/*  */
 function main() {  
     var scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(125, window.innerWidth/window.innerHeight, 0.1, 1000);    
-    this.renderer = new THREE.WebGLRenderer({antialias: true});
-    var swordScene = new SwordCharacter();
-    var QGHIntro = new IntroAnimation(scene, camera, renderer, swordScene);
+    var camera = new THREE.PerspectiveCamera(125, window.innerWidth/window.innerHeight, 0.1, 1000);    
+    var renderer = new THREE.WebGLRenderer({antialias: true});
+    var QGHIntro = new IntroAnimation(scene, camera, renderer);
 
     QGHIntro.coinFlip();
-    QGHIntro.sceneControl();
+    loadCharacter("./assets/3DObjects/rose_quartzs_sword/scene.gltf");
+
+    function modelLoader(path) {
+        const loader = new THREE.GLTFLoader();
+        return new Promise((resolve, reject) => {
+            loader.load(path, data=> resolve(data), null, reject);
+        });
+    }
+
+    async function loadCharacter(path) {
+        const gltf = await modelLoader(path);
+     
+        var sword = gltf.scene.children[0]; 
+        sword.scale.set(5,5,5);
+        sword.name = "sword";
+        sword.position.x = 20;
+        sword.position.y = 20;
+        sword.position.z = 100;
+
+        sword.rotation.x = - Math.PI / 5;
+        sword.rotation.y = - Math.PI / 3;
+        sword.rotation.z = - Math.PI / 2;
+
+        scene.add(sword);
+        QGHIntro.sceneControl(sword);
+    }
 }
  
- 
+/*  */
 function emptyDOM (elem){
     while (elem.firstChild) elem.removeChild(elem.firstChild);
 }
 
-// Creates a DOM element from the given HTML string
+/*  Creates a DOM element from the given HTML string
+* 
+*
+*
+*/
 function createDOM (htmlString){
     let template = document.createElement('template');
     template.innerHTML = htmlString.trim();
