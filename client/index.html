@@ -8,26 +8,29 @@
 
   <body>
 
-    <nav class="navBar">
-      <div class="nav-logo"><a href="">QGH</a></div>
-      <div  class="menu-container">
-          <ul class="menu">
-              <li><a href="#">About Me</a></li>
-              <li><a href="#">Projects</a></li>
-              <li><a href="#">Contact</a></li>
-          </ul>
+    <!-- Three.js Canvas -->
+    <canvas id="bg"></canvas>
+    <main class="htmlContent-Container">
+      <nav class="navBar">
+        <div class="nav-logo"><a href="">QGH</a></div>
+        <div  class="menu-container">
+            <ul class="menu">
+                <li><a href="#">About Me</a></li>
+                <li><a href="#">Projects</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <!-- <audio-player src="assets/BattleWithoutHonor.mp3" preload autoplay></audio-player> -->
+        <audio-player src="" preload autoplay></audio-player>      
+      </nav>
+
+      <!-- QGH's Introduction -->
+      <div class="AboutMe">
+        <div class="AboutMe-Card">
+          <p id="AboutMe-CardText"></p>
+        </div>
       </div>
-      <!-- <audio-player src="assets/BattleWithoutHonor.mp3" preload autoplay></audio-player> -->
-      <audio-player src="" preload autoplay></audio-player>      
-    </nav>
-  
-    <!-- 
-      Brainstorm
-        1. coin flip with reflective surface
-     -->
-    <div class="AboutMe">
-      <div id="intro-scene"></div>
-    </div>
+    </main>
 
 
     <!-- THREE.js -->

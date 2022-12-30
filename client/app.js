@@ -1,10 +1,12 @@
 /*  */
 class IntroAnimation {
-    constructor(scene, camera, renderer) {
+    constructor(scene, camera, renderer, htmlControl) {
         this.scene = scene;
         this.camera = camera;   
         this.renderer = renderer;
         this.initializeCoinScene();
+
+        this.htmlControl = htmlControl;
 
         this.coin1 = null;
         this.coin2 = null;
@@ -24,12 +26,11 @@ class IntroAnimation {
 
     /*  */
     initializeCoinScene() {
+        this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.shadowMap.enabled = true;
         this.renderer.outputEncoding = THREE.sRGBEncoding;
-        // this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1;
-        document.getElementById("intro-scene").appendChild(this.renderer.domElement);
         this.scene.background = new THREE.Color( 0xdddddd);
     }
 
@@ -121,23 +122,78 @@ class IntroAnimation {
             .to(sword.position, {duration: 0.5, x: 0, y: 0})
             .to(sword.rotation, {duration: 0.5, x: 0, y: 0, z:0}, "positionSword")
             .to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0}, "positionSword");
+        t1. call(function() {
+            self.htmlControl.displayByClassName("AboutMe-Card");
+            var i = 0;
+            var txt = 'Hello, I\'m QGH! Somehow I\'m trapped inside this sword...'; /* The text */
+            var speed = 50; /* The speed/duration of the effect in milliseconds */
+            self.htmlControl.typeWriter(txt, speed, "AboutMe-CardText");
+        });
 
         // dynamically changed object position based window/canvas size
         window.addEventListener( 'resize', onWindowResize, false );
-        function onWindowResize(){
+        function onWindowResize() {
             t1.to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0});
-        }
+        };
     }   
 }
 
+class HTMLControl {
+    constructor() {
+
+    }
+
+    /*  */
+    typeWriter(txt, speed, id) {
+        var i = 0;
+        var txt = txt; /* The text */
+        var speed = speed; /* The speed/duration of the effect in milliseconds */
+
+        function typeWriterHelper() {
+            if (i < txt.length) {
+                document.getElementById(id).innerHTML += txt.charAt(i);
+                i++;
+                setTimeout(typeWriterHelper, speed);
+            }
+        }
+
+        typeWriterHelper();
+    }
+
+    /*  */
+    displayByClassName(className) {
+        var tagetNode = document.getElementsByClassName(className)[0];
+        tagetNode.style.visibility = "visible";
+        tagetNode.style.opacity = 1;
+
+    }
+
+    /*  */
+    emptyDOM (elem){
+        while (elem.firstChild) elem.removeChild(elem.firstChild);
+    }
+
+    /*  Creates a DOM element from the given HTML string
+    * 
+    *
+    *
+    */
+    createDOM (htmlString){
+        let template = document.createElement('template');
+        template.innerHTML = htmlString.trim();
+        return template.content.firstChild;
+    }
+}
 window.addEventListener('load', main);
 
 /*  */
 function main() {  
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(125, window.innerWidth/window.innerHeight, 0.1, 1000);    
-    var renderer = new THREE.WebGLRenderer({antialias: true});
-    var QGHIntro = new IntroAnimation(scene, camera, renderer);
+    var renderer = new THREE.WebGLRenderer({antialias: true, canvas: document.querySelector("#bg")});
+
+    var htmlControl = new HTMLControl();
+    var QGHIntro = new IntroAnimation(scene, camera, renderer, htmlControl);
 
     QGHIntro.coinFlip();
     loadCharacter("./assets/3DObjects/rose_quartzs_sword/scene.gltf");
@@ -164,22 +220,7 @@ function main() {
         sword.rotation.z = - Math.PI / 2;
 
         scene.add(sword);
+
         QGHIntro.sceneControl(sword);
     }
-}
- 
-/*  */
-function emptyDOM (elem){
-    while (elem.firstChild) elem.removeChild(elem.firstChild);
-}
-
-/*  Creates a DOM element from the given HTML string
-* 
-*
-*
-*/
-function createDOM (htmlString){
-    let template = document.createElement('template');
-    template.innerHTML = htmlString.trim();
-    return template.content.firstChild;
 }

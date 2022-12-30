@@ -10,7 +10,7 @@
 }
 
 :root {
-    --body-bg: #f6f3ed;
+    /* --body-bg: #f6f3ed;
     --app-bg: #f7f3ec;
     --menu-bg: #fff5ee;
     --menu-hover-bg: #cc6666;
@@ -24,7 +24,7 @@
     --room-bg-hover: #cc6666;
 
     --chat-me-bg: #1f8eed;
-    --chat-bg: #f2f2f2;
+    --chat-bg: #f2f2f2; */
 }
 
 html {
@@ -53,7 +53,6 @@ button{
     font-weight: 400;
     background: var(--bt-bg);
 }
-
     button:hover {
         color: #090c12;
         background: rgba(255,255,255,0.35);
@@ -66,8 +65,27 @@ ul {
 }
 
 a {
+    color: #212534;
     text-decoration: none;
+    font-family: sans-serif;
+    font-weight: bold;
+    margin-top: 2rem;
+  }
+
+
+/* Three.js Canvas------------- */
+#bg {
+    position: fixed;
 }
+/* Three.js Canvas End--------- */
+
+/* Main (HTML content)--------- */
+.htmlContent-Container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+/* Main (HTML content) End----- */
 
 /* Navbar --------------------- */
 .navBar {
@@ -95,7 +113,7 @@ a {
 }
 
 .menu-container {
-    width: 70%;
+    width: 60%;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -118,14 +136,55 @@ a {
 .menu li a:hover {
     color: black;
 }
-
-
 /* Navbar End------------------ */
 
 /* AboutMe--------------------- */
 .AboutMe {
     width: 100%;
-    height: 50%;
+    height: 60%;
+    display:flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
+.AboutMe-Card {
+    background: #191c29;
+    width: 65%;
+    height: 45%;
+    margin-right: 1rem;
+    padding: 1rem;
+    position: relative;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    font-size: 1.5em;
+    cursor: pointer;
+    font-family: cursive;
+}
+
+.AboutMe-Card {
+    display: flex;
+    background: #191c29;
+    width: 65%;
+    height: 45%;
+    margin-right: 1rem;
+    padding: 1rem;
+    position: relative;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.5em;
+    cursor: pointer;
+    font-family: cursive;
+    transition:visibility 1s, opacity 1s; 
+    visibility:hidden; 
+    opacity:0
+}
+
+.AboutMe-Card p {
+    color: #cc6666;
+}
 /* AboutMe End------------------ */
