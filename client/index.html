@@ -12,23 +12,36 @@
     <canvas id="bg"></canvas>
     <main class="htmlContent-Container">
       <nav class="navBar">
-        <div class="nav-logo"><a href="">QGH</a></div>
+        <div class="nav-logo"><a href="#Intro">QGH</a></div>
         <div  class="menu-container">
             <ul class="menu">
-                <li><a href="#">About Me</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#AboutMe">About Me</a></li>
+                <li><a href="#Projects">Projects</a></li>
+                <li><a href="#Contact">Contact</a></li>
             </ul>
         </div>
+
         <!-- <audio-player src="assets/BattleWithoutHonor.mp3" preload autoplay></audio-player> -->
         <audio-player src="" preload autoplay></audio-player>      
       </nav>
 
       <!-- QGH's Introduction -->
-      <div class="AboutMe">
-        <div class="AboutMe-Card">
-          <p id="AboutMe-CardText"></p>
+      <div class="Intro" id="Intro">
+        <div class="Intro-Card">
+          <p id="Intro-CardText"></p>
         </div>
+      </div>
+
+      <div class="AboutMe" id="AboutMe">
+        <div class="AboutMe-Card">
+          <p id="AboutMe-CardText">asdfasdfasdfadsfadsfadsfadsfasdfdasfdasf</p>
+        </div>
+      </div>
+
+      <div class="Projects" id="Projects">
+      </div>
+
+      <div class="Contact" id="Contact">
       </div>
     </main>
 
@@ -40,6 +53,7 @@
 
     <!-- THREE.js "Extensions" -->
     <script src="../node_modules/gsap/dist/all.js"></script>
+
     <!-- OTHER -->
     <script src="components/audio-player.js"></script>
     <script src="app.js" type="text/javascript"></script>

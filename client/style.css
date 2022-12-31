@@ -138,38 +138,55 @@ a {
 }
 /* Navbar End------------------ */
 
-/* AboutMe--------------------- */
-.AboutMe {
+/* Intro--------------------- */
+.Intro {
     width: 100%;
     height: 60%;
-    display:flex;
-    justify-content: flex-end;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
-.AboutMe-Card {
+.Intro-Card {
+    display: flex;
     background: #191c29;
-    width: 65%;
+    width: 40%;
     height: 45%;
-    margin-right: 1rem;
+    margin-left: 5%;
     padding: 1rem;
     position: relative;
     border-radius: 6px;
     justify-content: center;
     align-items: center;
     text-align: center;
-    display: flex;
     font-size: 1.5em;
     cursor: pointer;
     font-family: cursive;
+    transition:visibility 1s, opacity 1s; 
+    visibility:hidden; 
+    opacity:0
+}
+
+.Intro-Card p {
+    color: #cc6666;
+}
+/* Intro End------------------ */
+
+/* AboutMe-------------------- */
+.AboutMe {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .AboutMe-Card {
     display: flex;
     background: #191c29;
-    width: 65%;
+    width: 40%;
     height: 45%;
-    margin-right: 1rem;
+    margin-left: 5%;
     padding: 1rem;
     position: relative;
     border-radius: 6px;
@@ -187,4 +204,4 @@ a {
 .AboutMe-Card p {
     color: #cc6666;
 }
-/* AboutMe End------------------ */
+/* AboutMe-------------------- */
