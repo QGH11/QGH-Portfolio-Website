@@ -145,6 +145,8 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition:visibility 1s, opacity 1s; 
+    visibility:hidden; 
 }
 
 .Intro-Card {
