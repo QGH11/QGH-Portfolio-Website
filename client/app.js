@@ -181,7 +181,7 @@ class Animation {
                 color: colors[Math.floor(Math.random() * colors.length)]
             });
             const mesh = new THREE.Mesh(geometry, material);
-            mesh.position.set(  (Math.random() - 0.5) * 1000,
+            mesh.position.set(  (Math.random() - 0.5) * 2000,
                                 (Math.random() - 0.5) * 1000,
                                 (Math.random() - 0.5) * 1500);
             mesh.rotation.set(  (Math.random()) * 2 * Math.PI,
@@ -199,22 +199,31 @@ class Animation {
                 speed = 0.49;
             }
 
+            else if (!self.state.localeCompare("Projects")) {
+                speed = 0.39;
+            }
+
             //   Stars Animation  
             for (let i = 0; i < starsNum; i +=2) {
                 self.particles.children[i].position.z += speed;
                 self.particles.children[i + 1].position.z += speed * 1.1;
+
+                if (!self.state.localeCompare("Projects")) {
+                    self.particles.children[i].position.x += speed;
+                    self.particles.children[i + 1].position.x += speed * 1.1;
+                }
                 
                 if (self.particles.children[i].position.z > 750) {
-                    self.particles.children[i].position.set(    (Math.random() - 0.5) * 1000,
+                    self.particles.children[i].position.set(    (Math.random() - 0.5) * 2000,
                                                                 (Math.random() - 0.5) * 1000,
                                                                 -700);
-                    self.particles.children[i].rotation.set(  (Math.random()) * 2 * Math.PI,
+                    self.particles.children[i].rotation.set(    (Math.random()) * 2 * Math.PI,
                                                                 (Math.random()) * 2 * Math.PI,
                                                                 (Math.random()) * 2 * Math.PI);
                 }
 
                 if (self.particles.children[i+1].position.z > 750) {
-                    self.particles.children[i+1].position.set(    (Math.random() - 0.5) * 1000,
+                    self.particles.children[i+1].position.set(  (Math.random() - 0.5) * 2000,
                                                                 (Math.random() - 0.5) * 1000,
                                                                 -700);
                     self.particles.children[i+1].rotation.set(  (Math.random()) * 2 * Math.PI,
@@ -343,14 +352,28 @@ class Animation {
                 
             }
             else if (!this.state.localeCompare("Projects")) {
-                console.log(this.state);
+
+                // 1. bring the planet forward, and ajust the sword angles
+                mainTimeline    .to(sword.position, {duration: 0.5, x: 0, y: 0, z: 0}, "adjustForLanding")
+                                .to(this.camera.position, {duration: 0.5, z: 5 }, "adjustForLanding")
+                                .to(this.camera.rotation, {duration: 0.5, y: 0}, "adjustForLanding")
+
+                // 2. start landing
+                mainTimeline    .to(sword.position, {duration: 0.5, x: 5}, "pointSaturn")
+                                .to(sword.rotation, {duration: 0.5, x: -Math.PI / 2, y: Math.PI / 2}, "pointSaturn")
+                                .to(sword.position, {duration: 1, x: 6, z: 6})
+                                .to(sword.position, {duration: 0.5, x: -1000, z: -1000});
+
+                // 3. maybe some landing animation and introducation
+
+                // 4. view projects on the planet
             }
 
             // dynamically changed object position based window/canvas size
             window.addEventListener( 'resize', onWindowResize, false);
             function onWindowResize() {
                 if (!self.state.localeCompare("Intro")) {
-                    mainTimeline.to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0});
+                    // mainTimeline.to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0});
                 }
             };
         })
@@ -359,6 +382,7 @@ class Animation {
 
 class HTMLControl {
     constructor() {
+        this.createSlider();
     }
 
     /*  */
@@ -410,6 +434,21 @@ class HTMLControl {
         tagetNode.style.opacity = 0;
     }
 
+    /* https://codepen.io/yudizsolutions/pen/wvzrPoj */
+    createSlider() {
+        $(".custom-carousel").owlCarousel({
+            autoWidth: true,
+            loop: true,
+            dots: false
+          });
+          $(document).ready(function () {
+            $(".custom-carousel .item").click(function () {
+              $(".custom-carousel .item").not($(this)).removeClass("active");
+              $(this).toggleClass("active");
+            });
+          });
+    }
+
     /*  */
     emptyDOM (elem){
         while (elem.firstChild) elem.removeChild(elem.firstChild);
@@ -425,6 +464,7 @@ class HTMLControl {
         template.innerHTML = htmlString.trim();
         return template.content.firstChild;
     }
+
 }
 
 class SwordCharacter {
@@ -465,24 +505,9 @@ class SwordCharacter {
 
         return sword;
     }
-
-    // onMouseMove(event, sword) {
-    //     // this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    //     // this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    //     // this.raycaster.setFromCamera(this.mouse, this.camera);
-    //     // this.raycaster.ray.intersectPlane(this.plane, this.pointOfIntersection);
-    //     // sword.position.set(this.pointOfIntersection.x, this.pointOfIntersection.y-5, sword.position.z);
-
-    //     // // this.sword.
-    //     // sword.rotation.set(sword.rotation.x, sword.rotation.y, Math.atan2(sword.position.y-this.mouse.y, sword.position.x-this.mouse.x));
-    //     // console.log( window.innerWidth)
-    //     // console.log("Mouth: " + this.mouse.x + " " + this.mouse.y);
-    //     // console.log("Mouth: " + event.clientX + " " + event.clientX);
-    //     // console.log("Sword: " + sword.position.x + " " + sword.position.y);
-    //     // console.log("Inter: " + this.pointOfIntersection.x + " " + this.pointOfIntersection.y)
-    // }
 }
 
+  
 window.addEventListener('load', main);
 
 /*  */
@@ -504,7 +529,7 @@ function main() {
         // console.log(QGHAnimation.state);
 
         // -> "AboutMe"
-        if (QGHAnimation.state.localeCompare("AboutMe") && top >= 200) {
+        if (QGHAnimation.state.localeCompare("AboutMe") && top >= 200 && top <= 300) {
             QGHAnimation.state = "AboutMe";
             QGHAnimation.sceneControl();
         }
