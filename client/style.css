@@ -229,4 +229,14 @@ p {
     visibility:hidden; 
     opacity:0
 }
+
+.AboutMe-StateSwitchReminder {
+    position: absolute;
+    margin: 1rem;
+    bottom: 0;
+    right: 0;
+    transition:visibility 1s, opacity 1s; 
+    visibility:hidden; 
+    opacity:0
+}
 /* AboutMe-------------------- */

@@ -324,6 +324,7 @@ class Animation {
                                         lastDialogState = false;
                                         clearInterval(reminder);
                                         yield await self.htmlControl.typeWriter(txt3, speed3, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
+                                        self.htmlControl.displayByClassName("AboutMe-StateSwitchReminder"); 
                                     }
                                     const dialogGen = dialogsGenerator();
                                     
@@ -341,6 +342,9 @@ class Animation {
 
                 
             }
+            else if (!this.state.localeCompare("Projects")) {
+                console.log(this.state);
+            }
 
             // dynamically changed object position based window/canvas size
             window.addEventListener( 'resize', onWindowResize, false);
@@ -355,7 +359,6 @@ class Animation {
 
 class HTMLControl {
     constructor() {
-        this.canvas = document.getElementsByClassName("htmlContent-Container")[0];
     }
 
     /*  */
@@ -500,16 +503,16 @@ function main() {
         // console.log(top);
         // console.log(QGHAnimation.state);
 
-        // "Other State" -> "AboutMe"
+        // -> "AboutMe"
         if (QGHAnimation.state.localeCompare("AboutMe") && top >= 200) {
             QGHAnimation.state = "AboutMe";
             QGHAnimation.sceneControl();
         }
-        // // "Other State" -> "Intro"
-        // else if (QGHAnimation.state.localeCompare("Intro") && top < 200) {
-        //     QGHAnimation.state = "Intro";
-        //     QGHAnimation.sceneControl();
-        // }
+        // -> "Projects"
+        else if (QGHAnimation.state.localeCompare("Projects") && top > 300) {
+            QGHAnimation.state = "Projects";
+            QGHAnimation.sceneControl();
+        }
     });
 }
 
