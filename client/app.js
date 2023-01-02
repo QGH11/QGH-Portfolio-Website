@@ -28,7 +28,6 @@ class Animation {
         function onWindowResize(){
             self.camera.aspect = window.innerWidth / window.innerHeight;
             self.camera.updateProjectionMatrix();
-
             self.renderer.setSize( window.innerWidth, window.innerHeight );
         }
         
@@ -55,14 +54,14 @@ class Animation {
         light.shadow.camera.bottom = -100;
         this.scene.add(light);
 
-        this.coinFlip();
+        this.drawCoin();
         this.drawSaturn();
-        this.drawParticles();
+        this.drawStars();
     }
 
     /* 
      */
-    coinFlip() {
+    drawCoin() {
         // Left point light
         const pointLightLeft = new THREE.PointLight(0xff4422, 1);
         pointLightLeft.position.set(-1,-1,3);
@@ -112,7 +111,7 @@ class Animation {
 
         var self = this;
 
-        function animate()
+        function coinFlip()
         {   
             // stop coin flip when cutting
             if (self.camera.position.z === 5) {
@@ -126,11 +125,11 @@ class Animation {
                 self.coin2.rotation.x +=0.015;
             }
 
-            requestAnimationFrame(animate);
+            requestAnimationFrame(coinFlip);
             self.renderer.render(self.scene, self.camera);
         }
 
-        animate()
+        coinFlip()
     }
 
 
@@ -170,7 +169,7 @@ class Animation {
     }
     
     /* https://codepen.io/elliezen/pen/yMqqWe */
-    drawParticles() {
+    drawStars() {
         this.scene.add(this.particles);
         const geometry = new THREE.TetrahedronGeometry(5, 0);
 
@@ -178,40 +177,51 @@ class Animation {
         const starsNum = 500;
 
         for (let i = 0; i < starsNum; i ++) {
-          const material = new THREE.MeshPhongMaterial({
-            color: colors[Math.floor(Math.random() * colors.length)]
-          });
-          const mesh = new THREE.Mesh(geometry, material);
-          mesh.position.set((Math.random() - 0.5) * 1000,
-                            (Math.random() - 0.5) * 1000,
-                            (Math.random() - 0.5) * 1000);
-          mesh.updateMatrix();
-          mesh.matrixAutoUpdate = false;
-          this.particles.add(mesh);
+            const material = new THREE.MeshPhongMaterial({
+                color: colors[Math.floor(Math.random() * colors.length)]
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(  (Math.random() - 0.5) * 1000,
+                                (Math.random() - 0.5) * 1000,
+                                (Math.random() - 0.5) * 1500);
+            mesh.rotation.set(  (Math.random()) * 2 * Math.PI,
+                                (Math.random()) * 2 * Math.PI,
+                                (Math.random()) * 2 * Math.PI);
+            mesh.updateMatrix();
+            this.particles.add(mesh);
         }
 
         var self = this;
         // slow startAnimation
         function starAnimation() {
-            //   Stars Animation  
-            for (let i = 0; i < starsNum; i +=2) {
-                self.particles.children[i].translateX(0);
-                self.particles.children[i + 1].position.x += 0.005;
-                // if (self.particles.children[i].position.x > 10)
-                // l_velocity_Array[2 * i] += 0.0049;
-                // l_velocity_Array[2 * i + 1] += 0.005;
-
-                // l_vertex_Array[6 * i + 2] += l_velocity_Array[2 * i];
-                // l_vertex_Array[6 * i + 5] += l_velocity_Array[2 * i + 1];
-
-                // if (self.particles > 10) {
-                //     l_vertex_Array[6 * i + 2] = l_vertex_Array[6 * i + 5] = THREE.MathUtils.randInt(-200, 10);
-                //     l_velocity_Array[2 * i] = 0;
-                //     l_velocity_Array[2 * i + 1] = 0;
-                // }
+            var speed = 0.049; // Intro speed
+            if (!self.state.localeCompare("AboutMe")) {
+                speed = 0.49;
             }
 
+            //   Stars Animation  
+            for (let i = 0; i < starsNum; i +=2) {
+                self.particles.children[i].position.z += speed;
+                self.particles.children[i + 1].position.z += speed * 1.1;
+                
+                if (self.particles.children[i].position.z > 750) {
+                    self.particles.children[i].position.set(    (Math.random() - 0.5) * 1000,
+                                                                (Math.random() - 0.5) * 1000,
+                                                                -700);
+                    self.particles.children[i].rotation.set(  (Math.random()) * 2 * Math.PI,
+                                                                (Math.random()) * 2 * Math.PI,
+                                                                (Math.random()) * 2 * Math.PI);
+                }
 
+                if (self.particles.children[i+1].position.z > 750) {
+                    self.particles.children[i+1].position.set(    (Math.random() - 0.5) * 1000,
+                                                                (Math.random() - 0.5) * 1000,
+                                                                -700);
+                    self.particles.children[i+1].rotation.set(  (Math.random()) * 2 * Math.PI,
+                                                                (Math.random()) * 2 * Math.PI,
+                                                                (Math.random()) * 2 * Math.PI);
+                }
+            }
 
             requestAnimationFrame(starAnimation);
             self.renderer.render(self.scene, self.camera);
@@ -223,22 +233,21 @@ class Animation {
     /*  */
     sceneControl() {
         var self = this;
-        var IntroTimmeline = gsap.timeline();
-        // var AboutMeTimelIne = gsap.timeline();
+        var mainTimeline = gsap.timeline();
 
         this.swordCharacter.swordAction.then((sword) => {
             if (!this.state.localeCompare("Intro")) {
                 // 1. flip Coin
-                IntroTimmeline  .to(this.camera.position, {duration: 3, z: 5}, "Init")
+                mainTimeline    .to(this.camera.position, {duration: 3, z: 5}, "Init")
                                 .to(sword.position, {duration: 3, z: -2}, "Init")
 
                 // 2. Slice coini
-                IntroTimmeline  .to(this.coin1.position, {duration: 1, x: -30}, "sliceCoin")
+                mainTimeline    .to(this.coin1.position, {duration: 1, x: -30}, "sliceCoin")
                                 .to(this.coin2.position, {duration: 1, x: 30}, "sliceCoin")
                                 .to(sword.position, {duration: 0.5, x: -20, y: -20}, "sliceCoin");
                 
                 // 3. Recover sword position
-                IntroTimmeline  .call(function() {
+                mainTimeline    .call(function() {
                                     self.scene.remove(self.coin1);
                                     self.scene.remove(self.coin2);
                                 }, null)
@@ -247,46 +256,98 @@ class Animation {
                                 .to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0}, "positionSword");
 
                 // 4. Interact with HTML elements
-                IntroTimmeline  .call(async function() {
+                mainTimeline    .call(async function() {
                                     self.htmlControl.displayByClassName("Intro-Card");
-                                    var txt = 'Hello, I\'m QGH! Somehow I\'m trapped inside this sword...'; /* The text */
+
+                                    var txt = 'Hello, I\'m QGH. Somehow my soul is trapped inside this sword...'; /* The text */
                                     var speed = 50; /* The speed/duration of the effect in milliseconds */
-                                    await self.htmlControl.typeWriter(txt, speed, "Intro-CardText");
+                                    await self.htmlControl.typeWriter(txt, speed, "Intro-CardText", "Intro-Card", "Intro-CardReminder");
 
                                     await sleep(1000);
 
-                                    self.htmlControl.displayByClassName("Intro-Card");
-                                    var txt = 'Scroll down to explore more!'; /* The text */
+                                    var txt = 'There is a planet over there, let\'s go there to explore more!'; /* The text */
                                     var speed = 50; /* The speed/duration of the effect in milliseconds */
-                                    await self.htmlControl.typeWriter(txt, speed, "Intro-CardText");
+                                    await self.htmlControl.typeWriter(txt, speed, "Intro-CardText", "Intro-Card", "Intro-CardReminder");
+
+                                    self.htmlControl.displayByClassName("Intro-CardReminder");
                                 }, null, ">");
             }
             else if (!this.state.localeCompare("AboutMe")) {
 
                 // 1. Clean the Intro Card
-                IntroTimmeline  .call(this.htmlControl.hidebyClassName("Intro"));
+                mainTimeline    .call(this.htmlControl.hidebyClassName("Intro"));
 
                 // 2. Plan to start flying toward saturn
-                IntroTimmeline  .to(sword.position, {duration: 0.5, x: 5}, "pointSaturn")
+                mainTimeline    .to(sword.position, {duration: 0.5, x: 5}, "pointSaturn")
                                 .to(sword.rotation, {duration: 0.5, x: -Math.PI / 2, y: Math.PI / 2}, "pointSaturn");
 
-                // 3. Ajust Camera, and start flying (bg start effects) and Introduce About me
-                IntroTimmeline  .to(this.camera.rotation, {duration: 0.5, y: -Math.PI / 2}, "adjustCamera")
+                // 3. Ajust Camera, and start flying (bg start effects
+                mainTimeline    .to(this.camera.rotation, {duration: 0.5, y: -Math.PI / 2}, "adjustCamera")
                                 .to(this.camera.position, {duration: 0.5, z: 0}, "adjustCamera")
-                                // .call(this.startBackground())
+                                .to(sword.position, {duration: 0.5, z: 3}, "adjustCamera");
+                
+                // 4. Intro About Me
+                mainTimeline    .call(async function() {
+                                    var lastDialogState = true; // force to wait for dialog completed
 
+                                    self.htmlControl.displayByClassName("AboutMe-DialogContainer"); 
 
-                // allow sword to track mouse cursor
-                // document.body.addEventListener('mousemove', (event) => {
-                //     this.swordCharacter.onMouseMove(event, sword);
-                // })
+                                    var reminder = setInterval(function(){
+                                        if (lastDialogState) {
+                                            self.htmlControl.displayByClassName("AboutMe-DialogReminder");
+                                        }
+                                    }, 5000)
+
+                                    // show dialogs in order
+                                    async function* dialogsGenerator() {
+                                        // dialog 0
+                                        let txt0 = 'Hello, my name is Antonio Q.\n I\'m studying Computer Engineering at UBC (3rd Year)'; /* The text */
+                                        let speed0 = 50; /* The speed/duration of the effect in milliseconds */
+                                        lastDialogState = false;
+                                        yield await self.htmlControl.typeWriter(txt0, speed0, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");  
+
+                                        // dialog 1
+                                        let txt1 = 'I know Full Stack, Software, FPGA Development and some Hardware skills'; /* The text */
+                                        let speed1 = 50; /* The speed/duration of the effect in milliseconds */
+                                        lastDialogState = false;
+                                        yield await self.htmlControl.typeWriter(txt1, speed1, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
+
+                                        // dialog 2
+                                        let txt2 = 'Currently, I\'m looking for all kind of Opportunities.\n I\'m also brainstorming interesting projects to work on!'; /* The text */
+                                        let speed2 = 50; /* The speed/duration of the effect in milliseconds */
+                                        lastDialogState = false;
+                                        yield await self.htmlControl.typeWriter(txt2, speed2, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
+
+                                        // dialog 3
+                                        let txt3 = 'It seems we are about to reach the planent, \n you will learn more about me there!'; /* The text */
+                                        let speed3 = 50; /* The speed/duration of the effect in milliseconds */
+                                        lastDialogState = false;
+                                        clearInterval(reminder);
+                                        yield await self.htmlControl.typeWriter(txt3, speed3, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
+                                    }
+                                    const dialogGen = dialogsGenerator();
+                                    
+                                    // dialog 0
+                                    if (lastDialogState) {
+                                        dialogGen.next().then((res) => lastDialogState = res.value);
+                                    }
+
+                                    document.getElementsByClassName("AboutMe-DialogContainer")[0].addEventListener("click", function() {
+                                        if (lastDialogState) {
+                                            dialogGen.next().then((res) => lastDialogState = res.value);
+                                        }
+                                    }, false);
+                                }, null, ">");
+
+                
             }
-
 
             // dynamically changed object position based window/canvas size
             window.addEventListener( 'resize', onWindowResize, false);
             function onWindowResize() {
-                IntroTimmeline.to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0});
+                if (!self.state.localeCompare("Intro")) {
+                    mainTimeline.to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0});
+                }
             };
         })
     }   
@@ -298,16 +359,22 @@ class HTMLControl {
     }
 
     /*  */
-    typeWriter(txt, speed, id) {
+    typeWriter(txt, speed, id, parentClass, reminderClass) {
         //  empty text
         document.getElementById(id).innerHTML = "";
+
+        var reminder = document.getElementsByClassName(reminderClass)[0];
+        if (reminder.style.opacity == 1) {
+            reminder.style.visibility = "hide";
+            reminder.style.opacity = 0;
+        }
 
         var i = 0;
         var txt = txt; /* The text */
         var speed = speed; /* The speed/duration of the effect in milliseconds */
 
-        document.body.addEventListener("click", ()=> {
-            speed = 10;
+        document.getElementsByClassName(parentClass)[0].addEventListener("click", ()=> {
+            speed /= 4;
         })
 
         return new Promise((resolve, reject) => {
@@ -364,10 +431,10 @@ class SwordCharacter {
         this.camera = camera;
         this.renderer = renderer;
 
-        this.plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-        this.raycaster = new THREE.Raycaster();
-        this.mouse = new THREE.Vector2();
-        this.pointOfIntersection = new THREE.Vector3(0,0,0);
+        // this.plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        // this.raycaster = new THREE.Raycaster();
+        // this.mouse = new THREE.Vector2();
+        // this.pointOfIntersection = new THREE.Vector3(0,0,0);
     }
 
     modelLoader(path) {

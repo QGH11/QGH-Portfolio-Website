@@ -70,7 +70,13 @@ a {
     font-family: sans-serif;
     font-weight: bold;
     margin-top: 2rem;
-  }
+}
+
+p {
+    color: #cc6666;
+    font-family: cursive;
+    white-space: pre-line;
+}
 
 
 /* Three.js Canvas------------- */
@@ -163,14 +169,23 @@ a {
     text-align: center;
     font-size: 1.5em;
     cursor: pointer;
-    font-family: cursive;
     transition:visibility 1s, opacity 1s; 
     visibility:hidden; 
     opacity:0
 }
 
 .Intro-Card p {
-    color: #cc6666;
+   
+}
+
+.Intro-CardReminder {
+    position: absolute;
+    margin: 1rem;
+    bottom: 0;
+    right: 0;
+    transition:visibility 1s, opacity 1s; 
+    visibility:hidden; 
+    opacity:0
 }
 /* Intro End------------------ */
 
@@ -180,15 +195,14 @@ a {
     height: 60%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
 }
 
-.AboutMe-Card {
+.AboutMe-DialogContainer {
     display: flex;
     background: #191c29;
-    width: 40%;
-    height: 45%;
-    margin-left: 5%;
+    width: 100%;
+    height: 60%;
     padding: 1rem;
     position: relative;
     border-radius: 6px;
@@ -197,13 +211,22 @@ a {
     text-align: center;
     font-size: 1.5em;
     cursor: pointer;
-    font-family: cursive;
     transition:visibility 1s, opacity 1s; 
     visibility:hidden; 
     opacity:0
 }
 
-.AboutMe-Card p {
-    color: #cc6666;
+#AboutMe-DialogText {
+
+}
+
+.AboutMe-DialogReminder {
+    position: absolute;
+    margin: 1rem;
+    bottom: 0;
+    right: 0;
+    transition:visibility 1s, opacity 1s; 
+    visibility:hidden; 
+    opacity:0
 }
 /* AboutMe-------------------- */
