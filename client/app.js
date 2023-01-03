@@ -853,10 +853,10 @@ class Animation {
             createLights();
             createPlane();
             createOrbit();
-            createSun();
+            // createSun();
             createLand();
             createForest();
-            createSky();
+            // createSky();
 
             document.addEventListener('mousemove', handleMouseMove, false);
 
@@ -992,7 +992,7 @@ class Animation {
                                 .to(sword.position, {duration: 0.5, x: -1000, z: -1000});
 
                 // 3. maybe some landing animation and introducation
-                mainTimeline    .call(this.htmlControl.displayByClassName, ["ProjectsWorld"], ">");
+                mainTimeline    .call(this.htmlControl.displayByClassName, ["Projects"], "showProjects");
 
                 // 4. view projects on the planet
             }
@@ -1065,16 +1065,18 @@ class HTMLControl {
     /* https://codepen.io/yudizsolutions/pen/wvzrPoj */
     createSlider() {
         $(".custom-carousel").owlCarousel({
-            autoWidth: true,
+            // autoWidth: true,
             loop: true,
-            dots: false
-          });
-          $(document).ready(function () {
+            dots: false,
+            center: true,
+            items: 1
+        });
+        $(document).ready(function () {
             $(".custom-carousel .item").click(function () {
-              $(".custom-carousel .item").not($(this)).removeClass("active");
-              $(this).toggleClass("active");
+                $(".custom-carousel .item").not($(this)).removeClass("active");
+                $(this).toggleClass("active");
             });
-          });
+        });
     }
 
     /*  */
