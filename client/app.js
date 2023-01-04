@@ -832,18 +832,16 @@ class Animation {
 
         }
 
-        // var dragDiection; // true = going right (dragLeft); false = going left (dragRight)
-        // var oldRotationLand;
-
-        var isDragging = false;
+        var dragDiection = true; // true = going right (dragLeft); false = going left (dragRight)
+        var currentLandRotationZ;
 
         function loop(){
-            if (mousePos.x < 0 && isDragging) {
+            if (dragDiection && land.mesh.rotation.z < currentLandRotationZ + Math.PI / 4) {
                 land.mesh.rotation.z += .005;
                 orbit.mesh.rotation.z += .001;
                 forest.mesh.rotation.z += .005;
             } 
-            else if (mousePos.x > 0 && isDragging) {
+            else if (!dragDiection && land.mesh.rotation.z > currentLandRotationZ - Math.PI / 4) {
                 land.mesh.rotation.z -= .005;
                 orbit.mesh.rotation.z -= .001;
                 forest.mesh.rotation.z -= .005;
@@ -872,14 +870,15 @@ class Animation {
             // createSky();
 
             document.addEventListener('mousemove', handleMouseMove, false);
-
-            var owl = $(".custom-carousel")
-            owl.on("mousedown", function() {
-                isDragging = true;
-            })
-            owl.on("mouseup", function() {
-                isDragging = false;
-            })
+            
+            $(".custom-carousel").on("change.owl.carousel", function (e) {
+                currentLandRotationZ = land.mesh.rotation.z;
+                if (e.relatedTarget._drag["stage"]["start"].x < e.relatedTarget._drag["stage"]["current"].x) {
+                    dragDiection = false;
+                } else {
+                    dragDiection = true;
+                }
+            });
 
             loop();
         }
@@ -898,16 +897,16 @@ class Animation {
                                 .to(sword.position, {duration: 3, z: -2}, "Init")
 
                 // 2. Slice coini
-                mainTimeline    .to(this.coin1.position, {duration: 1, x: -30}, "sliceCoin")
-                                .to(this.coin2.position, {duration: 1, x: 30}, "sliceCoin")
-                                .to(sword.position, {duration: 0.5, x: -20, y: -20}, "sliceCoin");
+                mainTimeline    .to(sword.position, {duration: 0.3, x: -10, y: -10}, "slice")
+                                .to(this.coin1.position, {duration: 1, x: -30}, "sliceCoin")
+                                .to(this.coin2.position, {duration: 1, x: 30}, "sliceCoin");
+                                
                 
                 // 3. Recover sword position
                 mainTimeline    .call(function() {
                                     self.scene.remove(self.coin1);
                                     self.scene.remove(self.coin2);
-                                }, null)
-                                .to(sword.position, {duration: 0.5, x: 0, y: 0})
+                                }, null, "positionSword")
                                 .to(sword.rotation, {duration: 0.5, x: 0, y: 0, z:0}, "positionSword")
                                 .to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0}, "positionSword");
 
@@ -950,31 +949,31 @@ class Animation {
                                         if (lastDialogState) {
                                             self.htmlControl.displayByClassName("AboutMe-DialogReminder");
                                         }
-                                    }, 5000)
+                                    }, 4000)
 
                                     // show dialogs in order
                                     async function* dialogsGenerator() {
                                         // dialog 0
                                         let txt0 = 'Hello, my name is Antonio Q.\n I\'m studying Computer Engineering at UBC (3rd Year)'; /* The text */
-                                        let speed0 = 40; /* The speed/duration of the effect in milliseconds */
+                                        let speed0 = 25; /* The speed/duration of the effect in milliseconds */
                                         lastDialogState = false;
                                         yield await self.htmlControl.typeWriter(txt0, speed0, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");  
 
                                         // dialog 1
                                         let txt1 = 'I know Full Stack, Software, FPGA Development and some Hardware skills'; /* The text */
-                                        let speed1 = 40; /* The speed/duration of the effect in milliseconds */
+                                        let speed1 = 25; /* The speed/duration of the effect in milliseconds */
                                         lastDialogState = false;
                                         yield await self.htmlControl.typeWriter(txt1, speed1, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
 
                                         // dialog 2
                                         let txt2 = 'Currently, I\'m looking for all kind of Opportunities.\n I\'m also brainstorming interesting projects to work on!'; /* The text */
-                                        let speed2 = 40; /* The speed/duration of the effect in milliseconds */
+                                        let speed2 = 25; /* The speed/duration of the effect in milliseconds */
                                         lastDialogState = false;
                                         yield await self.htmlControl.typeWriter(txt2, speed2, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
 
                                         // dialog 3
                                         let txt3 = 'It seems we are about to reach the planent, \n you will learn more about me there!'; /* The text */
-                                        let speed3 = 40; /* The speed/duration of the effect in milliseconds */
+                                        let speed3 = 25; /* The speed/duration of the effect in milliseconds */
                                         lastDialogState = false;
                                         clearInterval(reminder);
                                         yield await self.htmlControl.typeWriter(txt3, speed3, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
@@ -1047,7 +1046,7 @@ class HTMLControl {
         var speed = speed; /* The speed/duration of the effect in milliseconds */
 
         document.getElementsByClassName(parentClass)[0].addEventListener("click", ()=> {
-            speed /= 4;
+            speed = 2;
         })
 
         return new Promise((resolve, reject) => {
@@ -1096,22 +1095,6 @@ class HTMLControl {
         });
     }
 
-    /*  */
-    emptyDOM (elem){
-        while (elem.firstChild) elem.removeChild(elem.firstChild);
-    }
-
-    /*  Creates a DOM element from the given HTML string
-    * 
-    *
-    *
-    */
-    createDOM (htmlString){
-        let template = document.createElement('template');
-        template.innerHTML = htmlString.trim();
-        return template.content.firstChild;
-    }
-
     removeDomByClassName(className) {
         var beRemovedDom = document.getElementsByClassName(className)[0];
         beRemovedDom.parentElement.removeChild(beRemovedDom);
@@ -1126,7 +1109,6 @@ class HTMLControl {
             p.classList.remove('hide')
         }, 500);
     }
-
 }
 
 class SwordCharacter {
@@ -1219,7 +1201,6 @@ function main() {
 
     // -> "AboutMe"
     document.getElementsByClassName("Intro")[0].addEventListener("click", function(e) {
-        console.log("here")
         QGHAnimation.state = "AboutMe";
         introTimeline.kill();
         htmlControl.removeDomByClassName("Intro");
