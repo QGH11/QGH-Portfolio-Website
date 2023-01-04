@@ -753,21 +753,16 @@ class Animation {
         };
 
 
-        var sky;
+
         var forest;
         var land;
         var orbit;
         var airplane;
-        var sun;
+        // var sky;
+        // var sun;
 
         var mousePos={x:0, y:0};
         var offSet = -600;
-
-        function createSky(){
-            sky = new Sky();
-            sky.mesh.position.y = offSet;
-            scene.add(sky.mesh);
-        }
 
         function createLand(){
             land = new Land();
@@ -788,12 +783,18 @@ class Animation {
         scene.add(forest.mesh);
         }
 
-        function createSun(){ 
-            sun = new Sun();
-            sun.mesh.scale.set(1,1,.3);
-            sun.mesh.position.set(0,-30,-850);
-            scene.add(sun.mesh);
-        }
+        // function createSun(){ 
+        //     sun = new Sun();
+        //     sun.mesh.scale.set(1,1,.3);
+        //     sun.mesh.position.set(0,-30,-850);
+        //     scene.add(sun.mesh);
+        // }
+
+        // function createSky(){
+        //     sky = new Sky();
+        //     sky.mesh.position.y = offSet;
+        //     scene.add(sky.mesh);
+        // }
 
         function createPlane(){ 
             airplane = new AirPlane();
@@ -831,11 +832,23 @@ class Animation {
 
         }
 
+        // var dragDiection; // true = going right (dragLeft); false = going left (dragRight)
+        // var oldRotationLand;
+
+        var isDragging = false;
+
         function loop(){
-            // land.mesh.rotation.z += .005;
-            // orbit.mesh.rotation.z += .001;
-            // sky.mesh.rotation.z += .003;
-            // forest.mesh.rotation.z += .005;
+            if (mousePos.x < 0 && isDragging) {
+                land.mesh.rotation.z += .005;
+                orbit.mesh.rotation.z += .001;
+                forest.mesh.rotation.z += .005;
+            } 
+            else if (mousePos.x > 0 && isDragging) {
+                land.mesh.rotation.z -= .005;
+                orbit.mesh.rotation.z -= .001;
+                forest.mesh.rotation.z -= .005;
+            }
+
             updatePlane();
 
             renderer.render(scene, camera);
@@ -860,6 +873,14 @@ class Animation {
 
             document.addEventListener('mousemove', handleMouseMove, false);
 
+            var owl = $(".custom-carousel")
+            owl.on("mousedown", function() {
+                isDragging = true;
+            })
+            owl.on("mouseup", function() {
+                isDragging = false;
+            })
+
             loop();
         }
 
@@ -867,9 +888,8 @@ class Animation {
     }
     
     /*  */
-    sceneControl() {
+    sceneControl(mainTimeline) {
         var self = this;
-        var mainTimeline = gsap.timeline();
 
         this.swordCharacter.swordAction.then((sword) => {
             if (!this.state.localeCompare("Intro")) {
@@ -892,26 +912,24 @@ class Animation {
                                 .to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0}, "positionSword");
 
                 // 4. Interact with HTML elements
-                mainTimeline    .call(async function() {
-                                    self.htmlControl.displayByClassName("Intro-Card");
-
-                                    var txt = 'Hello, I\'m QGH. Somehow my soul is trapped inside this sword...'; /* The text */
-                                    var speed = 50; /* The speed/duration of the effect in milliseconds */
-                                    await self.htmlControl.typeWriter(txt, speed, "Intro-CardText", "Intro-Card", "Intro-CardReminder");
-
-                                    await sleep(1000);
-
+                mainTimeline    .call(function() {
+                                    self.htmlControl.displayByClassName("Intro");
+                                    var txt = "Hello, I\'m QGH. Somehow my soul is trapped inside this sword...";
+                                    document.getElementById("Intro-CardText").innerHTML = txt;
+                                }, null, ">")
+                                .call(function() {
                                     var txt = 'There is a planet over there, let\'s go there to explore more!'; /* The text */
-                                    var speed = 50; /* The speed/duration of the effect in milliseconds */
-                                    await self.htmlControl.typeWriter(txt, speed, "Intro-CardText", "Intro-Card", "Intro-CardReminder");
+                                    self.htmlControl.fadein(document.getElementById("Intro-CardText"), txt);
 
-                                    self.htmlControl.displayByClassName("Intro-CardReminder");
-                                }, null, ">");
+                                    // recover pointer events
+                                    document.getElementsByClassName("IntroAboutMe")[0].style.pointerEvents = "auto";
+                                    self.htmlControl.fadein(document.getElementsByClassName("Intro-CardReminder")[0], "click to skip");
+                                }, null, ">2")
             }
             else if (!this.state.localeCompare("AboutMe")) {
 
-                // 1. Clean the Intro Card
-                mainTimeline    .call(this.htmlControl.hidebyClassName("Intro"));
+                // // 1. Remove the Intro Card 
+                // mainTimeline    .call(this.htmlControl.hidebyClassName("Intro"));
 
                 // 2. Plan to start flying toward saturn
                 mainTimeline    .to(sword.position, {duration: 0.5, x: 5}, "pointSaturn")
@@ -938,25 +956,25 @@ class Animation {
                                     async function* dialogsGenerator() {
                                         // dialog 0
                                         let txt0 = 'Hello, my name is Antonio Q.\n I\'m studying Computer Engineering at UBC (3rd Year)'; /* The text */
-                                        let speed0 = 50; /* The speed/duration of the effect in milliseconds */
+                                        let speed0 = 40; /* The speed/duration of the effect in milliseconds */
                                         lastDialogState = false;
                                         yield await self.htmlControl.typeWriter(txt0, speed0, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");  
 
                                         // dialog 1
                                         let txt1 = 'I know Full Stack, Software, FPGA Development and some Hardware skills'; /* The text */
-                                        let speed1 = 50; /* The speed/duration of the effect in milliseconds */
+                                        let speed1 = 40; /* The speed/duration of the effect in milliseconds */
                                         lastDialogState = false;
                                         yield await self.htmlControl.typeWriter(txt1, speed1, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
 
                                         // dialog 2
                                         let txt2 = 'Currently, I\'m looking for all kind of Opportunities.\n I\'m also brainstorming interesting projects to work on!'; /* The text */
-                                        let speed2 = 50; /* The speed/duration of the effect in milliseconds */
+                                        let speed2 = 40; /* The speed/duration of the effect in milliseconds */
                                         lastDialogState = false;
                                         yield await self.htmlControl.typeWriter(txt2, speed2, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
 
                                         // dialog 3
                                         let txt3 = 'It seems we are about to reach the planent, \n you will learn more about me there!'; /* The text */
-                                        let speed3 = 50; /* The speed/duration of the effect in milliseconds */
+                                        let speed3 = 40; /* The speed/duration of the effect in milliseconds */
                                         lastDialogState = false;
                                         clearInterval(reminder);
                                         yield await self.htmlControl.typeWriter(txt3, speed3, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
@@ -992,9 +1010,9 @@ class Animation {
                                 .to(sword.position, {duration: 0.5, x: -1000, z: -1000});
 
                 // 3. maybe some landing animation and introducation
+                // 4. view projects on the planet
                 mainTimeline    .call(this.htmlControl.displayByClassName, ["Projects"], "showProjects");
 
-                // 4. view projects on the planet
             }
 
             // dynamically changed object position based window/canvas size
@@ -1056,6 +1074,7 @@ class HTMLControl {
         tagetNode.style.opacity = 1;
     }
 
+    /*  */
     hidebyClassName(className) {
         var tagetNode = document.getElementsByClassName(className)[0];
         tagetNode.style.visibility = "hide";
@@ -1071,11 +1090,9 @@ class HTMLControl {
             center: true,
             items: 1
         });
-        $(document).ready(function () {
-            $(".custom-carousel .item").click(function () {
-                $(".custom-carousel .item").not($(this)).removeClass("active");
-                $(this).toggleClass("active");
-            });
+        $(".custom-carousel .item").on("click", function () {
+            $(".custom-carousel .item").not($(this)).removeClass("active");
+            $(this).toggleClass("active");
         });
     }
 
@@ -1093,6 +1110,21 @@ class HTMLControl {
         let template = document.createElement('template');
         template.innerHTML = htmlString.trim();
         return template.content.firstChild;
+    }
+
+    removeDomByClassName(className) {
+        var beRemovedDom = document.getElementsByClassName(className)[0];
+        beRemovedDom.parentElement.removeChild(beRemovedDom);
+    }
+
+    fadein(p, txt) {
+        p.classList.add('hide');
+        setTimeout(function() { 
+            p.textContent = txt;
+        }, 500);
+        setTimeout(function() { 
+            p.classList.remove('hide')
+        }, 500);
     }
 
 }
@@ -1166,25 +1198,33 @@ function main() {
     var swordCharacter = new SwordCharacter(scene, camera, renderer);
     var QGHAnimation = new Animation(scene, camera, renderer, htmlControl, swordCharacter);
 
-    QGHAnimation.sceneControl();
+    var introTimeline = gsap.timeline();
+    var aboutMeTimeline = gsap.timeline();
+    var projectsTimeline = gsap.timeline();
+
+    QGHAnimation.sceneControl(introTimeline);
 
     document.getElementsByClassName("htmlContent-Container")[0].addEventListener("scroll", function() {
         const top = (window.pageYOffset || this.scrollTop)  - (this.clientTop || 0);
         // console.log(top);
         // console.log(QGHAnimation.state);
-
-        // -> "AboutMe"
-        if (QGHAnimation.state.localeCompare("AboutMe") && top >= 200 && top <= 300) {
-            QGHAnimation.state = "AboutMe";
-            QGHAnimation.sceneControl();
-            window.cancelAnimationFrame(QGHAnimation.coinFlipAnimation);
-        }
+        
         // -> "Projects"
-        else if (QGHAnimation.state.localeCompare("Projects") && top > 300) {
+        if (QGHAnimation.state.localeCompare("Projects") && top > 550) {
             QGHAnimation.state = "Projects";
-            QGHAnimation.sceneControl();
+            QGHAnimation.sceneControl(projectsTimeline);
             window.cancelAnimationFrame(QGHAnimation.starAnimation);
         }
+    });
+
+    // -> "AboutMe"
+    document.getElementsByClassName("Intro")[0].addEventListener("click", function(e) {
+        console.log("here")
+        QGHAnimation.state = "AboutMe";
+        introTimeline.kill();
+        htmlControl.removeDomByClassName("Intro");
+        QGHAnimation.sceneControl(aboutMeTimeline);
+        window.cancelAnimationFrame(QGHAnimation.coinFlipAnimation);
     });
 }
 
