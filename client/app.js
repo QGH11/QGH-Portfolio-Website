@@ -1133,7 +1133,7 @@ class HTMLControl {
 
 class SwordCharacter {
     constructor(scene, camera, renderer) {
-        this.swordAction = this.loadCharacter("./assets/3DObjects/rose_quartzs_sword/scene.gltf");
+        this.swordAction = this.loadCharacter("./client/assets/3DObjects/rose_quartzs_sword/scene.gltf");
         this.scene = scene;
         this.camera = camera;
         this.renderer = renderer;
