@@ -130,6 +130,7 @@ h3 {
     position: absolute;
     height: 100%;
     width: 100%;
+    scroll-behavior: smooth;
 }
 /* Main (HTML content) End----- */
 
@@ -144,6 +145,10 @@ h3 {
     margin: 1.5rem 2rem;
     position: fixed;
     z-index: 15;
+
+    transition:visibility 1s, opacity 1s; 
+    visibility:hidden; 
+    opacity:0
 }
 
 .nav-logo {

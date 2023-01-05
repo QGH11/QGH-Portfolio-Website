@@ -903,12 +903,12 @@ class Animation {
                                 
                 
                 // 3. Recover sword position
-                mainTimeline    .call(function() {
+                mainTimeline    .to(sword.rotation, {duration: 0.5, x: 0, y: 0, z:0}, "positionSword")
+                                .to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0}, "positionSword")
+                                .call(function() {
                                     self.scene.remove(self.coin1);
                                     self.scene.remove(self.coin2);
-                                }, null, "positionSword")
-                                .to(sword.rotation, {duration: 0.5, x: 0, y: 0, z:0}, "positionSword")
-                                .to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0}, "positionSword");
+                                }, null);
 
                 // 4. Interact with HTML elements
                 mainTimeline    .call(function() {
@@ -923,12 +923,15 @@ class Animation {
                                     // recover pointer events
                                     document.getElementsByClassName("IntroAboutMe")[0].style.pointerEvents = "auto";
                                     self.htmlControl.fadein(document.getElementsByClassName("Intro-CardReminder")[0], "click to skip");
-                                }, null, ">2")
+                                }, null, ">3")
             }
             else if (!this.state.localeCompare("AboutMe")) {
 
-                // // 1. Remove the Intro Card 
-                // mainTimeline    .call(this.htmlControl.hidebyClassName("Intro"));
+                // 1. Remove the Intro Card (done in event listern in main), show menu
+                mainTimeline    .call(function() {
+                                    self.htmlControl.displayByClassName("navBar");
+                                    self.htmlControl.enableScroll();
+                                });
 
                 // 2. Plan to start flying toward saturn
                 mainTimeline    .to(sword.position, {duration: 0.5, x: 5}, "pointSaturn")
@@ -1028,6 +1031,8 @@ class Animation {
 class HTMLControl {
     constructor() {
         this.createSlider();
+
+        this.disableScroll();
     }
 
     /*  */
@@ -1108,6 +1113,21 @@ class HTMLControl {
         setTimeout(function() { 
             p.classList.remove('hide')
         }, 500);
+    }
+    
+    disableScroll() {
+        // Get the current page scroll position
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    
+        // if any scroll is attempted, set this to the previous value
+        document.getElementsByClassName("htmlContent-Container")[0].onscroll = function() {
+            document.getElementsByClassName("htmlContent-Container")[0].scrollTo(scrollLeft, scrollTop);
+        };
+    }
+    
+    enableScroll() {
+        document.getElementsByClassName("htmlContent-Container")[0].onscroll = function() {};
     }
 }
 
