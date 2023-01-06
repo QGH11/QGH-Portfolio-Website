@@ -29,7 +29,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
+  <a href="https://qghportfolio.vercel.app/">
     <img src="client\assets\imgs\FaceTitle.ico" alt="Logo" width="80" height="80">
   </a>
 
@@ -38,10 +38,10 @@
   <p align="center">
     An awesome README template to jumpstart your projects!
     <br />
-    <a href="https://github.com/QGH11/QGH-Portfolio-Website"><strong>Explore the docs »</strong></a>
+    <a href="https://qghportfolio.vercel.app/"><strong>Explore the Website »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/QGH11/QGH-Portfolio-Website/issues">View Website</a>
+    <a href="https://github.com/QGH11/QGH-Portfolio-Website">View Docs</a>
     ·
     <a href="https://github.com/QGH11/QGH-Portfolio-Website/issues">Report Bug</a>
     ·
@@ -77,7 +77,7 @@ I want to do something different from a boring website with all my information, 
 The website has one page but with many animation, and game-like features.
 
 <br />
-Check it out here: 
+Check it out with link: <a href="https://qghportfolio.vercel.app/"><strong>https://qghportfolio.vercel.app/</strong></a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -93,7 +93,7 @@ Check it out here:
 
 <!-- GETTING STARTED -->
 ## Getting Started
-The website can be view at []()
+The website can be view at [here](https://qghportfolio.vercel.app/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -111,6 +111,8 @@ The website can be view at []()
     - [x] Polish JS Effects
     - [x] Fix Bugs
 - [ ] Deploy to Vecel (Version 1.0)
+- [ ] Fix More Bugs (Version 1.0)
+- [ ] Make improvement (Version 1.5)
 - [ ] Add Background Music
 - [ ] Review Feedbacks and BrainStorm Version 2.0
 
