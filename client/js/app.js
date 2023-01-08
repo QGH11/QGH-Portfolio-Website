@@ -4,6 +4,35 @@ import "../../node_modules/jquery/dist/jquery.min.js"
 import '../../node_modules/owl.carousel/dist/owl.carousel.min.js';
 import {GLTFLoader} from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js'
 
+var scene = new THREE.Scene();
+
+/* Loading */
+const loadingManager = new THREE.LoadingManager();
+const gltfLoader = new GLTFLoader(loadingManager);
+
+loadingManager.onStart = function() {
+    console.log("model loding start")
+}
+loadingManager.onLoad = function () {
+    console.log("model loading finished")
+    main();
+}
+
+function loadCharacter(path, name) {
+    gltfLoader.load(
+        path, 
+        function(gltf) {            
+            var object = gltf.scene.children[0]; 
+            object.name = name;
+            scene.add(object);
+        }
+    )
+}
+
+// models
+loadCharacter("./dist/assets/3DObjects/rose_quartzs_sword/scene.gltf", "Sword");
+// loadCharacter("./dist/assets/3DObjects/bananya_birbo/scene.gltf", "BananaCat");  
+
 class Animation {
     constructor(scene, camera, renderer, htmlControl, swordCharacter) {
         this.scene = scene;
@@ -893,141 +922,139 @@ class Animation {
     sceneControl(mainTimeline) {
         var self = this;
 
-        this.swordCharacter.swordAction.then((sword) => {
-            if (!this.state.localeCompare("Intro")) {
-                // 1. flip Coin
-                mainTimeline    .to(this.camera.position, {duration: 3, z: 5}, "Init")
-                                .to(sword.position, {duration: 3, z: -2}, "Init")
+        if (!this.state.localeCompare("Intro")) {
+            // 1. flip Coin
+            mainTimeline    .to(this.camera.position, {duration: 3, z: 5}, "Init")
+                            .to(this.swordCharacter.sword.position, {duration: 3, z: -2}, "Init")
 
-                // 2. Slice coini
-                mainTimeline    .to(sword.position, {duration: 0.3, x: -10, y: -10}, "slice")
-                                .to(this.coin1.position, {duration: 1, x: -30}, "sliceCoin")
-                                .to(this.coin2.position, {duration: 1, x: 30}, "sliceCoin");
-                                
-                
-                // 3. Recover sword position
-                mainTimeline    .to(sword.rotation, {duration: 0.5, x: 0, y: 0, z:0}, "positionSword")
-                                .to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0}, "positionSword")
-                                .call(function() {
-                                    self.scene.remove(self.coin1);
-                                    self.scene.remove(self.coin2);
-                                }, null);
+            // 2. Slice coini
+            mainTimeline    .to(this.swordCharacter.sword.position, {duration: 0.3, x: -10, y: -10}, "slice")
+                            .to(this.coin1.position, {duration: 1, x: -30}, "sliceCoin")
+                            .to(this.coin2.position, {duration: 1, x: 30}, "sliceCoin");
+                            
+            
+            // 3. Recover sword position
+            mainTimeline    .to(this.swordCharacter.sword.rotation, {duration: 0.5, x: 0, y: 0, z:0}, "positionSword")
+                            .to(this.swordCharacter.sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0}, "positionSword")
+                            .call(function() {
+                                self.scene.remove(self.coin1);
+                                self.scene.remove(self.coin2);
+                            }, null);
 
-                // 4. Interact with HTML elements
-                mainTimeline    .call(function() {
-                                    self.htmlControl.displayByClassName("Intro");
-                                    var txt = "Hello, I\'m QGH. Somehow my soul is trapped inside this sword...";
-                                    document.getElementById("Intro-CardText").innerHTML = txt;
-                                }, null, ">")
-                                .call(function() {
-                                    var txt = 'There is a planet over there, let\'s go there to explore more!'; /* The text */
-                                    self.htmlControl.fadein(document.getElementById("Intro-CardText"), txt);
+            // 4. Interact with HTML elements
+            mainTimeline    .call(function() {
+                                self.htmlControl.displayByClassName("Intro");
+                                var txt = "Hello, I\'m QGH. Somehow my soul is trapped inside this sword...";
+                                document.getElementById("Intro-CardText").innerHTML = txt;
+                            }, null, ">")
+                            .call(function() {
+                                var txt = 'There is a planet over there, let\'s go there to explore more!'; /* The text */
+                                self.htmlControl.fadein(document.getElementById("Intro-CardText"), txt);
 
-                                    // recover pointer events
-                                    document.getElementsByClassName("IntroAboutMe")[0].style.pointerEvents = "auto";
-                                    self.htmlControl.fadein(document.getElementsByClassName("Intro-CardReminder")[0], "click to skip");
-                                }, null, ">3")
-            }
-            else if (!this.state.localeCompare("AboutMe")) {
+                                // recover pointer events
+                                document.getElementsByClassName("IntroAboutMe")[0].style.pointerEvents = "auto";
+                                self.htmlControl.fadein(document.getElementsByClassName("Intro-CardReminder")[0], "click to skip");
+                            }, null, ">3")
+        }
+        else if (!this.state.localeCompare("AboutMe")) {
+            
+            // 1. Remove the Intro Card (done in event listern in main), show menu
+            mainTimeline    .call(function() {
+                                self.htmlControl.displayByClassName("navBar");
+                                self.htmlControl.enableScroll();
+                            });
 
-                // 1. Remove the Intro Card (done in event listern in main), show menu
-                mainTimeline    .call(function() {
-                                    self.htmlControl.displayByClassName("navBar");
-                                    self.htmlControl.enableScroll();
-                                });
+            // 2. Plan to start flying toward saturn
+            mainTimeline    .to(this.swordCharacter.sword.position, {duration: 0.5, x: 5}, "pointSaturn")
+                            .to(this.swordCharacter.sword.rotation, {duration: 0.5, x: -Math.PI / 2, y: Math.PI / 2}, "pointSaturn");
 
-                // 2. Plan to start flying toward saturn
-                mainTimeline    .to(sword.position, {duration: 0.5, x: 5}, "pointSaturn")
-                                .to(sword.rotation, {duration: 0.5, x: -Math.PI / 2, y: Math.PI / 2}, "pointSaturn");
+            // 3. Ajust Camera, and start flying (bg start effects
+            mainTimeline    .to(this.camera.rotation, {duration: 0.5, y: -Math.PI / 2}, "adjustCamera")
+                            .to(this.camera.position, {duration: 0.5, z: 0}, "adjustCamera")
+                            .to(this.swordCharacter.sword.position, {duration: 0.5, z: 3}, "adjustCamera");
+            
+            // 4. Intro About Me
+            mainTimeline    .call(async function() {
+                                var lastDialogState = true; // force to wait for dialog completed
 
-                // 3. Ajust Camera, and start flying (bg start effects
-                mainTimeline    .to(this.camera.rotation, {duration: 0.5, y: -Math.PI / 2}, "adjustCamera")
-                                .to(this.camera.position, {duration: 0.5, z: 0}, "adjustCamera")
-                                .to(sword.position, {duration: 0.5, z: 3}, "adjustCamera");
-                
-                // 4. Intro About Me
-                mainTimeline    .call(async function() {
-                                    var lastDialogState = true; // force to wait for dialog completed
+                                self.htmlControl.displayByClassName("AboutMe-DialogContainer"); 
 
-                                    self.htmlControl.displayByClassName("AboutMe-DialogContainer"); 
-
-                                    var reminder = setInterval(function(){
-                                        if (lastDialogState) {
-                                            self.htmlControl.displayByClassName("AboutMe-DialogReminder");
-                                        }
-                                    }, 4000)
-
-                                    // show dialogs in order
-                                    async function* dialogsGenerator() {
-                                        // dialog 0
-                                        let txt0 = 'Hello, my name is Antonio Q.\n I\'m studying Computer Engineering at UBC (3rd Year)'; /* The text */
-                                        let speed0 = 25; /* The speed/duration of the effect in milliseconds */
-                                        lastDialogState = false;
-                                        yield await self.htmlControl.typeWriter(txt0, speed0, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");  
-
-                                        // dialog 1
-                                        let txt1 = 'I know Full Stack, Software, FPGA Development and some Hardware skills'; /* The text */
-                                        let speed1 = 25; /* The speed/duration of the effect in milliseconds */
-                                        lastDialogState = false;
-                                        yield await self.htmlControl.typeWriter(txt1, speed1, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
-
-                                        // dialog 2
-                                        let txt2 = 'Currently, I\'m looking for all kind of Opportunities.\n I\'m also brainstorming interesting projects to work on!'; /* The text */
-                                        let speed2 = 25; /* The speed/duration of the effect in milliseconds */
-                                        lastDialogState = false;
-                                        yield await self.htmlControl.typeWriter(txt2, speed2, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
-
-                                        // dialog 3
-                                        let txt3 = 'It seems we are about to reach the planent, \n you will learn more about me there!'; /* The text */
-                                        let speed3 = 25; /* The speed/duration of the effect in milliseconds */
-                                        lastDialogState = false;
-                                        clearInterval(reminder);
-                                        yield await self.htmlControl.typeWriter(txt3, speed3, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
-                                        self.htmlControl.displayByClassName("AboutMe-StateSwitchReminder"); 
+                                var reminder = setInterval(function(){
+                                    if (lastDialogState) {
+                                        self.htmlControl.displayByClassName("AboutMe-DialogReminder");
                                     }
-                                    const dialogGen = dialogsGenerator();
-                                    
+                                }, 4000)
+
+                                // show dialogs in order
+                                async function* dialogsGenerator() {
                                     // dialog 0
+                                    let txt0 = 'Hello, my name is Antonio Q.\n I\'m studying Computer Engineering at UBC (3rd Year)'; /* The text */
+                                    let speed0 = 25; /* The speed/duration of the effect in milliseconds */
+                                    lastDialogState = false;
+                                    yield await self.htmlControl.typeWriter(txt0, speed0, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");  
+
+                                    // dialog 1
+                                    let txt1 = 'I know Full Stack, Software, FPGA Development and some Hardware skills'; /* The text */
+                                    let speed1 = 25; /* The speed/duration of the effect in milliseconds */
+                                    lastDialogState = false;
+                                    yield await self.htmlControl.typeWriter(txt1, speed1, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
+
+                                    // dialog 2
+                                    let txt2 = 'Currently, I\'m looking for all kind of Opportunities.\n I\'m also brainstorming interesting projects to work on!'; /* The text */
+                                    let speed2 = 25; /* The speed/duration of the effect in milliseconds */
+                                    lastDialogState = false;
+                                    yield await self.htmlControl.typeWriter(txt2, speed2, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
+
+                                    // dialog 3
+                                    let txt3 = 'It seems we are about to reach the planent, \n you will learn more about me there!'; /* The text */
+                                    let speed3 = 25; /* The speed/duration of the effect in milliseconds */
+                                    lastDialogState = false;
+                                    clearInterval(reminder);
+                                    yield await self.htmlControl.typeWriter(txt3, speed3, "AboutMe-DialogText", "AboutMe-DialogContainer", "AboutMe-DialogReminder");
+                                    self.htmlControl.displayByClassName("AboutMe-StateSwitchReminder"); 
+                                }
+                                const dialogGen = dialogsGenerator();
+                                
+                                // dialog 0
+                                if (lastDialogState) {
+                                    dialogGen.next().then((res) => lastDialogState = res.value);
+                                }
+
+                                document.getElementsByClassName("AboutMe-DialogContainer")[0].addEventListener("click", function() {
                                     if (lastDialogState) {
                                         dialogGen.next().then((res) => lastDialogState = res.value);
                                     }
+                                }, false);
+                            }, null, ">");
 
-                                    document.getElementsByClassName("AboutMe-DialogContainer")[0].addEventListener("click", function() {
-                                        if (lastDialogState) {
-                                            dialogGen.next().then((res) => lastDialogState = res.value);
-                                        }
-                                    }, false);
-                                }, null, ">");
+            
+        }
+        else if (!this.state.localeCompare("Projects")) {
 
-                
-            }
-            else if (!this.state.localeCompare("Projects")) {
+            // 1. bring the planet forward, and ajust the sword angles
+            mainTimeline    .to(this.swordCharacter.sword.position, {duration: 0.5, x: 0, y: 0, z: 0}, "adjustForLanding")
+                            .to(this.camera.position, {duration: 0.5, z: 5 }, "adjustForLanding")
+                            .to(this.camera.rotation, {duration: 0.5, y: 0}, "adjustForLanding")
 
-                // 1. bring the planet forward, and ajust the sword angles
-                mainTimeline    .to(sword.position, {duration: 0.5, x: 0, y: 0, z: 0}, "adjustForLanding")
-                                .to(this.camera.position, {duration: 0.5, z: 5 }, "adjustForLanding")
-                                .to(this.camera.rotation, {duration: 0.5, y: 0}, "adjustForLanding")
+            // 2. start landing
+            mainTimeline    .to(this.swordCharacter.sword.position, {duration: 0.5, x: 5}, "pointSaturn")
+                            .to(this.swordCharacter.sword.rotation, {duration: 0.5, x: -Math.PI / 2, y: Math.PI / 2}, "pointSaturn")
+                            .to(this.swordCharacter.sword.position, {duration: 1, x: 6, z: 6})
+                            .to(this.swordCharacter.sword.position, {duration: 0.5, x: -1000, z: -1000});
 
-                // 2. start landing
-                mainTimeline    .to(sword.position, {duration: 0.5, x: 5}, "pointSaturn")
-                                .to(sword.rotation, {duration: 0.5, x: -Math.PI / 2, y: Math.PI / 2}, "pointSaturn")
-                                .to(sword.position, {duration: 1, x: 6, z: 6})
-                                .to(sword.position, {duration: 0.5, x: -1000, z: -1000});
+            // 3. maybe some landing animation and introducation
+            // 4. view projects on the planet
+            mainTimeline    .call(this.htmlControl.displayByClassName, ["Projects"], "showProjects");
 
-                // 3. maybe some landing animation and introducation
-                // 4. view projects on the planet
-                mainTimeline    .call(this.htmlControl.displayByClassName, ["Projects"], "showProjects");
+        }
 
-            }
-
-            // dynamically changed object position based window/canvas size
-            window.addEventListener( 'resize', onWindowResize, false);
-            function onWindowResize() {
-                if (!self.state.localeCompare("Intro")) {
-                    // mainTimeline.to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0});
-                }
-            };
-        })
+        // dynamically changed object position based window/canvas size
+        // window.addEventListener( 'resize', onWindowResize, false);
+        // function onWindowResize() {
+        //     if (!self.state.localeCompare("Intro")) {
+        //         // mainTimeline.to(sword.position, {duration: 0.5, x: -window.innerWidth / window.innerHeight * 7, y: 0});
+        //     }
+        // };
     }   
 }
 
@@ -1135,38 +1162,30 @@ class HTMLControl {
 }
 
 class SwordCharacter {
-    constructor(scene, camera, renderer) {
-        this.swordAction = this.loadCharacter("./assets/3DObjects/rose_quartzs_sword/scene.gltf");
+    constructor(scene, camera, renderer, sword) {
+        // deploy path
+        // this.swordAction = this.loadCharacter("./assets/3DObjects/rose_quartzs_sword/scene.gltf");
+        // testing path
+        // this.swordAction = this.loadCharacter("./client/assets/3DObjects/rose_quartzs_sword/scene.gltf");
         this.scene = scene;
         this.camera = camera;
         this.renderer = renderer;
-
+        this.sword = sword;
         this.swordAnimation;
+
+        this.init();
     }
 
-    modelLoader(path) {
-        const loader = new GLTFLoader();
-        return new Promise((resolve, reject) => {
-            loader.load(path, data=> resolve(data), null, reject);
-        });
-    }
+    init() {
+        this.sword.scale.set(5,5,5);
+        this.sword.position.x = 20;
+        this.sword.position.y = 20;
+        this.sword.position.z = 100;
 
-    async loadCharacter(path) {
-        const gltf = await this.modelLoader(path);
-     
-        var sword = gltf.scene.children[0]; 
-        sword.scale.set(5,5,5);
-        sword.name = "sword";
-        sword.position.x = 20;
-        sword.position.y = 20;
-        sword.position.z = 100;
+        this.sword.rotation.x = - Math.PI / 5;
+        this.sword.rotation.y = - Math.PI / 3;
+        this.sword.rotation.z = - Math.PI / 2;
 
-        sword.rotation.x = - Math.PI / 5;
-        sword.rotation.y = - Math.PI / 3;
-        sword.rotation.z = - Math.PI / 2;
-
-        this.scene.add(sword);
-        
         var self = this;
 
         function animate() {
@@ -1175,24 +1194,18 @@ class SwordCharacter {
         }
 
         animate();
-
-        return sword;
     }
 }
 
-window.addEventListener('load', main);
-
 /*  */
 function main() {
-    var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(125, window.innerWidth/window.innerHeight, 0.001, 2000);    
-    // var camera = new THREE.OrthographicCamera(window.innerWidth / 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / 2, 1, 1000)
     var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     var container = document.getElementById('bg');
     container.appendChild (renderer.domElement);
 
     var htmlControl = new HTMLControl();
-    var swordCharacter = new SwordCharacter(scene, camera, renderer);
+    var swordCharacter = new SwordCharacter(scene, camera, renderer, scene.children[0]);
     var QGHAnimation = new Animation(scene, camera, renderer, htmlControl, swordCharacter);
 
     var introTimeline = gsap.timeline();
@@ -1223,4 +1236,3 @@ function main() {
         window.cancelAnimationFrame(QGHAnimation.coinFlipAnimation);
     });
 }
-
