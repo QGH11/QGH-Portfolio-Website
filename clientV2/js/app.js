@@ -51,6 +51,15 @@ class Character {
         this.speed = speed;
 
         this.controls;
+
+        
+        this._mixers = [];
+        this._previousRAF = null;
+    }
+
+    CharacterInit() {
+        this.loadAnimatedModel();
+        this.RAF();
     }
 
     loadAnimatedModel() {
@@ -58,14 +67,39 @@ class Character {
           camera: camera,
           scene: scene,
         }
-        this.controls = new BasicCharacterController(params);
+        // console.log(this.character.quaternion)
+        this.controls = new BasicCharacterController(this.character, params);
+    }
+
+    RAF() {
+        requestAnimationFrame((t) => {
+            if (this._previousRAF === null) {
+                this._previousRAF = t;
+            }
+        
+            this.RAF();
+        
+            render();
+            this.Step(t - this._previousRAF);
+            this._previousRAF = t;
+        });
+    }
+    
+    Step(timeElapsed) {
+        const timeElapsedS = timeElapsed * 0.001;
+        if (this._mixers) {
+            this._mixers.map(m => m.update(timeElapsedS));
+        }
+
+        if (this.controls) {    
+            this.controls.Update(timeElapsedS);
+        }
     }
 }
 
 class DodocoKing extends Character {
     constructor(character, name) {
         super(character, name, 0.01); 
-        
         this.init();
     }
 
@@ -74,14 +108,14 @@ class DodocoKing extends Character {
         this.character.rotateZ(Math.PI)
 
         const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
-        directionalLight.position.set(0, 9, 0);
+        directionalLight.position.set(0, 0, 5);
         directionalLight.shadow.mapSize.x = 2048;
         directionalLight.target = this.character;
-        scene.add(directionalLight);
         const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight);
         scene.add(directionalLightHelper);
+        this.character.add(directionalLight);
 
-        this.loadAnimatedModel();
+        this.CharacterInit();
     }
 }
 
