@@ -2,7 +2,7 @@ import * as THREE from '../../node_modules/three/build/three.module.js';
 // import {gsap} from '../../node_modules/gsap/gsap-core.js';
 import {GLTFLoader} from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js'
-import BasicCharacterController from './components/CharacterControls.js'
+import BasicCharacterController, {ThirdPersonCamera} from './components/CharacterControls.js'
  
 // scene basic setup
 var scene = new THREE.Scene();
@@ -15,6 +15,16 @@ renderer.toneMappingExposure = 1;
 renderer.outputEncoding = THREE.sRGBEncoding;
 var container = document.getElementById('bg');
 container.appendChild (renderer.domElement);
+
+//  orbitccontrol
+const orbit = new OrbitControls(camera, renderer.domElement);
+orbit.keys = { LEFT: 0, RIGHT: 0, UP: 0, BOTTOM: 0 }
+orbit.minDistance = 20;
+orbit.maxDistance = 100;
+orbit.minPolarAngle = 0;
+orbit.maxPolarAngle = Math.PI / 2 - Math.PI / 16    ;
+camera.position.set(30, 30, 30);
+orbit.update();
 
 /* Loading */
 const loadingManager = new THREE.LoadingManager();
@@ -57,18 +67,17 @@ class Character {
         this._previousRAF = null;
     }
 
-    CharacterInit() {
-        this.loadAnimatedModel();
-        this.RAF();
-    }
-
     loadAnimatedModel() {
         const params = {
           camera: camera,
-          scene: scene,
+          scene: scene
         }
-        // console.log(this.character.quaternion)
         this.controls = new BasicCharacterController(this.character, params);
+
+        this.thirdPersonCamera = new ThirdPersonCamera({
+            camera: camera,
+            target: this.controls,
+        });
     }
 
     RAF() {
@@ -94,6 +103,8 @@ class Character {
         if (this.controls) {    
             this.controls.Update(timeElapsedS);
         }
+
+        // this.thirdPersonCamera.Update(timeElapsedS);
     }
 }
 
@@ -105,7 +116,6 @@ class DodocoKing extends Character {
 
     init() {
         this.character.position.y = 5;
-        this.character.rotateZ(Math.PI)
 
         const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
         directionalLight.position.set(0, 0, 5);
@@ -114,8 +124,20 @@ class DodocoKing extends Character {
         const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight);
         scene.add(directionalLightHelper);
         this.character.add(directionalLight);
+        const axesHelper = new THREE.AxesHelper( 10 );
+
+        this.character.add(axesHelper);
+
+        // axis helper
+        const sceneaxesHelper = new THREE.AxesHelper( 10 );
+        scene.add( sceneaxesHelper );
 
         this.CharacterInit();
+    }
+
+    CharacterInit() {
+        this.loadAnimatedModel();
+        this.RAF();
     }
 }
 
@@ -139,14 +161,6 @@ class World {
 
     init() {
         scene.background = new THREE.Color(0xdddddd);
-        const orbit = new OrbitControls(camera, renderer.domElement);
-        orbit.keys = { LEFT: 0, RIGHT: 0, UP: 0, BOTTOM: 0 }
-        orbit.minDistance = 20;
-        orbit.maxDistance = 100;
-        orbit.minPolarAngle = 0;
-        orbit.maxPolarAngle = Math.PI / 2 - Math.PI / 16    ;
-        camera.position.set(10, 15, -22);
-        orbit.update();
 
         const ambientLight = new THREE.AmbientLight();
         scene.add(ambientLight);

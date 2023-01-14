@@ -30,8 +30,7 @@ function loadCharacter(path, name) {
 }
 
 // models
-loadCharacter("./dist/assets/3DObjects/rose_quartzs_sword/scene.gltf", "Sword");
-// loadCharacter("./dist/assets/3DObjects/bananya_birbo/scene.gltf", "BananaCat");  
+loadCharacter("./assets/3DObjects/rose_quartzs_sword/scene.gltf", "Sword");
 
 class Animation {
     constructor(scene, camera, renderer, htmlControl, swordCharacter) {
@@ -121,7 +120,7 @@ class Animation {
 
         THREE.ImageUtils.crossOrigin = '';
         // IMPORTANT: This next line defines the texture of your coin. I didn't include the Minecraft texture (for copyright reasons) You should replace the url inside '.load(...)' with the path to your own image.
-        const texture = new THREE.TextureLoader().load( "https://raw.githubusercontent.com/pkellz/devsage/master/ThreeJS/MinecraftBlock/devsage.jpg" );
+        const texture = new THREE.TextureLoader().load( "./images/laptop.jpg" );
 
         const material = new THREE.MeshStandardMaterial({
             map: texture,

@@ -22,6 +22,7 @@ export default class BasicCharacterController {
       this._decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0);
       this._acceleration = new THREE.Vector3(1, 0.25, 50.0);
       this._velocity = new THREE.Vector3(0, 0, 0);
+      this._position = new THREE.Vector3();
       this._canjump = true;
   
       this._animations = {};
@@ -68,7 +69,18 @@ export default class BasicCharacterController {
         // loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
     //   });
     // }    
-  
+    
+    get Position() {
+        return this._position;
+      }
+    
+    get Rotation() {
+        if (!this._target) {
+            return new THREE.Quaternion();
+        }
+        return this._target.quaternion;
+    }
+    
     Update(timeInSeconds) {
         if (!this._target) {
             return;
@@ -103,17 +115,18 @@ export default class BasicCharacterController {
         // }
 
         // jumping logic
+        // console.log(this._target.position.z)
         if (this._input._keys.space && this._canjump) {
-            velocity.x += 200 * timeInSeconds;
+            velocity.z += 200 * timeInSeconds;
         }
         if (this._target.position.z >= 10) {
             this._canjump = false;
         }
         if(!this._canjump){
-            velocity.x -= 150 * timeInSeconds;
-            if(this._target.position.z <= 5){
+            velocity.z -= 150 * timeInSeconds;
+            if(this._target.position.z <= 5) {
                 this._canjump = true;
-                velocity.x = 0;
+                velocity.z = 0;
             }
         }
     
@@ -143,7 +156,7 @@ export default class BasicCharacterController {
         forward.applyQuaternion(controlObject.quaternion);
         forward.normalize();
     
-        const sideways = new THREE.Vector3(0, 0, 1);
+        const sideways = new THREE.Vector3(0, 0, 0);
         sideways.applyQuaternion(controlObject.quaternion);
         sideways.normalize();
     
@@ -154,6 +167,7 @@ export default class BasicCharacterController {
         controlObject.position.add(sideways);
     
         oldPosition.copy(controlObject.position);
+
     
         if (this._mixer) {
             this._mixer.update(timeInSeconds);
@@ -175,6 +189,7 @@ class BasicCharacterControllerInput {
             space: false,
             shift: false
         };
+
         document.addEventListener('keydown', (e) => this._onKeyDown(e), false);
         document.addEventListener('keyup', (e) => this._onKeyUp(e), false);
     }
@@ -529,3 +544,43 @@ class IdleState extends State {
         }
     }
 };
+
+export class ThirdPersonCamera {
+    constructor(params) {
+        this._params = params;
+        this._camera = params.camera;
+    
+        this._currentPosition = new THREE.Vector3();
+        this._currentLookat = new THREE.Vector3();
+    }
+  
+    _CalculateIdealOffset() {
+        const idealOffset = new THREE.Vector3(30, 30, 30);
+        idealOffset.applyQuaternion(this._params.target.Rotation);   
+        idealOffset.add(this._params.target.Position);
+        return idealOffset;
+    }
+  
+    _CalculateIdealLookat() {
+        const idealLookat = new THREE.Vector3(0, 0, 0);
+        idealLookat.applyQuaternion(this._params.target.Rotation);
+        idealLookat.add(this._params.target.Position);
+        return idealLookat;
+    }
+  
+    Update(timeElapsed) {
+        const idealOffset = this._CalculateIdealOffset();
+        const idealLookat = this._CalculateIdealLookat();
+
+        // const t = 0.05;
+        // const t = 4.0 * timeElapsed;
+        // const t = 1.0 - Math.pow(0.001, timeElapsed);
+
+        this._currentPosition.copy(idealOffset);
+        this._currentLookat.copy(idealLookat);
+
+        // console.log(this._currentPosition)
+        this._camera.position.copy(this._currentPosition);
+        this._camera.lookAt(this._currentLookat);
+    }
+}
