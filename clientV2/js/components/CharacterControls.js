@@ -1,5 +1,6 @@
 import * as THREE from '../../../node_modules/three/build/three.module.js';
 
+
 // https://github.com/simondevyoutube/ThreeJS_Tutorial_CharacterController
 class BasicCharacterControllerProxy {
     constructor(animations) {
@@ -29,45 +30,69 @@ export default class BasicCharacterController {
       this._input = new BasicCharacterControllerInput();
       this._stateMachine = new CharacterFSM(new BasicCharacterControllerProxy(this._animations));
   
-    //   this._LoadModels();
     }
   
     // _LoadModels() {
-    //   const loader = new FBXLoader();
-    //   loader.setPath('./resources/zombie/');
-    //   loader.load('mremireh_o_desbiens.fbx', (fbx) => {
-    //     fbx.scale.setScalar(0.1);
-    //     fbx.traverse(c => {
-    //       c.castShadow = true;
-    //     });
+    //     const gltfLoader = new GLTFLoader();
+    //     gltfLoader.loadAsync(
+    //         "./clientV2/assets/3DObjects/dodoco_king/dodoco.glb", 
+    //         function(gltf) {            
+    //             // let mixer = new THREE.AnimationMixer(gltf.scene)
+
+    //             // const animationAction = mixer.clipAction((gltf as any).animations[0])
+    //             // animationActions.push(animationAction)
+    //             // animationsFolder.add(animations, 'default')
+    //             // activeAction = animationActions[0]
+    //             // this._mixer = new THREE.AnimationMixer(this._target);
+    //             // const _OnLoad = (animName, anim) => {
+    //             //     const clip = anim.animations[0];
+    //             //     const action = this._mixer.clipAction(clip);
+            
+    //             //     this._animations[animName] = {
+    //             //     clip: clip,
+    //             //     action: action,
+    //             //     };
+    //             // };
+    //             this._target = gltf;
+
+    //             console.log(gltf)
+    //             this._params.scene.add(gltf.scene);
+    //         }
+    //     )
+    // //   const loader = new FBXLoader();
+    // //   loader.setPath('./clientV2/assets/3DObjects/dodoco_king/');
+    // //   loader.load('dodoco.fbx', (fbx) => {
+    // //     fbx.scale.setScalar(0.1);
+    // //     fbx.traverse(c => {
+    // //       c.castShadow = true;
+    // //     })
+    // //     this._target = fbx;
+    // //     this._params.scene.add(this._target);
   
-        // this._target = fbx;
-        // this._params.scene.add(this._target);
+    // //     this._mixer = new THREE.AnimationMixer(this._target);
   
-        // this._mixer = new THREE.AnimationMixer(this._target);
+    // //     this._manager = new THREE.LoadingManager();
+    // //     this._manager.onLoad = () => {
+    // //       this._stateMachine.SetState('idle');
+    // //     };
   
-        // this._manager = new THREE.LoadingManager();
-        // this._manager.onLoad = () => {
-        //   this._stateMachine.SetState('idle');
-        // };
-  
-        // const _OnLoad = (animName, anim) => {
-        //   const clip = anim.animations[0];
-        //   const action = this._mixer.clipAction(clip);
+    // //     const _OnLoad = (animName, anim) => {
+    // //       const clip = anim.animations[0];
+    // //       const action = this._mixer.clipAction(clip);
     
-        //   this._animations[animName] = {
-        //     clip: clip,
-        //     action: action,
-        //   };
-        // };
+    // //       this._animations[animName] = {
+    // //         clip: clip,
+    // //         action: action,
+    // //       };
+    // //     };
   
-        // const loader = new FBXLoader(this._manager);
-        // loader.setPath('./resources/zombie/');
-        // loader.load('walk.fbx', (a) => { _OnLoad('walk', a); });
-        // loader.load('run.fbx', (a) => { _OnLoad('run', a); });
-        // loader.load('idle.fbx', (a) => { _OnLoad('idle', a); });
-        // loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
-    //   });
+    // //     const loader = new FBXLoader(this._manager);
+    // //     loader.setPath('./clientV2/assets/3DObjects/dodoco_king/');
+    // //     loader.load('walk.fbx', (a) => { _OnLoad('walk', a); });
+    // //     loader.load('run.fbx', (a) => { _OnLoad('run', a); });
+    // //     loader.load('idle.fbx', (a) => { _OnLoad('idle', a); });
+    // //     loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
+    // //   });
     // }    
     
     get Position() {
@@ -114,19 +139,19 @@ export default class BasicCharacterController {
         // acc.multiplyScalar(0.0);
         // }
 
-        // jumping logic
-        // console.log(this._target.position.z)
+        // jumping logic: no clue why z is changing
+        
         if (this._input._keys.space && this._canjump) {
-            velocity.z += 200 * timeInSeconds;
+            velocity.y += 200 * timeInSeconds;
         }
         if (this._target.position.z >= 10) {
             this._canjump = false;
         }
         if(!this._canjump){
-            velocity.z -= 150 * timeInSeconds;
+            velocity.y -= 150 * timeInSeconds;
             if(this._target.position.z <= 5) {
                 this._canjump = true;
-                velocity.z = 0;
+                velocity.y = 0;
             }
         }
     
@@ -137,12 +162,12 @@ export default class BasicCharacterController {
             velocity.z -= acc.z * timeInSeconds;
         }
         if (this._input._keys.left) {
-            _A.set(0, 0, 1);
+            _A.set(0, 1, 0);
             _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this._acceleration.y);
             _R.multiply(_Q);
         }
         if (this._input._keys.right) {
-            _A.set(0, 0, 1);
+            _A.set(0, 1, 0);
             _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this._acceleration.y);
             _R.multiply(_Q);
         }
@@ -152,15 +177,15 @@ export default class BasicCharacterController {
         const oldPosition = new THREE.Vector3();
         oldPosition.copy(controlObject.position);
     
-        const forward = new THREE.Vector3(0, -1, 0);
+        const forward = new THREE.Vector3(0, 0, 1);
         forward.applyQuaternion(controlObject.quaternion);
         forward.normalize();
     
-        const sideways = new THREE.Vector3(0, 0, 0);
+        const sideways = new THREE.Vector3(0, 1, 0);
         sideways.applyQuaternion(controlObject.quaternion);
         sideways.normalize();
     
-        sideways.multiplyScalar(velocity.x * timeInSeconds);
+        sideways.multiplyScalar(velocity.y * timeInSeconds);
         forward.multiplyScalar(velocity.z * timeInSeconds);
     
         controlObject.position.add(forward);

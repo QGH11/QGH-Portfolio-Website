@@ -1,5 +1,4 @@
 import * as THREE from '../../node_modules/three/build/three.module.js';
-// import {gsap} from '../../node_modules/gsap/gsap-core.js';
 import {GLTFLoader} from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js'
 import BasicCharacterController, {ThirdPersonCamera} from './components/CharacterControls.js'
@@ -38,41 +37,63 @@ loadingManager.onLoad = function () {
     main();
 }
 
-function loadCharacter(path, name) {
+var mixers = [];
+var actions = [];
+var mixer_1;
+
+function loadCharacter(path) {
     gltfLoader.load(
         path, 
-        function(gltf) {            
-            var object = gltf.scene.children[0]; 
-            object.name = name;
-            scene.add(object);
+        function(gltf) {   
+            mixer_1 = new THREE.AnimationMixer(gltf.scene);
+            mixers.push( mixer_1 );
+            const action_1 = mixer_1.clipAction( gltf.animations[0]);
+            actions.push(action_1);
+            action_1.play();
+            const currentAction = mixer_1.clipAction(gltf.animations[0]);
+
+            console.log(gltf)
+            scene.add(gltf.scene);
+
+            // load_animations();
         }
     )
 }
 
-// models
-// loadCharacter("./dist/assets/3DObjects/bananya_birbo/scene.gltf", "BananaCat");  
-loadCharacter("./clientV2/assets/3DObjects/dodoco_king/nonmetalscene.glb", "DodocoKing");  
+// function load_animations() {
+//     gltfLoader.load( 
+//       './clientV2/assets/3DObjects/dodoco_king/dodoco.glb', function ( gltf ) {
+//         console.log( "Look Around animation loaded" );
+//         const action_2 = mixer_1.clipAction(gltf.animations[0]);
+//         actions.push(action_2);
+//       }
+//     );
+// }
 
+// models
+loadCharacter("./clientV2/assets/3DObjects/dodoco_king/dodoco.glb");  
 
 class Character {
-    constructor(character, name, speed) {
-        this.character = character;
+    constructor(characterScene, name) {
         this.name = name;
-        this.speed = speed;
 
         this.controls;
 
+        this.characterScene = characterScene;
         
-        this._mixers = [];
+        this._mixers = mixers;
         this._previousRAF = null;
+
+        this.loadAnimatedModel()
+        this.RAF();
     }
 
     loadAnimatedModel() {
         const params = {
           camera: camera,
-          scene: scene
+          scene: scene,
         }
-        this.controls = new BasicCharacterController(this.character, params);
+        this.controls = new BasicCharacterController(this.characterScene, params);
 
         this.thirdPersonCamera = new ThirdPersonCamera({
             camera: camera,
@@ -109,35 +130,29 @@ class Character {
 }
 
 class DodocoKing extends Character {
-    constructor(character, name) {
-        super(character, name, 0.01); 
+    constructor(characterScene, name) {
+        super(characterScene, name); 
         this.init();
     }
 
     init() {
-        this.character.position.y = 5;
+        this.characterScene.position.y = 5;
 
         const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
-        directionalLight.position.set(0, 0, 5);
+        directionalLight.position.set(0, 5, 0);
         directionalLight.shadow.mapSize.x = 2048;
-        directionalLight.target = this.character;
+        directionalLight.target = this.characterScene;
         const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight);
         scene.add(directionalLightHelper);
-        this.character.add(directionalLight);
+        this.characterScene.add(directionalLight);
         const axesHelper = new THREE.AxesHelper( 10 );
 
-        this.character.add(axesHelper);
+        this.characterScene.add(axesHelper);
 
-        // axis helper
+        // axis helper: The X axis is red. The Y axis is green. The Z axis is blue.
         const sceneaxesHelper = new THREE.AxesHelper( 10 );
         scene.add( sceneaxesHelper );
 
-        this.CharacterInit();
-    }
-
-    CharacterInit() {
-        this.loadAnimatedModel();
-        this.RAF();
     }
 }
 
@@ -156,7 +171,7 @@ class World {
         this.ground.rotateX(-Math.PI / 2);
         scene.add(this.ground);
 
-        this.ground.attach(this.dodocoKing.character);
+        this.ground.attach(this.dodocoKing.characterScene);
     }
 
     init() {
@@ -171,8 +186,8 @@ class World {
 
 /*  */
 function main() {
-    var dodocoKing = new DodocoKing(scene.children[0], scene.children[0].name);
-    var world = new World(dodocoKing, );
+    var dodocoKing = new DodocoKing(scene.children[0], "dodoco");
+    var world = new World(dodocoKing);
 }
 
 
