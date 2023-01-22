@@ -29,71 +29,7 @@ export default class BasicCharacterController {
       this._animations = {};
       this._input = new BasicCharacterControllerInput();
       this._stateMachine = new CharacterFSM(new BasicCharacterControllerProxy(this._animations));
-  
     }
-  
-    // _LoadModels() {
-    //     const gltfLoader = new GLTFLoader();
-    //     gltfLoader.loadAsync(
-    //         "./clientV2/assets/3DObjects/dodoco_king/dodoco.glb", 
-    //         function(gltf) {            
-    //             // let mixer = new THREE.AnimationMixer(gltf.scene)
-
-    //             // const animationAction = mixer.clipAction((gltf as any).animations[0])
-    //             // animationActions.push(animationAction)
-    //             // animationsFolder.add(animations, 'default')
-    //             // activeAction = animationActions[0]
-    //             // this._mixer = new THREE.AnimationMixer(this._target);
-    //             // const _OnLoad = (animName, anim) => {
-    //             //     const clip = anim.animations[0];
-    //             //     const action = this._mixer.clipAction(clip);
-            
-    //             //     this._animations[animName] = {
-    //             //     clip: clip,
-    //             //     action: action,
-    //             //     };
-    //             // };
-    //             this._target = gltf;
-
-    //             console.log(gltf)
-    //             this._params.scene.add(gltf.scene);
-    //         }
-    //     )
-    // //   const loader = new FBXLoader();
-    // //   loader.setPath('./clientV2/assets/3DObjects/dodoco_king/');
-    // //   loader.load('dodoco.fbx', (fbx) => {
-    // //     fbx.scale.setScalar(0.1);
-    // //     fbx.traverse(c => {
-    // //       c.castShadow = true;
-    // //     })
-    // //     this._target = fbx;
-    // //     this._params.scene.add(this._target);
-  
-    // //     this._mixer = new THREE.AnimationMixer(this._target);
-  
-    // //     this._manager = new THREE.LoadingManager();
-    // //     this._manager.onLoad = () => {
-    // //       this._stateMachine.SetState('idle');
-    // //     };
-  
-    // //     const _OnLoad = (animName, anim) => {
-    // //       const clip = anim.animations[0];
-    // //       const action = this._mixer.clipAction(clip);
-    
-    // //       this._animations[animName] = {
-    // //         clip: clip,
-    // //         action: action,
-    // //       };
-    // //     };
-  
-    // //     const loader = new FBXLoader(this._manager);
-    // //     loader.setPath('./clientV2/assets/3DObjects/dodoco_king/');
-    // //     loader.load('walk.fbx', (a) => { _OnLoad('walk', a); });
-    // //     loader.load('run.fbx', (a) => { _OnLoad('run', a); });
-    // //     loader.load('idle.fbx', (a) => { _OnLoad('idle', a); });
-    // //     loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
-    // //   });
-    // }    
     
     get Position() {
         return this._position;
@@ -103,7 +39,7 @@ export default class BasicCharacterController {
         if (!this._target) {
             return new THREE.Quaternion();
         }
-        return this._target.quaternion;
+        return new THREE.Quaternion(this._target.quaternion.x, -this._target.quaternion.y, this._target.quaternion.z, this._target.quaternion.w);
     }
     
     Update(timeInSeconds) {
@@ -140,7 +76,6 @@ export default class BasicCharacterController {
         // }
 
         // jumping logic: no clue why z is changing
-        
         if (this._input._keys.space && this._canjump) {
             velocity.y += 200 * timeInSeconds;
         }
@@ -190,9 +125,8 @@ export default class BasicCharacterController {
     
         controlObject.position.add(forward);
         controlObject.position.add(sideways);
-    
-        oldPosition.copy(controlObject.position);
-
+        
+        this._position.copy(controlObject.position);
     
         if (this._mixer) {
             this._mixer.update(timeInSeconds);
@@ -574,20 +508,21 @@ export class ThirdPersonCamera {
     constructor(params) {
         this._params = params;
         this._camera = params.camera;
-    
+
         this._currentPosition = new THREE.Vector3();
         this._currentLookat = new THREE.Vector3();
+
     }
   
     _CalculateIdealOffset() {
-        const idealOffset = new THREE.Vector3(30, 30, 30);
+        const idealOffset = new THREE.Vector3(20, 20, -30);
         idealOffset.applyQuaternion(this._params.target.Rotation);   
         idealOffset.add(this._params.target.Position);
         return idealOffset;
     }
   
     _CalculateIdealLookat() {
-        const idealLookat = new THREE.Vector3(0, 0, 0);
+        const idealLookat = new THREE.Vector3(0, 20, 30);
         idealLookat.applyQuaternion(this._params.target.Rotation);
         idealLookat.add(this._params.target.Position);
         return idealLookat;
@@ -599,12 +534,11 @@ export class ThirdPersonCamera {
 
         // const t = 0.05;
         // const t = 4.0 * timeElapsed;
-        // const t = 1.0 - Math.pow(0.001, timeElapsed);
+        const t = 1.0 - Math.pow(0.001, timeElapsed);
 
-        this._currentPosition.copy(idealOffset);
-        this._currentLookat.copy(idealLookat);
+        this._currentPosition.lerp(idealOffset, t);
+        this._currentLookat.lerp(idealLookat, t);
 
-        // console.log(this._currentPosition)
         this._camera.position.copy(this._currentPosition);
         this._camera.lookAt(this._currentLookat);
     }

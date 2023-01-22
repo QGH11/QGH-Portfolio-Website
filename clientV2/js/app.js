@@ -5,7 +5,8 @@ import BasicCharacterController, {ThirdPersonCamera} from './components/Characte
  
 // scene basic setup
 var scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );  
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1.0, 1000 );  
+camera.position.set(30, 30, 30);
 var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -22,7 +23,6 @@ orbit.minDistance = 20;
 orbit.maxDistance = 100;
 orbit.minPolarAngle = 0;
 orbit.maxPolarAngle = Math.PI / 2 - Math.PI / 16    ;
-camera.position.set(30, 30, 30);
 orbit.update();
 
 /* Loading */
@@ -45,30 +45,26 @@ function loadCharacter(path) {
     gltfLoader.load(
         path, 
         function(gltf) {   
+
+            gltf.scene.traverse( function ( object ) {
+                if ( object.isMesh ) {
+                  object.castShadow = true;
+                }   
+            });
+        
+
             mixer_1 = new THREE.AnimationMixer(gltf.scene);
             mixers.push( mixer_1 );
             const action_1 = mixer_1.clipAction( gltf.animations[0]);
             actions.push(action_1);
             action_1.play();
-            const currentAction = mixer_1.clipAction(gltf.animations[0]);
 
             console.log(gltf)
             scene.add(gltf.scene);
-
-            // load_animations();
         }
     )
 }
 
-// function load_animations() {
-//     gltfLoader.load( 
-//       './clientV2/assets/3DObjects/dodoco_king/dodoco.glb', function ( gltf ) {
-//         console.log( "Look Around animation loaded" );
-//         const action_2 = mixer_1.clipAction(gltf.animations[0]);
-//         actions.push(action_2);
-//       }
-//     );
-// }
 
 // models
 loadCharacter("./clientV2/assets/3DObjects/dodoco_king/dodoco.glb");  
@@ -125,7 +121,7 @@ class Character {
             this.controls.Update(timeElapsedS);
         }
 
-        // this.thirdPersonCamera.Update(timeElapsedS);
+        this.thirdPersonCamera.Update(timeElapsedS);
     }
 }
 
