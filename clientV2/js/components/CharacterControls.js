@@ -32,14 +32,15 @@ export default class BasicCharacterController {
     }
     
     get Position() {
-        return this._position;
-      }
+        // ignore jumping camera movement
+        return new THREE.Vector3(this._position.x, 0, -this._position.y);
+    }
     
     get Rotation() {
         if (!this._target) {
             return new THREE.Quaternion();
         }
-        return new THREE.Quaternion(this._target.quaternion.x, -this._target.quaternion.y, this._target.quaternion.z, this._target.quaternion.w);
+        return new THREE.Quaternion(this._target.quaternion.x, this._target.quaternion.y, -this._target.quaternion.z, this._target.quaternion.w);
     }
     
     Update(timeInSeconds) {
@@ -89,7 +90,8 @@ export default class BasicCharacterController {
                 velocity.y = 0;
             }
         }
-    
+        
+        // camera control 
         if (this._input._keys.forward) {
             velocity.z += acc.z * timeInSeconds;
         }
@@ -512,34 +514,48 @@ export class ThirdPersonCamera {
         this._currentPosition = new THREE.Vector3();
         this._currentLookat = new THREE.Vector3();
 
+        this._pauseCameraFollow = false;
+
+        var self = this;    
+        this._params.orbitControl.addEventListener('start', function() {
+            self._pauseCameraFollow = true;
+        });
+        this._params.orbitControl.addEventListener('end', function() {
+            self._pauseCameraFollow = false;
+        });
     }
   
     _CalculateIdealOffset() {
-        const idealOffset = new THREE.Vector3(20, 20, -30);
+        const idealOffset = new THREE.Vector3(0, -35, -35);
         idealOffset.applyQuaternion(this._params.target.Rotation);   
         idealOffset.add(this._params.target.Position);
         return idealOffset;
     }
   
     _CalculateIdealLookat() {
-        const idealLookat = new THREE.Vector3(0, 20, 30);
+        const idealLookat = new THREE.Vector3(0, 0, 0);
         idealLookat.applyQuaternion(this._params.target.Rotation);
         idealLookat.add(this._params.target.Position);
         return idealLookat;
     }
   
     Update(timeElapsed) {
-        const idealOffset = this._CalculateIdealOffset();
-        const idealLookat = this._CalculateIdealLookat();
+        if (!this._pauseCameraFollow) {
+            const idealOffset = this._CalculateIdealOffset();
+            const idealLookat = this._CalculateIdealLookat();
 
-        // const t = 0.05;
-        // const t = 4.0 * timeElapsed;
-        const t = 1.0 - Math.pow(0.001, timeElapsed);
+            // const t = 0.05;
+            // const t = 4.0 * timeElapsed;
+            const t = 1.0 - Math.pow(0.001, timeElapsed);
 
-        this._currentPosition.lerp(idealOffset, t);
-        this._currentLookat.lerp(idealLookat, t);
+            this._currentPosition.lerp(idealOffset, t);
+            this._currentLookat.lerp(idealLookat, t);   
 
-        this._camera.position.copy(this._currentPosition);
-        this._camera.lookAt(this._currentLookat);
+            this._camera.position.copy(this._currentPosition);
+            this._camera.lookAt(this._currentLookat)
+        }
+        else {
+            this._params.orbitControl.target.set(this._params.target.Position.x, this._params.target.Position.y, this._params.target.Position.z)
+        }
     }
 }

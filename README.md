@@ -1,5 +1,7 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+
 <a name="readme-top"></a>
+
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
@@ -7,8 +9,6 @@
 *** Don't forget to give the project a star!
 *** Thanks again! Now go create something AMAZING! :D
 -->
-
-
 
 <!-- PROJECT SHIELDS -->
 <!--
@@ -18,13 +18,12 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -49,8 +48,6 @@
   </p>
 </div>
 
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -67,10 +64,10 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
+
 I want to do something different from a boring website with all my information, so I decided to use Three.js to make a interactive and fun portfolio, so that view can have fun as well as learn more about me in the meantime.
 
 <br />
@@ -81,35 +78,36 @@ Check it out with link: <a href="https://qghportfolio.vercel.app/"><strong>https
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 ### Developed With
-* HTML, CSS, JS
-* Three.js, GSAP
-* Jquery, Owl-Carousel
+
+- HTML, CSS, JS
+- Three.js, GSAP
+- Jquery, Owl-Carousel
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- GETTING STARTED -->
+
 ## Getting Started
+
 The website can be view at [here](https://qghportfolio.vercel.app/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- ROADMAP -->
+
 ## Roadmap
+
 - [x] Create HTML structure
 - [x] Create Intro Animation
 - [x] Create AboutMe Section
 - [x] Create Projects Section
 - [x] Create Contact Section
 - [x] Polish Website
-    - [x] Fill in Content
-    - [x] Polish CSS
-    - [x] Polish JS Effects
-    - [x] Fix Bugs
+  - [x] Fill in Content
+  - [x] Polish CSS
+  - [x] Polish JS Effects
+  - [x] Fix Bugs
 - [ ] Deploy to Vecel (Version 1.0)
 - [ ] Fix More Bugs (Version 1.0)
 - [ ] Make improvement (Version 1.5)
@@ -120,43 +118,47 @@ See the [open issues](https://github.com/QGH11/QGH-Portfolio-Website/issues) for
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- LICENSE -->
+
 ## License
+
 Distributed under the MIT License. See [LICENSE.md][license-url] for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
+
 ## Attribution
 
 ### 3D Model
-* ["Rose Quartz's Sword"](https://skfb.ly/6uXo8) by Miaru3d is licensed under Creative Commons [Attribution](http://creativecommons.org/licenses/by/4.0/).
-* "Bananya Birbo" (https://skfb.ly/6YZLu) by CzernO is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-* "Dodoco King - Genshin Impact" (https://skfb.ly/ooGx8) by copycatypo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+- ["Rose Quartz's Sword"](https://skfb.ly/6uXo8) by Miaru3d is licensed under Creative Commons [Attribution](http://creativecommons.org/licenses/by/4.0/).
+<!-- * "Bananya Birbo" (https://skfb.ly/6YZLu) by CzernO is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Dodoco King - Genshin Impact" (https://skfb.ly/ooGx8) by copycatypo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
+
+### Music
 
 ### Code Template (Modified From)
-* [Plane & Plant](https://codepen.io/Zultan/pen/mwGZBP)
-* [Start & Saturn](https://codepen.io/elliezen/pen/yMqqWe) 
-* [Card Slider](https://codepen.io/yudizsolutions/pen/wvzrPoj) 
+
+- [Plane & Plant](https://codepen.io/Zultan/pen/mwGZBP)
+- [Start & Saturn](https://codepen.io/elliezen/pen/yMqqWe)
+- [Card Slider](https://codepen.io/yudizsolutions/pen/wvzrPoj)
 
 ### Resources
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [CodePen](https://codepen.io/trending)
-* [StackOverFlow](https://stackoverflow.com/)
+
+- [GitHub Pages](https://pages.github.com)
+- [Font Awesome](https://fontawesome.com)
+- [CodePen](https://codepen.io/trending)
+- [StackOverFlow](https://stackoverflow.com/)
 
 ### Others
+
 Coin imgs:https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOYbaEeQZH_lMjVEJsPQg5flhgxg6n2ZCFjg&usqp=CAU
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
 [contributors-url]: https://github.com/QGH11/QGH-Portfolio-Website/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
@@ -167,7 +169,5 @@ Coin imgs:https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOYbaEeQZH_lMjVE
 [license-url]: https://github.com/QGH11/QGH-Portfolio-Website/blob/main/LICENSE.md
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/antonio-qiao/
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
-
-
+[jquery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
+[jquery-url]: https://jquery.com

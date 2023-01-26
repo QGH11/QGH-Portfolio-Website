@@ -1,12 +1,12 @@
 import * as THREE from '../../node_modules/three/build/three.module.js';
 import {GLTFLoader} from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js'
+import {DragControls} from '../../node_modules/three/examples/jsm/controls/DragControls.js'
 import BasicCharacterController, {ThirdPersonCamera} from './components/CharacterControls.js'
  
 // scene basic setup
 var scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1.0, 1000 );  
-camera.position.set(30, 30, 30);
 var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -22,8 +22,11 @@ orbit.keys = { LEFT: 0, RIGHT: 0, UP: 0, BOTTOM: 0 }
 orbit.minDistance = 20;
 orbit.maxDistance = 100;
 orbit.minPolarAngle = 0;
-orbit.maxPolarAngle = Math.PI / 2 - Math.PI / 16    ;
+orbit.maxPolarAngle = Math.PI / 2 - Math.PI / 16;
+orbit.enableZoom = false;
 orbit.update();
+
+
 
 /* Loading */
 const loadingManager = new THREE.LoadingManager();
@@ -45,13 +48,11 @@ function loadCharacter(path) {
     gltfLoader.load(
         path, 
         function(gltf) {   
-
             gltf.scene.traverse( function ( object ) {
                 if ( object.isMesh ) {
                   object.castShadow = true;
                 }   
             });
-        
 
             mixer_1 = new THREE.AnimationMixer(gltf.scene);
             mixers.push( mixer_1 );
@@ -59,7 +60,6 @@ function loadCharacter(path) {
             actions.push(action_1);
             action_1.play();
 
-            console.log(gltf)
             scene.add(gltf.scene);
         }
     )
@@ -87,13 +87,14 @@ class Character {
     loadAnimatedModel() {
         const params = {
           camera: camera,
-          scene: scene,
+          scene: scene
         }
         this.controls = new BasicCharacterController(this.characterScene, params);
 
         this.thirdPersonCamera = new ThirdPersonCamera({
             camera: camera,
             target: this.controls,
+            orbitControl: orbit
         });
     }
 
@@ -102,9 +103,9 @@ class Character {
             if (this._previousRAF === null) {
                 this._previousRAF = t;
             }
-        
+
             this.RAF();
-        
+
             render();
             this.Step(t - this._previousRAF);
             this._previousRAF = t;
@@ -155,9 +156,24 @@ class DodocoKing extends Character {
 class World {
     constructor(dodocoKing) {
         this.ground;
-
         this.dodocoKing = dodocoKing;
+
+        this.musicbtn = document.getElementsByClassName("toggle-sound")[0];
+        this.sound;
+
         this.init();
+
+        var self = this;
+        // music on and off
+        this.musicbtn.addEventListener("click", function() {
+            if (self.sound.isPlaying) {
+                self.sound.pause();
+            }
+            else {
+                self.sound.play();
+            }
+            this.classList.toggle('sound-mute');
+        });
     }
 
     createPlane() {
@@ -177,6 +193,23 @@ class World {
         scene.add(ambientLight);
         
         this.createPlane();
+
+        // create an AudioListener and add it to the camera
+        const listener = new THREE.AudioListener();
+        camera.add( listener );
+
+        // create a global audio source
+        this.sound = new THREE.Audio( listener );
+
+        var self = this;
+        // load a sound and set it as the Audio object's buffer
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load( './clientV2/assets/music/GenshinMainTheme.mp3', function( buffer ) {
+            self.sound.setBuffer( buffer );
+            self.sound.setLoop( true );
+            self.sound.setVolume( 0.5 );
+            self.sound.play();
+        });
     }
 }
 
