@@ -135,6 +135,7 @@ Distributed under the MIT License. See [LICENSE.md][license-url] for more inform
 - ["Rose Quartz's Sword"](https://skfb.ly/6uXo8) by Miaru3d is licensed under Creative Commons [Attribution](http://creativecommons.org/licenses/by/4.0/).
 <!-- * "Bananya Birbo" (https://skfb.ly/6YZLu) by CzernO is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Dodoco King - Genshin Impact" (https://skfb.ly/ooGx8) by copycatypo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
+<!-- "Kitty Donut Shop" (https://skfb.ly/oqSyM) by Mikkel Garde Blaase is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
 
 ### Music
 

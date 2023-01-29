@@ -1,8 +1,8 @@
 import * as THREE from '../../node_modules/three/build/three.module.js';
 import {GLTFLoader} from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js'
-import {DragControls} from '../../node_modules/three/examples/jsm/controls/DragControls.js'
 import BasicCharacterController, {ThirdPersonCamera} from './components/CharacterControls.js'
+import Structure from './components/Structure.js';
  
 // scene basic setup
 var scene = new THREE.Scene();
@@ -65,17 +65,30 @@ function loadCharacter(path) {
     )
 }
 
+function loadStructure(path) {
+    gltfLoader.load(
+        path, 
+        function(gltf) {   
+            gltf.scene.traverse( function ( object ) {
+                if ( object.isMesh ) {
+                  object.castShadow = true;
+                }   
+            });
+
+            scene.add(gltf.scene);
+        }
+    )
+}
 
 // models
 loadCharacter("./clientV2/assets/3DObjects/dodoco_king/dodoco.glb");  
+loadStructure("./clientV2/assets/3DObjects/kitty_donout_shop/scene.gltf");
 
 class Character {
-    constructor(characterScene, name) {
-        this.name = name;
+    constructor(characterScene) {
+        this.characterScene = characterScene;
 
         this.controls;
-
-        this.characterScene = characterScene;
         
         this._mixers = mixers;
         this._previousRAF = null;
@@ -94,7 +107,7 @@ class Character {
         this.thirdPersonCamera = new ThirdPersonCamera({
             camera: camera,
             target: this.controls,
-            orbitControl: orbit
+            orbitControl: orbit,
         });
     }
 
@@ -127,8 +140,8 @@ class Character {
 }
 
 class DodocoKing extends Character {
-    constructor(characterScene, name) {
-        super(characterScene, name); 
+    constructor(characterScene) {
+        super(characterScene); 
         this.init();
     }
 
@@ -142,24 +155,26 @@ class DodocoKing extends Character {
         const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight);
         scene.add(directionalLightHelper);
         this.characterScene.add(directionalLight);
+
+
         const axesHelper = new THREE.AxesHelper( 10 );
-
         this.characterScene.add(axesHelper);
-
         // axis helper: The X axis is red. The Y axis is green. The Z axis is blue.
         const sceneaxesHelper = new THREE.AxesHelper( 10 );
         scene.add( sceneaxesHelper );
-
     }
 }
 
 class World {
-    constructor(dodocoKing) {
+    constructor(dodocoKing, kittyshop) {
         this.ground;
         this.dodocoKing = dodocoKing;
 
         this.musicbtn = document.getElementsByClassName("toggle-sound")[0];
         this.sound;
+
+        this.kittyshop = kittyshop;
+
 
         this.init();
 
@@ -177,13 +192,23 @@ class World {
     }
 
     createPlane() {
-        const geometry = new THREE.PlaneGeometry( 100, 100 );
+        const geometry = new THREE.PlaneGeometry(200, 200);
         const material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
         this.ground = new THREE.Mesh( geometry, material );
         this.ground.rotateX(-Math.PI / 2);
         scene.add(this.ground);
 
         this.ground.attach(this.dodocoKing.characterScene);
+    }
+
+    checkCollision() {
+        const dodocoKingBB = new THREE.Box3().setFromObject(this.dodocoKing.characterScene.children[0]);
+        const kittyshopBB = new THREE.Box3().setFromObject(this.kittyshop.structureScene.children[0]);
+        if (dodocoKingBB.intersectsBox(kittyshopBB)) {
+            return {id: 0, boxBB: kittyshopBB};
+        }
+
+        return {id: -1, boxBB: null};
     }
 
     init() {
@@ -196,7 +221,7 @@ class World {
 
         // create an AudioListener and add it to the camera
         const listener = new THREE.AudioListener();
-        camera.add( listener );
+        camera.add(listener);
 
         // create a global audio source
         this.sound = new THREE.Audio( listener );
@@ -208,25 +233,33 @@ class World {
             self.sound.setBuffer( buffer );
             self.sound.setLoop( true );
             self.sound.setVolume( 0.5 );
-            self.sound.play();
+            // self.sound.play();
         });
     }
 }
 
 /*  */
 function main() {
-    var dodocoKing = new DodocoKing(scene.children[0], "dodoco");
-    var world = new World(dodocoKing);
-}
+    var dodocoKing = new DodocoKing(scene.children[0]);
+    var kittyshop = new Structure(scene.children[1]);
+    var world = new World(dodocoKing, kittyshop);
+
+    kittyshop.init(new THREE.Vector3(20, 0, 20), [2, 2, 2],  Math.PI);
 
 
-function animate(time) {
-    render();
+    function animate() {
+        dodocoKing.controls.collisionHandler(world.checkCollision().boxBB);
+        
+
+        requestAnimationFrame(animate);
+        render();
+    }
+
+    animate();
 }
-renderer.setAnimationLoop(animate);
 
 function render() {
-    renderer.render( scene, camera );
+    renderer.render(scene, camera);
 }
 
 // resize

@@ -19,23 +19,30 @@ export default class BasicCharacterController {
     }
   
     _Init(params) {
-      this._params = params;
-      this._decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0);
-      this._acceleration = new THREE.Vector3(1, 0.25, 50.0);
-      this._velocity = new THREE.Vector3(0, 0, 0);
-      this._position = new THREE.Vector3();
-      this._canjump = true;
-  
-      this._animations = {};
-      this._input = new BasicCharacterControllerInput();
-      this._stateMachine = new CharacterFSM(new BasicCharacterControllerProxy(this._animations));
+        this._params = params;
+        this._decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0);
+        this._acceleration = new THREE.Vector3(1, 0.25, 50.0);
+        this._velocity = new THREE.Vector3(0, 0, 0);
+        this._position = new THREE.Vector3();
+        this._canjump = true;
+        this._collision = null;
+
+        // boxhelper for collision
+        const boxHelper = new THREE.BoxHelper(this._target.children[0]);
+        this._target.add(boxHelper);
+    
+        this._animations = {};
+        this._input = new BasicCharacterControllerInput();
+        this._stateMachine = new CharacterFSM(new BasicCharacterControllerProxy(this._animations));
     }
     
+    /* for camera  */
     get Position() {
         // ignore jumping camera movement
         return new THREE.Vector3(this._position.x, 0, -this._position.y);
     }
     
+    /* for camera  */
     get Rotation() {
         if (!this._target) {
             return new THREE.Quaternion();
@@ -43,6 +50,11 @@ export default class BasicCharacterController {
         return new THREE.Quaternion(this._target.quaternion.x, this._target.quaternion.y, -this._target.quaternion.z, this._target.quaternion.w);
     }
     
+    /* handle collision */
+    collisionHandler(collision) {
+        this._collision = collision;
+    }
+
     Update(timeInSeconds) {
         if (!this._target) {
             return;
@@ -91,7 +103,7 @@ export default class BasicCharacterController {
             }
         }
         
-        // camera control 
+        // key control 
         if (this._input._keys.forward) {
             velocity.z += acc.z * timeInSeconds;
         }
@@ -124,10 +136,23 @@ export default class BasicCharacterController {
     
         sideways.multiplyScalar(velocity.y * timeInSeconds);
         forward.multiplyScalar(velocity.z * timeInSeconds);
-    
-        controlObject.position.add(forward);
+
+        // prevent collision
+        if (this._collision != null) {
+            oldPosition.add(forward);
+
+            if (-oldPosition.y > this._collision.min.y + 6 && -oldPosition.y < this._collision.max.y * 2 - 4 && oldPosition.x > this._collision.min.x && oldPosition.x < this._collision.max.x * 2) {
+                
+            } else {
+                controlObject.position.add(forward)
+            }
+        }   
+        else {
+            controlObject.position.add(forward);
+        }
+
         controlObject.position.add(sideways);
-        
+
         this._position.copy(controlObject.position);
     
         if (this._mixer) {
@@ -558,4 +583,4 @@ export class ThirdPersonCamera {
             this._params.orbitControl.target.set(this._params.target.Position.x, this._params.target.Position.y, this._params.target.Position.z)
         }
     }
-}
+} 
