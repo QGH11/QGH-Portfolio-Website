@@ -2,7 +2,7 @@ import * as THREE from '../../node_modules/three/build/three.module.js';
 import {GLTFLoader} from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js'
 import BasicCharacterController, {ThirdPersonCamera} from './components/CharacterControls.js'
-import Structure from './components/Structure.js';
+import Structure, {KittyDonoutShop} from './components/Structure.js';
  
 // scene basic setup
 var scene = new THREE.Scene();
@@ -83,6 +83,7 @@ function loadStructure(path) {
 // models
 loadCharacter("./clientV2/assets/3DObjects/dodoco_king/dodoco.glb");  
 loadStructure("./clientV2/assets/3DObjects/kitty_donout_shop/scene.gltf");
+
 
 class Character {
     constructor(characterScene) {
@@ -198,7 +199,8 @@ class World {
         this.ground.rotateX(-Math.PI / 2);
         scene.add(this.ground);
 
-        this.ground.attach(this.dodocoKing.characterScene);
+            // this.ground.attach(this.dodocoKing.characterScene);
+            // this.ground.attach(this.kittyshop.str);
     }
 
     checkCollision() {
@@ -238,8 +240,12 @@ class World {
     }
 }
 
+// donout kitty shop page (About Me)
+
 /*  */
 function main() {
+    window.addEventListener('popstate', renderRoute);
+    
     var dodocoKing = new DodocoKing(scene.children[0]);
     var kittyshop = new Structure(scene.children[1]);
     var world = new World(dodocoKing, kittyshop);
@@ -247,20 +253,54 @@ function main() {
     kittyshop.init(new THREE.Vector3(20, 0, 20), [2, 2, 2],  Math.PI);
 
 
+    var kittydonoutshop = new KittyDonoutShop();
+
+    renderRoute() // the appropriate page is rendered upon page load
+
+    // one page website
+    function renderRoute() {
+        var hash = window.location.hash;
+        var pageview = document.getElementById("page-view");
+
+        // create a client-sider "router": single-page application
+        if (!hash.localeCompare("#/") || hash === "") {        
+            emptyDOM(pageview);
+        } 
+        else if (!hash.localeCompare("#/kittydonoutshop")) {        
+            emptyDOM(pageview);
+            pageview.appendChild(kittydonoutshop.elem);
+                        
+            // restore page-view z index
+            document.getElementsByClassName("page-control")[0].addEventListener("click", function() {
+                document.getElementById("page-view").style.zIndex = "-10"
+            });
+        } 
+    }
+
     function animate() {
         dodocoKing.controls.collisionHandler(world.checkCollision().boxBB);
-        
+        kittyshop.collisionHandler(world.checkCollision().id)
 
         requestAnimationFrame(animate);
         render();
     }
 
     animate();
+
+    // menu events
+    document.getElementsByClassName("enterPageBtn")[0].addEventListener("click", function() {
+        document.getElementById("page-view").style.zIndex = "20"
+    });
 }
 
 function render() {
     renderer.render(scene, camera);
 }
+
+function emptyDOM (elem){
+    while (elem.firstChild) elem.removeChild(elem.firstChild);
+}
+
 
 // resize
 window.addEventListener('resize', function() {

@@ -39,7 +39,7 @@ export default class BasicCharacterController {
     /* for camera  */
     get Position() {
         // ignore jumping camera movement
-        return new THREE.Vector3(this._position.x, 0, -this._position.y);
+        return new THREE.Vector3(this._position.x, this._position.y, this._position.z);
     }
     
     /* for camera  */
@@ -92,20 +92,34 @@ export default class BasicCharacterController {
         if (this._input._keys.space && this._canjump) {
             velocity.y += 200 * timeInSeconds;
         }
-        if (this._target.position.z >= 10) {
+        if (this._target.position.y >= 10) {
             this._canjump = false;
         }
         if(!this._canjump){
             velocity.y -= 150 * timeInSeconds;
-            if(this._target.position.z <= 5) {
+            if(this._target.position.y <= 5) {
                 this._canjump = true;
                 velocity.y = 0;
             }
         }
         
+        const oldPosition = new THREE.Vector3();
+        oldPosition.copy(controlObject.position);
+
         // key control 
         if (this._input._keys.forward) {
-            velocity.z += acc.z * timeInSeconds;
+
+            // prevent collision
+            if (this._collision != null) {
+                if (oldPosition.x > this._collision.min.x && oldPosition.x < this._collision.max.x && oldPosition.z > this._collision.min.z && oldPosition.z < this._collision.max.z) {
+                    velocity.z -= 200 * timeInSeconds;
+                } else {
+                    velocity.z += acc.z * timeInSeconds
+                }
+            }   
+            else {
+                velocity.z += acc.z * timeInSeconds;
+            }
         }
         if (this._input._keys.backward) {
             velocity.z -= acc.z * timeInSeconds;
@@ -123,9 +137,6 @@ export default class BasicCharacterController {
     
         controlObject.quaternion.copy(_R);
     
-        const oldPosition = new THREE.Vector3();
-        oldPosition.copy(controlObject.position);
-    
         const forward = new THREE.Vector3(0, 0, 1);
         forward.applyQuaternion(controlObject.quaternion);
         forward.normalize();
@@ -137,20 +148,8 @@ export default class BasicCharacterController {
         sideways.multiplyScalar(velocity.y * timeInSeconds);
         forward.multiplyScalar(velocity.z * timeInSeconds);
 
-        // prevent collision
-        if (this._collision != null) {
-            oldPosition.add(forward);
 
-            if (-oldPosition.y > this._collision.min.y + 6 && -oldPosition.y < this._collision.max.y * 2 - 4 && oldPosition.x > this._collision.min.x && oldPosition.x < this._collision.max.x * 2) {
-                
-            } else {
-                controlObject.position.add(forward)
-            }
-        }   
-        else {
-            controlObject.position.add(forward);
-        }
-
+        controlObject.position.add(forward);
         controlObject.position.add(sideways);
 
         this._position.copy(controlObject.position);
@@ -551,7 +550,7 @@ export class ThirdPersonCamera {
     }
   
     _CalculateIdealOffset() {
-        const idealOffset = new THREE.Vector3(0, -35, -35);
+        const idealOffset = new THREE.Vector3(0, 35, -35);
         idealOffset.applyQuaternion(this._params.target.Rotation);   
         idealOffset.add(this._params.target.Position);
         return idealOffset;
