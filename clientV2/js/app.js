@@ -171,7 +171,7 @@ class World {
         this.ground;
         this.dodocoKing = dodocoKing;
 
-        this.musicbtn = document.getElementsByClassName("toggle-sound")[0];
+        this.musicbtn = document.getElementsByClassName("sound")[0];
         this.sound;
 
         this.kittyshop = kittyshop;
@@ -183,12 +183,15 @@ class World {
         // music on and off
         this.musicbtn.addEventListener("click", function() {
             if (self.sound.isPlaying) {
+                document.getElementsByClassName("playing")[0].classList.toggle("play");
+                document.getElementsByClassName("stoping")[0].classList.toggle("play");    
                 self.sound.pause();
             }
             else {
+                document.getElementsByClassName("playing")[0].classList.toggle("play");
+                document.getElementsByClassName("stoping")[0].classList.toggle("play");
                 self.sound.play();
             }
-            this.classList.toggle('sound-mute');
         });
     }
 

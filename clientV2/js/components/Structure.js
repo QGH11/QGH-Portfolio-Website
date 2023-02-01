@@ -25,12 +25,12 @@ export default class Structure {
     enterStructure(promot) {
         this.structureInfo.appendChild(createDOM(
             `
-            <a id="structureBtn" href="#/kittydonoutshop"><button  class="button">${promot}</button></a>
+            <a id="structureBtn" href="#/kittydonoutshop"><button class="button">${promot}</button></a>
             `
         ));
     
         document.getElementById("structureBtn").addEventListener("click", function() {
-            document.getElementById("page-view").style.zIndex = "20"
+            document.getElementById("page-view").style.zIndex = "20";
         });
     }
 
@@ -50,13 +50,16 @@ export default class Structure {
 export class KittyDonoutShop {
     constructor() {
         this.elem = createDOM(
-            `<div class = "content">
+            `<div class="kittydonout-content">
                 <div class="About-Me">
-                    <img src="./clientV2/assets/3DObjects/kitty_donout_shop/textures/texture_baseColor.png" alt="Donout Cat">
-                
-                </div>
-                <div class = "page-control">
-                <a href="#/"><button>Return</button><a/>
+                    <img src="./clientV2/assets/images/kittyDonout.jpg" alt="Donout Cat">
+                    <div class="About-Me-Content">
+                        <h2>Hello I'm Antonio</h2>
+                        <p>Currently, I am a 3rd year Computer Engineering student at UBC</p>
+                        <div class="page-control">
+                            <a href="#/"><button class="button">Return</button><a/>
+                        </div>
+                    </div>
                 </div>
             </div>`
         );

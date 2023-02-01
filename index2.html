@@ -16,24 +16,19 @@
 
     <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a class="enterPageBtn" href="#/kittydonoutshop">About</a>
-      <a href="#">Services</a>
+      <a class="enterPageBtn" href="#/kittydonoutshop">About Me</a>
+      <a href="#">Projects</a>
       <a href="#">Clients</a>
       <a href="#">Contact</a>
     </div>
   
     <!-- Use any element to open the sidenav -->
-    <span id="menu-button" onclick="openNav()">open</span>
+    <span id="menu-button" onclick="openNav()"><i class="fa-solid fa-bars"></i></span>
 
-    <!-- bgm -->
-    <!-- https://codepen.io/giannisrig/pen/RYJPzb -->
-    <div class="unmuted toggle-sound"  href="#">
-        <div class="tooltip--left sound" data-tooltip="Turn On/Off Sound">
-          <div class="sound--icon fa fa-volume-off"></div>
-          <div class="sound--wave sound--wave_one"></div>
-          <div class="sound--wave sound--wave_two"></div>
-          <div class="sound--wave sound--wave_three"></div>
-        </div>
+    <!-- music button -->
+    <div class="sound"  href="#">
+        <i class="playing fa-solid fa-bars"></i>
+        <i class="stoping fa-solid fa-volume-xmark play"></i>
     </div>
     
     <div class="structure-info">
@@ -45,11 +40,10 @@
     
 
 
-
     <!-- <script src="./bundle.js"></script> -->
     <script>
       function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("mySidenav").style.width = "230px";
       }
 
       function closeNav() {
