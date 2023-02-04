@@ -2,7 +2,7 @@ import * as THREE from '../../node_modules/three/build/three.module.js';
 import {GLTFLoader} from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js'
 import BasicCharacterController, {ThirdPersonCamera} from './components/CharacterControls.js'
-import Structure, {KittyDonoutShop} from './components/Structure.js';
+import Structure, {KittyDonoutShop, Contact, Legal} from './components/Structure.js';
  
 // scene basic setup
 var scene = new THREE.Scene();
@@ -257,6 +257,8 @@ function main() {
 
 
     var kittydonoutshop = new KittyDonoutShop();
+    var contactPage = new Contact();
+    var legalPage = new Legal();
 
     renderRoute() // the appropriate page is rendered upon page load
 
@@ -278,6 +280,24 @@ function main() {
                 document.getElementById("page-view").style.zIndex = "-10"
             });
         } 
+        else if (!hash.localeCompare("#/legal")) {        
+            emptyDOM(pageview);
+            pageview.appendChild(legalPage.elem);
+                        
+            // restore page-view z index
+            document.getElementsByClassName("page-control")[0].addEventListener("click", function() {
+                document.getElementById("page-view").style.zIndex = "-10"
+            });
+        } 
+        else if (!hash.localeCompare("#/contact")) {        
+            emptyDOM(pageview);
+            pageview.appendChild(contactPage.elem);
+                        
+            // restore page-view z index
+            document.getElementsByClassName("page-control")[0].addEventListener("click", function() {
+                document.getElementById("page-view").style.zIndex = "-10"
+            });
+        } 
     }
 
     function animate() {
@@ -291,9 +311,13 @@ function main() {
     animate();
 
     // menu events
-    document.getElementsByClassName("enterPageBtn")[0].addEventListener("click", function() {
-        document.getElementById("page-view").style.zIndex = "20"
-    });
+    var menubtns = document.getElementsByClassName("enterAboutBtn");
+    
+    for (var i = 0; i < menubtns.length; i++) {
+        menubtns[i].addEventListener("click", function() {
+            document.getElementById("page-view").style.zIndex = "20"
+        });
+    }
 }
 
 function render() {
