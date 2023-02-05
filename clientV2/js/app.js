@@ -84,8 +84,8 @@ function loadStructure(path) {
 }
 
 // models
-loadCharacter("./clientV2/assets/3DObjects/dodoco_king/dodoco.glb");  
-loadStructure("./clientV2/assets/3DObjects/kitty_donout_shop/scene.gltf");
+loadCharacter("./assets/3DObjects/dodoco_king/dodoco.glb");  
+loadStructure("./assets/3DObjects/kitty_donout_shop/scene2.glb");
 
 /* Character Class */
 class Character {
@@ -157,16 +157,17 @@ class DodocoKing extends Character {
         directionalLight.position.set(0, 5, 0);
         directionalLight.shadow.mapSize.x = 2048;
         directionalLight.target = this.characterScene;
-        const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight);
-        scene.add(directionalLightHelper);
         this.characterScene.add(directionalLight);
+        // const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight);
+        // scene.add(directionalLightHelper);
 
 
-        const axesHelper = new THREE.AxesHelper( 10 );
-        this.characterScene.add(axesHelper);
-        // axis helper: The X axis is red. The Y axis is green. The Z axis is blue.
-        const sceneaxesHelper = new THREE.AxesHelper( 10 );
-        scene.add( sceneaxesHelper );
+
+        // const axesHelper = new THREE.AxesHelper( 10 );
+        // this.characterScene.add(axesHelper);
+        // // axis helper: The X axis is red. The Y axis is green. The Z axis is blue.
+        // const sceneaxesHelper = new THREE.AxesHelper( 10 );
+        // scene.add( sceneaxesHelper );
     }
 }
 
@@ -203,7 +204,7 @@ class World {
 
     createPlane() {
         const geometry = new THREE.PlaneGeometry(200, 200);
-        const material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
+        const material = new THREE.MeshBasicMaterial( {color: 0xffb366, side: THREE.DoubleSide} );
         this.ground = new THREE.Mesh( geometry, material );
         this.ground.rotateX(-Math.PI / 2);
         scene.add(this.ground);
@@ -237,7 +238,7 @@ class World {
         var self = this;
         // load a sound and set it as the Audio object's buffer
         const audioLoader = new THREE.AudioLoader();
-        audioLoader.load( './clientV2/assets/music/GenshinMainTheme.mp3', function( buffer ) {
+        audioLoader.load( './assets/music/GenshinMainTheme.mp3', function( buffer ) {
             self.sound.setBuffer( buffer );
             self.sound.setLoop( true );
             self.sound.setVolume( 0.5 );
@@ -253,7 +254,7 @@ function main() {
     var kittyshop = new Structure(scene.children[1]);
     var world = new World(dodocoKing, kittyshop);
 
-    kittyshop.init(new THREE.Vector3(20, 0, 20), [2, 2, 2],  Math.PI);
+    kittyshop.init(new THREE.Vector3(20, 0, 20), [3, 3, 3],  Math.PI);
 
 
     var kittydonoutshopPage = new KittyDonoutShop();

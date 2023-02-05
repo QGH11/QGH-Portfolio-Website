@@ -33,12 +33,12 @@
     "webpack-cli": "^5.0.1"
   },
   "scripts": {
-    "build:images": "imagemin client/assets/imgs/**/* --out-dir=dist/images",
+    "build:images": "imagemin clientV2/assets/images/**/* --out-dir=dist/assets/images",
     "build:js": "webpack --mode=production",
     "build": "run-p build:*",
-    "watch:css": "onchange \"client/style\" -- npm run build:css",
-    "watch:images": "onchange \"client/assets/imgs\" -- npm run build:images",
-    "watch:js": "onchange \"client/js\" -- webpack --mode=development",
+    "watch:css": "onchange \"clientV2/style\" -- npm run build:css",
+    "watch:images": "onchange \"clientV2/assets/images\" -- npm run build:images",
+    "watch:js": "onchange \"clientV2/js\" -- webpack --mode=development",
     "watch": "run-p serve watch:*"
   }
 }

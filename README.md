@@ -68,6 +68,8 @@
 
 ## About The Project
 
+I aim to create a web based open world, so that people can do interesting or useful things on it. I started it off by building my own porfolio with it, but the future of this world is undefined. I would love to have other developers directly develop inside this world, maybe I will build some features so this world becomes like Minecraft, or MMORPG, so that it can grow fast with the helper around the actual world.
+
 I want to do something different from a boring website with all my information, so I decided to use Three.js to make a interactive and fun portfolio, so that view can have fun as well as learn more about me in the meantime.
 
 <br />
@@ -81,8 +83,7 @@ Check it out with link: <a href="https://qghportfolio.vercel.app/"><strong>https
 ### Developed With
 
 - HTML, CSS, JS
-- Three.js, GSAP
-- Jquery, Owl-Carousel
+- Three.js
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -108,11 +109,9 @@ The website can be view at [here](https://qghportfolio.vercel.app/)
   - [x] Polish CSS
   - [x] Polish JS Effects
   - [x] Fix Bugs
-- [ ] Deploy to Vecel (Version 1.0)
-- [ ] Fix More Bugs (Version 1.0)
-- [ ] Make improvement (Version 1.5)
-- [ ] Add Background Music
-- [ ] Review Feedbacks and BrainStorm Version 2.0
+- [x] Deploy to Vecel (Version 1.0)
+- [x] Review Feedbacks and BrainStorm Version 2.0
+- [x] Verson 2.0 Published with many changes: 3d character control, character animation, background music, more interesting pages that introduce me,....
 
 See the [open issues](https://github.com/QGH11/QGH-Portfolio-Website/issues) for a full list of proposed features (and known issues).
 
@@ -132,18 +131,25 @@ Distributed under the MIT License. See [LICENSE.md][license-url] for more inform
 
 ### 3D Model
 
-- ["Rose Quartz's Sword"](https://skfb.ly/6uXo8) by Miaru3d is licensed under Creative Commons [Attribution](http://creativecommons.org/licenses/by/4.0/).
-<!-- * "Bananya Birbo" (https://skfb.ly/6YZLu) by CzernO is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-- "Dodoco King - Genshin Impact" (https://skfb.ly/ooGx8) by copycatypo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
-<!-- "Kitty Donut Shop" (https://skfb.ly/oqSyM) by Mikkel Garde Blaase is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
-
-### Music
+- ["Dodoco King - Genshin Impact"](https://skfb.ly/ooGx8) by copycatypo is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/).
+- ["Kitty Donut Shop"](https://skfb.ly/oqSyM) by Mikkel Garde Blaase is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/).
 
 ### Code Template (Modified From)
 
-- [Plane & Plant](https://codepen.io/Zultan/pen/mwGZBP)
-- [Start & Saturn](https://codepen.io/elliezen/pen/yMqqWe)
-- [Card Slider](https://codepen.io/yudizsolutions/pen/wvzrPoj)
+- [3rd Person Controller + Camera](https://github.com/simondevyoutube/ThreeJS_Tutorial_CharacterController)
+- [Music play and pause button](https://codepen.io/abikuk/pen/pGzJGy)
+- ["The Green Button"](https://codepen.io/seme332/pen/reJOwo)
+- [Contact Button](https://codepen.io/FrankieDoodie/pen/dqmKrb)
+- [Text Hover Effect](https://codepen.io/team/css-tricks/pen/gOXMLLY)
+- [Bongo Cat](https://codepen.io/Sloth_Sonal/pen/JjYWobO)
+
+### Images
+
+- Cat Donut: RottingFantacy (No Link for now, just credit this project)
+
+### Music
+
+- [Genshin Impact BGM](https://downloads.khinsider.com/game-soundtracks/album/genshin-impact-the-wind-and-the-star-traveler-2020)
 
 ### Resources
 
@@ -151,10 +157,7 @@ Distributed under the MIT License. See [LICENSE.md][license-url] for more inform
 - [Font Awesome](https://fontawesome.com)
 - [CodePen](https://codepen.io/trending)
 - [StackOverFlow](https://stackoverflow.com/)
-
-### Others
-
-Coin imgs:https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOYbaEeQZH_lMjVEJsPQg5flhgxg6n2ZCFjg&usqp=CAU
+- [W3Schools](https://www.w3schools.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

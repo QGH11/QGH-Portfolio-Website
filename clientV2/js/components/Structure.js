@@ -39,11 +39,11 @@ export default class Structure {
         this.structureScene.scale.set(scale[0], scale[1], scale[2]);
         this.structureScene.rotateY(rotationY);
 
-        const axesHelper = new THREE.AxesHelper( 10 );
-        this.structureScene.add(axesHelper);
+        // const axesHelper = new THREE.AxesHelper( 10 );
+        // this.structureScene.add(axesHelper);
 
-        const boxHelper = new THREE.BoxHelper(this.structureScene.children[0]);
-        this.structureScene.add(boxHelper)
+        // const boxHelper = new THREE.BoxHelper(this.structureScene.children[0]);
+        // this.structureScene.add(boxHelper)
     }
 }
 
@@ -52,14 +52,17 @@ export class KittyDonoutShop {
         this.elem = createDOM(
             `<div class="kittydonout-content">
                 <div class="About-Me">
-                    <img src="./clientV2/assets/images/kittyDonout.jpg" alt="Donout Cat">
+                    <img src="./assets/images/kittyDonout.jpg" alt="Donout Cat">
                     <div class="About-Me-Content">
                         <h1>Hello I'm Antonio</h1>
                         <p>
                             Currently, I am a 3rd year Computer Engineering student at UBC
                         </p>
                         <p>
-                            I love designing games, websites, applications that solve problems, ...
+                            I love developing games, websites, applications that solve problems, ...
+                        </p>
+                        <p>
+                            (Looking for Coop positions...)
                         </p>
                         <div class="page-control">
                             <a href="#/"><button class="button">Return</button><a/>

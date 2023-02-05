@@ -28,8 +28,8 @@ export default class BasicCharacterController {
         this._collision = null;
 
         // boxhelper for collision
-        const boxHelper = new THREE.BoxHelper(this._target.children[0]);
-        this._target.add(boxHelper);
+        // const boxHelper = new THREE.BoxHelper(this._target.children[0]);
+        // this._target.add(boxHelper);
     
         this._animations = {};
         this._input = new BasicCharacterControllerInput();

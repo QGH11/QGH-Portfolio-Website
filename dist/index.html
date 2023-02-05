@@ -2,105 +2,55 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" type="text/css"  href="./style.css">
-    <link rel="stylesheet" href="./style/owl.carousel.min.css">
-    <link rel="stylesheet" href="./style//owl.theme.default.min.css">
-    <link rel="stylesheet" href="./style/fontawesome-free/css/all.min.css">
-    <link rel="icon" href="./assets/imgs/FaceTitle.ico" type="image/icon type">
-    <title>QGH Portfolio</title>
+    <link rel="stylesheet" href="./style/fontawesome-free/css/all.css">
+    <link rel="icon" href="./assets/images/kittyDonout.jpg" type="image/icon type">
+    <title>QGH</title>
   </head>   
 
   <body>
-    <!-- Intro and ABoutMe Canvas -->
+    <!-- loading screen -->
+    <div class="progress-bar-container">
+        <label for="progress-bar">Loading...</label>
+        <progress id="progress-bar" value="0" max="100"></progress> 
+    </div>
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="#/kittydonoutshop">About Me</a>
+      <a href="#/Projects">Projects</a>
+      <a href="#/legal">This Porfolio</a>
+      <a href="#/contact">Contact</a>
+    </div>
+  
+    <!-- Use any element to open the sidenav -->
+    <span id="menu-button" onclick="openNav()"><i class="fa-solid fa-bars"></i></span>
+
+    <!-- music button -->
+    <div id="play-pause" class="play"></div>
+    
+    <!-- Enter Building Btn -->
+    <div class="structure-info">
+    </div>
+
+    <!-- one page web -->
+    <div id="page-view"></div>
+    
+    <!-- three.js bg -->
     <div id="bg"></div>
-    <main class="htmlContent-Container">
-      <nav class="navBar">
-        <div class="nav-logo"><a href="./index.html">QGH</a></div>
-        <div  class="menu-container">
-            <ul class="menu">
-                <li><a href="#AboutMe">About Me</a></li>
-                <li><a href="#Projects">Projects</a></li>
-                <li><a href="#Contact">Contact</a></li>
-            </ul>
-        </div>
+    
 
-        <!-- <audio-player src="assets/BattleWithoutHonor.mp3" preload autoplay></audio-player> -->
-        <!-- <audio-player src="" preload autoplay></audio-player>       -->
-      </nav>
-
-      <div class="IntroAboutMe" id="IntroAboutMe">
-        <!-- QGH's Introduction -->
-        <div class="Intro" id="Intro">
-          <div class="Intro-Card">
-            <p id="Intro-CardText"></p>
-            <p class="CardReminder Intro-CardReminder"></p>
-          </div>
-        </div>
-
-        <div class="AboutMe" id="AboutMe">
-          <div class="AboutMe-DialogContainer">
-            <p id="AboutMe-DialogText"></p>
-            <p class="AboutMe-DialogReminder">Click to Continue>>></p>
-            <p class="CardReminder AboutMe-StateSwitchReminder">Scroll Down to Continue>>></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="Projects" id="Projects">
-        <div id="world" class="ProjectsWorld"></div>
-        <section class="game-section">
-          <div class="owl-carousel custom-carousel owl-theme">
-            <div class="item active" style="background-image: url(./images/OnlineChattingApp.png);">
-              <div class="item-desc">
-                <h3>Online Chatting App (UBC)</h3>
-                <p> A web chatting app with features: multi-users chatting, chatting room creation, login authentication, 
-                    web secruity to prevent XSS. The web app is dynamically rendered, with server (Node.js) and data base (MongoDb) support...</p>
-              </div>
-            </div>
-            <div class="item" style="background-image: url(./images/RoboticArm.png);">
-              <div class="item-desc">
-                <h3>Robotic Arm (Personal)</h3>
-                <p> Robotic Arm that can be controled via website and VR (Oculus). VR interfacce is developed via
-                    Unity with simulation of a 3D Model; website is develop with JS and server connection with bluetooth...
-                </p>
-              </div>
-            </div>
-            <div class="item" style="background-image: url(./images/FoodSearchApp.png);">
-              <div class="item-desc">
-                <h3>Food Search/Shopping App (Personal)</h3>
-                <p> Java GUI App with features: login, registration, food-browsing, shopping cart. The App is developed using Java Swing,
-                    and user login/registration data is stored in MySQL, and cached some locally in .JSON for performance...
-                </p>
-              </div>
-            </div>
-            <div class="item" style="background-image: url(./images/IndustrialFurnaceWebsite.gif);">
-              <div class="item-desc">
-                <h3>Industrial Furance Website (Personal)</h3>
-                <p> A Landing Website for company to use to promote business and product...
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="Contact" id="Contact">
-          <h2 class="Contact-header">Contact Me</h2>
-          <div class="Contact-social">
-            <ul class="Attribute-socialList">
-              <a href="https://github.com/QGH11/QGH-Portfolio-Website" target="_blank"><li><i class="fa-brands fa-github"> Attribute</i></li></a>
-            </ul>
-            <ul class="Contact-socialList">
-              <a href="https://github.com/QGH11" target="_blank"><li><i class="fa-brands fa-github"> Github</i> </li></a>
-              <a href="https://www.linkedin.com/in/antonio-qiao/" target="_blank"><li><i class="fa-brands fa-linkedin"> LinkedIn</i> </li></a>
-              <a href="mailto: Guanhua.Qiao@outlook.com"><li><i class="fa-solid fa-envelope"> Email</i> </li></a>
-            </ul>
-          </div>  
-      </div>
-
-      <footer>Copyright © 2023 QGH Portfolio, All Rights Reserved</footer>
-    </main>
 
     <script src="./bundle.js"></script>
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "230px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+    </script>
+    <!-- <script src="./js/app.js" type="module"></script> -->
   </body>
 </html>
 
