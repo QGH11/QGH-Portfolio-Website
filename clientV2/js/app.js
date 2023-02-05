@@ -2,7 +2,7 @@ import * as THREE from '../../node_modules/three/build/three.module.js';
 import {GLTFLoader} from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js'
 import BasicCharacterController, {ThirdPersonCamera} from './components/CharacterControls.js'
-import Structure, {KittyDonoutShop, Contact, Legal} from './components/Structure.js';
+import Structure, {KittyDonoutShop, Contact, Legal, NotFound} from './components/Structure.js';
  
 // scene basic setup
 var scene = new THREE.Scene();
@@ -26,8 +26,6 @@ orbit.maxPolarAngle = Math.PI / 2 - Math.PI / 16;
 orbit.enableZoom = false;
 orbit.update();
 
-
-
 /* Loading */
 const loadingManager = new THREE.LoadingManager();
 const gltfLoader = new GLTFLoader(loadingManager);
@@ -35,8 +33,13 @@ const gltfLoader = new GLTFLoader(loadingManager);
 loadingManager.onStart = function() {
     console.log("model loding start")
 }
+loadingManager.onProgress = function(url, loaded, total) {
+    const progressBar = document.getElementById("progress-bar");
+    progressBar.value = (loaded / total) * 100;
+}
 loadingManager.onLoad = function () {
-    console.log("model loading finished")
+    const progressBarContainer = document.getElementsByClassName("progress-bar-container")[0];
+    progressBarContainer.style.display = "none";
     main();
 }
 
@@ -84,7 +87,7 @@ function loadStructure(path) {
 loadCharacter("./clientV2/assets/3DObjects/dodoco_king/dodoco.glb");  
 loadStructure("./clientV2/assets/3DObjects/kitty_donout_shop/scene.gltf");
 
-
+/* Character Class */
 class Character {
     constructor(characterScene) {
         this.characterScene = characterScene;
@@ -140,6 +143,7 @@ class Character {
     }
 }
 
+/* Dodoco */
 class DodocoKing extends Character {
     constructor(characterScene) {
         super(characterScene); 
@@ -166,12 +170,12 @@ class DodocoKing extends Character {
     }
 }
 
+/* The 3D World */
 class World {
     constructor(dodocoKing, kittyshop) {
         this.ground;
         this.dodocoKing = dodocoKing;
 
-        this.musicbtn = document.getElementsByClassName("sound")[0];
         this.sound;
 
         this.kittyshop = kittyshop;
@@ -180,19 +184,21 @@ class World {
         this.init();
 
         var self = this;
-        // music on and off
-        this.musicbtn.addEventListener("click", function() {
+
+        // music control
+        var controlBtn = document.getElementById('play-pause');
+
+        function playPause() {
             if (self.sound.isPlaying) {
-                document.getElementsByClassName("playing")[0].classList.toggle("play");
-                document.getElementsByClassName("stoping")[0].classList.toggle("play");    
                 self.sound.pause();
-            }
-            else {
-                document.getElementsByClassName("playing")[0].classList.toggle("play");
-                document.getElementsByClassName("stoping")[0].classList.toggle("play");
+                controlBtn.className = "play";
+            } else { 
                 self.sound.play();
+                controlBtn.className = "pause";
             }
-        });
+        }
+
+        controlBtn.addEventListener("click", playPause);
     }
 
     createPlane() {
@@ -201,9 +207,6 @@ class World {
         this.ground = new THREE.Mesh( geometry, material );
         this.ground.rotateX(-Math.PI / 2);
         scene.add(this.ground);
-
-            // this.ground.attach(this.dodocoKing.characterScene);
-            // this.ground.attach(this.kittyshop.str);
     }
 
     checkCollision() {
@@ -238,14 +241,11 @@ class World {
             self.sound.setBuffer( buffer );
             self.sound.setLoop( true );
             self.sound.setVolume( 0.5 );
-            // self.sound.play();
         });
     }
 }
 
-// donout kitty shop page (About Me)
-
-/*  */
+/* main function */
 function main() {
     window.addEventListener('popstate', renderRoute);
     
@@ -256,9 +256,10 @@ function main() {
     kittyshop.init(new THREE.Vector3(20, 0, 20), [2, 2, 2],  Math.PI);
 
 
-    var kittydonoutshop = new KittyDonoutShop();
+    var kittydonoutshopPage = new KittyDonoutShop();
     var contactPage = new Contact();
     var legalPage = new Legal();
+    var notFoundPage = new NotFound();
 
     renderRoute() // the appropriate page is rendered upon page load
 
@@ -273,7 +274,8 @@ function main() {
         } 
         else if (!hash.localeCompare("#/kittydonoutshop")) {        
             emptyDOM(pageview);
-            pageview.appendChild(kittydonoutshop.elem);
+            pageview.appendChild(kittydonoutshopPage.elem);
+            document.getElementById("page-view").style.zIndex = "20"
                         
             // restore page-view z index
             document.getElementsByClassName("page-control")[0].addEventListener("click", function() {
@@ -283,6 +285,7 @@ function main() {
         else if (!hash.localeCompare("#/legal")) {        
             emptyDOM(pageview);
             pageview.appendChild(legalPage.elem);
+            document.getElementById("page-view").style.zIndex = "20"
                         
             // restore page-view z index
             document.getElementsByClassName("page-control")[0].addEventListener("click", function() {
@@ -292,12 +295,23 @@ function main() {
         else if (!hash.localeCompare("#/contact")) {        
             emptyDOM(pageview);
             pageview.appendChild(contactPage.elem);
+            document.getElementById("page-view").style.zIndex = "20"
                         
             // restore page-view z index
             document.getElementsByClassName("page-control")[0].addEventListener("click", function() {
                 document.getElementById("page-view").style.zIndex = "-10"
             });
         } 
+        else {
+            emptyDOM(pageview);
+            pageview.appendChild(notFoundPage.elem);
+            document.getElementById("page-view").style.zIndex = "20"
+                        
+            // restore page-view z index
+            document.getElementsByClassName("page-control")[0].addEventListener("click", function() {
+                document.getElementById("page-view").style.zIndex = "-10"
+            });
+        }
     }
 
     function animate() {
@@ -309,17 +323,11 @@ function main() {
     }
 
     animate();
-
-    // menu events
-    var menubtns = document.getElementsByClassName("enterAboutBtn");
-    
-    for (var i = 0; i < menubtns.length; i++) {
-        menubtns[i].addEventListener("click", function() {
-            document.getElementById("page-view").style.zIndex = "20"
-        });
-    }
 }
 
+
+
+/* Other helper functions */
 function render() {
     renderer.render(scene, camera);
 }
@@ -327,7 +335,6 @@ function render() {
 function emptyDOM (elem){
     while (elem.firstChild) elem.removeChild(elem.firstChild);
 }
-
 
 // resize
 window.addEventListener('resize', function() {
