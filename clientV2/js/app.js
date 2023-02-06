@@ -47,7 +47,7 @@ var mixers = [];
 var actions = [];
 var mixer_1;
 
-function loadCharacter(path) {
+function loadCharacter(path, name) {
     gltfLoader.load(
         path, 
         function(gltf) {   
@@ -63,12 +63,13 @@ function loadCharacter(path) {
             actions.push(action_1);
             action_1.play();
 
+            gltf.scene.name = name;
             scene.add(gltf.scene);
         }
     )
 }
 
-function loadStructure(path) {
+function loadStructure(path, name) {
     gltfLoader.load(
         path, 
         function(gltf) {   
@@ -78,14 +79,15 @@ function loadStructure(path) {
                 }   
             });
 
+            gltf.scene.name = name;
             scene.add(gltf.scene);
         }
     )
 }
 
 // models
-loadCharacter("./assets/3DObjects/dodoco_king/dodoco.glb");  
-loadStructure("./assets/3DObjects/kitty_donout_shop/scene2.glb");
+loadCharacter("./assets/3DObjects/dodoco_king/dodoco.glb", "dodoco");  
+loadStructure("./assets/3DObjects/kitty_donout_shop/scene2.glb", "kittydonoutshop");
 
 /* Character Class */
 class Character {
@@ -160,8 +162,6 @@ class DodocoKing extends Character {
         this.characterScene.add(directionalLight);
         // const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight);
         // scene.add(directionalLightHelper);
-
-
 
         // const axesHelper = new THREE.AxesHelper( 10 );
         // this.characterScene.add(axesHelper);
@@ -249,9 +249,9 @@ class World {
 /* main function */
 function main() {
     window.addEventListener('popstate', renderRoute);
-    
-    var dodocoKing = new DodocoKing(scene.children[0]);
-    var kittyshop = new Structure(scene.children[1]);
+
+    var dodocoKing = new DodocoKing(get3DObjectByName("dodoco"));
+    var kittyshop = new Structure(get3DObjectByName("kittydonoutshop"));
     var world = new World(dodocoKing, kittyshop);
 
     kittyshop.init(new THREE.Vector3(20, 0, 20), [3, 3, 3],  Math.PI);
@@ -262,8 +262,15 @@ function main() {
     var legalPage = new Legal();
     var notFoundPage = new NotFound();
 
-    renderRoute() // the appropriate page is rendered upon page load
+    function get3DObjectByName(name) {
+        for (let i = 0; i < scene.children.length; i++) {
+            if (!scene.children[i].name.localeCompare(name)) {
+                return scene.children[i];
+            }
+        }
+    }
 
+    renderRoute() // the appropriate page is rendered upon page load
     // one page website
     function renderRoute() {
         var hash = window.location.hash;
@@ -315,6 +322,7 @@ function main() {
         }
     }
 
+    // main animation: collision
     function animate() {
         dodocoKing.controls.collisionHandler(world.checkCollision().boxBB);
         kittyshop.collisionHandler(world.checkCollision().id)
@@ -322,7 +330,6 @@ function main() {
         requestAnimationFrame(animate);
         render();
     }
-
     animate();
 }
 

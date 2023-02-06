@@ -112,6 +112,9 @@ The website can be view at [here](https://qghportfolio.vercel.app/)
 - [x] Deploy to Vecel (Version 1.0)
 - [x] Review Feedbacks and BrainStorm Version 2.0
 - [x] Verson 2.0 Published with many changes: 3d character control, character animation, background music, more interesting pages that introduce me,....
+- [ ] Add instructions on loading page
+- [ ] Add Projects page / 3d parts
+- [ ] Bug fixed
 
 See the [open issues](https://github.com/QGH11/QGH-Portfolio-Website/issues) for a full list of proposed features (and known issues).
 
