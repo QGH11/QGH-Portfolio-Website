@@ -112,7 +112,7 @@ The website can be view at [here](https://qghportfolio.vercel.app/)
 - [x] Deploy to Vecel (Version 1.0)
 - [x] Review Feedbacks and BrainStorm Version 2.0
 - [x] Verson 2.0 Published with many changes: 3d character control, character animation, background music, more interesting pages that introduce me,....
-- [ ] Add instructions on loading page
+- [x] Add instructions on loading page
 - [ ] Add Projects page / 3d parts
 - [ ] Bug fixed
 
@@ -145,6 +145,7 @@ Distributed under the MIT License. See [LICENSE.md][license-url] for more inform
 - [Contact Button](https://codepen.io/FrankieDoodie/pen/dqmKrb)
 - [Text Hover Effect](https://codepen.io/team/css-tricks/pen/gOXMLLY)
 - [Bongo Cat](https://codepen.io/Sloth_Sonal/pen/JjYWobO)
+- [Mouse Instruction](https://codepen.io/qgh11/pen/RwYrbRq)
 
 ### Images
 

@@ -35,12 +35,19 @@ loadingManager.onStart = function() {
 }
 loadingManager.onProgress = function(url, loaded, total) {
     const progressBar = document.getElementById("progress-bar");
-    progressBar.value = (loaded / total) * 100;
+    const progress = (loaded / total) * 100;
+    progressBar.innerHTML = progress + "%"; 
+    progressBar.style.background = "linear-gradient(to right, rgb(46,229,157)" + progress + "%, white " + (100-progress) + "%)"
 }
 loadingManager.onLoad = function () {
-    const progressBarContainer = document.getElementsByClassName("progress-bar-container")[0];
-    progressBarContainer.style.display = "none";
-    main();
+    const progressBar = document.getElementById("progress-bar");
+    progressBar.innerHTML = "CLICK TO ENTER"
+    // wait for click to enter
+    progressBar.addEventListener("click", function() {
+        const progressBarContainer = document.getElementsByClassName("progress-container")[0];
+        progressBarContainer.style.display = "none";
+        main();
+    });
 }
 
 var mixers = [];
@@ -242,6 +249,7 @@ class World {
             self.sound.setBuffer( buffer );
             self.sound.setLoop( true );
             self.sound.setVolume( 0.5 );
+            self.sound.play()
         });
     }
 }
