@@ -55,8 +55,9 @@
 
     <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="#/">QGH's World</a>
       <a href="#/kittydonoutshop">About Me</a>
-      <a href="#/Projects">Projects</a>
+      <a href="#/projects">Projects</a>
       <a href="#/legal">This Porfolio</a>
       <a href="#/contact">Contact</a>
     </div>
@@ -66,18 +67,60 @@
 
     <!-- music button -->
     <div id="play-pause" class="pause"></div>
-    
+
     <!-- Enter Building Btn -->
     <div class="structure-info">
     </div>
 
     <!-- one page web -->
     <div id="page-view"></div>
+
+    <!-- wheel event -->
+    <div id="selector"></div>
+
+    <!-- Project Screen -->
+    <div id="projects-wrapper" class="off">
+      <div id="screen">
+          <div id="content-holder">
+              <div id="content">
+                <div class="item">
+                  <div id="channel">Robotic Arm (Personal)</div>
+                  <img src="./assets/images/RoboticArm.png" alt="Robotic Arm Preview">
+                  <p> Robotic Arm that can be controled via website and VR (Oculus). VR interfacce is developed via
+                      Unity with simulation of a 3D Model; website is develop with JS and server connection with bluetooth...
+                  </p>
+                </div>
+                <div class="item">
+                  <div id="channel">Online Chatting App (UBC)</div>
+                  <img src="./assets/images/OnlineChattingApp.png" alt="Online Chatting App Preview">
+                  <p> A web chatting app with features: multi-users chatting, chatting room creation, login authentication, 
+                          web secruity to prevent XSS. The web app is dynamically rendered, with server (Node.js) and data base (MongoDb) support...
+                  </p>
+                </div>
+                <div class="item">
+                  <div id="channel">Food App (Personal)</div>
+                  <img src="./assets/images/FoodSearchApp.png" alt="Food Search App Preview">
+                  <p> Java GUI App with features: login, registration, food-browsing, shopping cart. The App is developed using Java Swing,
+                          and user login/registration data is stored in MySQL, and cached some locally in .JSON for performance...
+                  </p>
+                </div>
+                <div class="item">
+                  <div id="channel">Industrial Furance Web (Personal)</div>
+                  <img src="./assets/images/IndustrialFurnaceWebsite.gif" alt="Industrial Furance Website Preview">
+                  <p> A Landing Website for company to use to promote business and product...
+                  </p>
+                </div>
+                </div>
+          </div>
+      </div>
+      <button id="power" onclick="power();"></button>
+      <button class="slider-arrow" onclick="plusDivs(-1)">&#10094;</button>
+      <button class="slider-arrow" onclick="plusDivs(1)">&#10095;</button>
+    </div> 
     
     <!-- three.js bg -->
     <div id="bg"></div>
-    
-
+  </body>
 
     <script src="./bundle.js"></script>
     <script>
@@ -87,6 +130,40 @@
 
       function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
+      }
+
+      let power = function() {
+        let body = document.getElementById("projects-wrapper");
+        body.className = (body.className == "on") ? "off" : "on";
+
+        if (body.className == "on") {
+          body.style.opacity = 1;
+        }
+        else {
+          body.style.opacity = 0;
+        }
+      }
+
+      var slideIndex = 1;
+      showDivs(slideIndex);
+
+      function plusDivs(n) {
+        showDivs(slideIndex += n);
+      }
+
+      function showDivs(n) {
+        var i;
+        var x = document.getElementsByClassName("item");
+        if (n > x.length) {
+          slideIndex = 1
+        }
+        if (n < 1) {
+          slideIndex = x.length
+        }
+        for (i = 0; i < x.length; i++) {
+          x[i].style.display = "none";  
+        }
+        x[slideIndex-1].style.display = "block";  
       }
     </script>
     <!-- <script src="./js/app.js" type="module"></script> -->

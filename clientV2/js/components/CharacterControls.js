@@ -551,9 +551,10 @@ export class ThirdPersonCamera {
         this._scroll = 35; // max=370, min=-30
         this._lookAt = 0;
         window.addEventListener("wheel", function(e) {
+            // adjust the camera based on scroll
             if (e.deltaY < 0) {
                 // scroll up
-                if (self._scroll >= -25) {
+                if (self._scroll >= 10) {
                     self._scroll -= 5;
 
                     if (self._scroll >= 80) {
@@ -566,7 +567,7 @@ export class ThirdPersonCamera {
             }
             else if (e.deltaY > 0) {
                 // scroll down
-                if (self._scroll <= 250) {
+                if (self._scroll <= 225) {
                     self._scroll += 5;
 
                     if (self._scroll >= 80) {
@@ -576,6 +577,16 @@ export class ThirdPersonCamera {
                         self._lookAt = 0;
                     }
                 }
+            }
+
+            // show the project screen
+            if (self._scroll >= 120 && self._scroll <= 130) {
+                document.getElementById("projects-wrapper").style.opacity = 1;
+                document.getElementById("projects-wrapper").className = "on";
+            }
+            else {
+                document.getElementById("projects-wrapper").style.opacity= 0;
+                document.getElementById("projects-wrapper").className = "off";
             }
         }, true);
     }

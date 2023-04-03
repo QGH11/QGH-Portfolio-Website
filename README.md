@@ -113,8 +113,8 @@ The website can be view at [here](https://qghportfolio.vercel.app/)
 - [x] Review Feedbacks and BrainStorm Version 2.0
 - [x] Verson 2.0 Published with many changes: 3d character control, character animation, background music, more interesting pages that introduce me,....
 - [x] Add instructions on loading page
-- [ ] Add Projects page / 3d parts
-- [ ] Bug fixed
+- [x] Add Projects page / 3d parts
+- [ ] Dynamic Web (Mobile Control)
 
 See the [open issues](https://github.com/QGH11/QGH-Portfolio-Website/issues) for a full list of proposed features (and known issues).
 
@@ -135,7 +135,7 @@ Distributed under the MIT License. See [LICENSE.md][license-url] for more inform
 ### 3D Model
 
 - ["Dodoco King - Genshin Impact"](https://skfb.ly/ooGx8) by copycatypo is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/).
-- ["Kitty Donut Shop"](https://skfb.ly/oqSyM) by Mikkel Garde Blaase is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/).
+- ["Kitty Donut Shop"](https://skfb.ly/oqSyM) by Mikkel Garde Blaase is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/). -["Futuristic City Pano"](https://sketchfab.com/3d-models/futuristic-city-pano-3f8ec55a41984bcf9642bb7a15154804) by ["Elin"](https://sketchfab.com/ElinHohler) licensed under [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
 
 ### Code Template (Modified From)
 
@@ -154,6 +154,10 @@ Distributed under the MIT License. See [LICENSE.md][license-url] for more inform
 ### Music
 
 - [Genshin Impact BGM](https://downloads.khinsider.com/game-soundtracks/album/genshin-impact-the-wind-and-the-star-traveler-2020)
+
+### Other
+
+- Glass Texture: Three.js Glass Example: venice_sunset_1k.hdr
 
 ### Resources
 

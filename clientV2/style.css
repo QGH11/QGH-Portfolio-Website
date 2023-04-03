@@ -576,7 +576,6 @@ label {
 .legal {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   padding: 2rem 5rem 5rem 5rem;
   color: white;
   background-color: #2d2d2d;
@@ -592,21 +591,19 @@ label {
 }
 
 
-/* https://codepen.io/team/css-tricks/pen/gOXMLLY */
 .legal a {
   color: white;
   overflow: hidden;
   position: relative;
-  box-shadow: inset 0 0 0 0 #54b3d6;
   color: #54b3d6;
   margin: 0 -.25rem;
   padding: 0 .25rem;
-  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
 }
-  .legal a:hover {
-    box-shadow: inset 300px 0 0 0 #54b3d6;
-    color: white;
-  }
+
+.legal .page-control {
+  position: relative;
+  float: right;
+}
 
 /* Legal End------------------- */
 
@@ -1274,8 +1271,10 @@ path#f3-l9 {
   position: fixed;
   left: 50%;
   transform: translate(-50%, 0);
-  z-index: 99999;
+  z-index: 15;
   padding: 30px;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
 }
 #screen {
   box-sizing: border-box;
@@ -1335,16 +1334,29 @@ path#f3-l9 {
 #power {
   bottom: 12px;
   width: 35px;
-  height: 5px;
+  height: 15px;
   position: absolute;
   right: 45px;
-  background-color: #282828;
+  background-color: #f5f0f0;
   cursor: pointer;
 }
 .on #power {
   background-color: #0035ff;
   box-shadow: 0px 0px 20px 2px #0035ff;
 }
+
+.slider-arrow {
+  width: 35px;
+  height: 25px;
+  background-color: #ff733c;
+  box-shadow: 0px 0px 20px 2px #ff733c;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+
 .item {
   display: flex;
   width: 100%;

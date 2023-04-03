@@ -97,23 +97,9 @@ export class Legal {
                 <h1>Future of This World </h1>
                 <p> I would like to add more content and features to this world, 
                     but I would love to have other people and developers to work on this project together. <br>
-                    I may add features so that people can edit and create features directly to the world, like MMORPG, Minecraft...
+                    I may add features so that people can edit and create features directly to the world, like MMORPG, Minecraft...   
                 </p>
-                <ul> Here are some of my ideas
-                    <li> 
-                        Make this world a shopping place: online web 3D supermarket...
-                    </li>   
-                    <li> 
-                        Make this world a social area: online web 3D social media...
-                    </li>
-                    <li> 
-                        Make this world a game: game 
-                    </li>
-                    <li> 
-                        Make this world a world: greedy me want all the features...
-                    </li>
-                    <a href="https://github.com/QGH11/QGH-Portfolio-Website/issues" target="_blank">Suggest More...</a>
-                </ul>
+                <a href="https://github.com/QGH11/QGH-Portfolio-Website/issues" target="_blank">Suggest More...</a>
                                 
                 <h1>Disclaimer on QGH Portfolio</h1>
                 <p> Copyright © 2023 QGH Portfolio, All Rights Reserved <br> 

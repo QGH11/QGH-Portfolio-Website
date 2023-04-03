@@ -2,8 +2,6 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" type="text/css"  href="./style.css">
-    <link rel="stylesheet" href="../node_modules/owl.carousel/dist/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="../node_modules/owl.carousel/dist/assets/owl.theme.default.min.css">
     <link rel="stylesheet" href="./style/fontawesome-free/css/all.css">
     <link rel="icon" href="./assets/images/kittyDonout.jpg" type="image/icon type">
     <title>QGH</title>
@@ -59,7 +57,7 @@
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       <a href="#/">QGH's World</a>
       <a href="#/kittydonoutshop">About Me</a>
-      <a href="#/Projects">Projects</a>
+      <a href="#/projects">Projects</a>
       <a href="#/legal">This Porfolio</a>
       <a href="#/contact">Contact</a>
     </div>
@@ -77,8 +75,11 @@
     <!-- one page web -->
     <div id="page-view"></div>
 
+    <!-- wheel event -->
+    <div id="selector"></div>
+
     <!-- Project Screen -->
-    <div id="projects-wrapper" class="on">
+    <div id="projects-wrapper" class="off">
       <div id="screen">
           <div id="content-holder">
               <div id="content">
@@ -112,9 +113,9 @@
                 </div>
           </div>
       </div>
-      <div id="power" onclick="power();"></div>
-      <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
-      <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+      <button id="power" onclick="power();"></button>
+      <button class="slider-arrow" onclick="plusDivs(-1)">&#10094;</button>
+      <button class="slider-arrow" onclick="plusDivs(1)">&#10095;</button>
     </div> 
     
     <!-- three.js bg -->
@@ -134,6 +135,13 @@
       let power = function() {
         let body = document.getElementById("projects-wrapper");
         body.className = (body.className == "on") ? "off" : "on";
+
+        if (body.className == "on") {
+          body.style.opacity = 1;
+        }
+        else {
+          body.style.opacity = 0;
+        }
       }
 
       var slideIndex = 1;

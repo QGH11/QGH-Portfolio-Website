@@ -348,6 +348,7 @@ function main() {
         // create a client-sider "router": single-page application
         if (!hash.localeCompare("#/") || hash === "") {        
             emptyDOM(pageview);
+            document.getElementById("page-view").style.zIndex = "-10"
         } 
         else if (!hash.localeCompare("#/kittydonoutshop")) {        
             emptyDOM(pageview);
@@ -359,6 +360,30 @@ function main() {
                 document.getElementById("page-view").style.zIndex = "-10"
             });
         } 
+        else if (!hash.localeCompare("#/projects")) {
+            const offset = (120 - dodocoKing.thirdPersonCamera._scroll) / 5;
+
+            if (offset >= 0) {
+                let wheelEvent = new WheelEvent('wheel', {
+                    deltaY: 1,  
+                    deltaMode: 1
+                });
+
+                for (let i = 0; i < offset; i++) {
+                    document.getElementById('selector').dispatchEvent(wheelEvent);
+                }
+            }   
+            else {
+                let wheelEvent = new WheelEvent('wheel', {
+                    deltaY: -1,  
+                    deltaMode: 1
+                });
+
+                for (let i = -offset; i > 0; i--) {
+                    document.getElementById('selector').dispatchEvent(wheelEvent);
+                }
+            }
+        }
         else if (!hash.localeCompare("#/legal")) {        
             emptyDOM(pageview);
             pageview.appendChild(legalPage.elem);
