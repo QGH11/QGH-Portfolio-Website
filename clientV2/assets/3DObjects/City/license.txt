@@ -1,0 +1,11 @@
+Model Information:
+* title:	Futuristic City Pano
+* source:	https://sketchfab.com/3d-models/futuristic-city-pano-3f8ec55a41984bcf9642bb7a15154804
+* author:	Elin (https://sketchfab.com/ElinHohler)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Futuristic City Pano" (https://sketchfab.com/3d-models/futuristic-city-pano-3f8ec55a41984bcf9642bb7a15154804) by Elin (https://sketchfab.com/ElinHohler) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

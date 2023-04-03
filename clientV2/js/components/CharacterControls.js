@@ -547,17 +547,48 @@ export class ThirdPersonCamera {
         this._params.orbitControl.addEventListener('end', function() {
             self._pauseCameraFollow = false;
         });
+
+        this._scroll = 35; // max=370, min=-30
+        this._lookAt = 0;
+        window.addEventListener("wheel", function(e) {
+            if (e.deltaY < 0) {
+                // scroll up
+                if (self._scroll >= -25) {
+                    self._scroll -= 5;
+
+                    if (self._scroll >= 80) {
+                        self._lookAt -= 15;
+                    }
+                    else {
+                        self._lookAt = 0;
+                    }
+                }
+            }
+            else if (e.deltaY > 0) {
+                // scroll down
+                if (self._scroll <= 250) {
+                    self._scroll += 5;
+
+                    if (self._scroll >= 80) {
+                        self._lookAt += 15;
+                    }
+                    else {
+                        self._lookAt = 0;
+                    }
+                }
+            }
+        }, true);
     }
   
     _CalculateIdealOffset() {
-        const idealOffset = new THREE.Vector3(0, 35, -35);
+        const idealOffset = new THREE.Vector3(0, this._scroll, -this._scroll);
         idealOffset.applyQuaternion(this._params.target.Rotation);   
         idealOffset.add(this._params.target.Position);
         return idealOffset;
     }
   
     _CalculateIdealLookat() {
-        const idealLookat = new THREE.Vector3(0, 0, 0);
+        const idealLookat = new THREE.Vector3(0, 0 + this._lookAt, 0);
         idealLookat.applyQuaternion(this._params.target.Rotation);
         idealLookat.add(this._params.target.Position);
         return idealLookat;
@@ -579,7 +610,7 @@ export class ThirdPersonCamera {
             this._camera.lookAt(this._currentLookat)
         }
         else {
-            this._params.orbitControl.target.set(this._params.target.Position.x, this._params.target.Position.y, this._params.target.Position.z)
+            this._params.orbitControl.target.set(this._params.target.Position.x, this._params.target.Position.y + this._scroll, this._params.target.Position.z - this._scroll)
         }
     }
 } 

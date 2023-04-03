@@ -1,5 +1,6 @@
 import * as THREE from '../../node_modules/three/build/three.module.js';
 import {GLTFLoader} from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+import {RGBELoader} from '../../node_modules/three/examples/jsm/loaders/RGBELoader.js';
 import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js'
 import BasicCharacterController, {ThirdPersonCamera} from './components/CharacterControls.js'
 import Structure, {KittyDonoutShop, Contact, Legal, NotFound} from './components/Structure.js';
@@ -29,6 +30,7 @@ orbit.update();
 /* Loading */
 const loadingManager = new THREE.LoadingManager();
 const gltfLoader = new GLTFLoader(loadingManager);
+const rgbLoader = new RGBELoader(loadingManager);
 
 loadingManager.onStart = function() {
     console.log("model loding start")
@@ -89,12 +91,34 @@ function loadStructure(path, name) {
             gltf.scene.name = name;
             scene.add(gltf.scene);
         }
-    )
+    );
+}
+
+function loadHDRTexture(path){
+    return rgbLoader.load(
+        path, 
+        function(){
+            sphereHDR.mapping = THREE.EquirectangularReflectionMapping;
+        }
+    );
+}
+
+function loadCity(path, name) {
+    gltfLoader.load(
+        path, 
+        function(gltf) {   
+            gltf.scene.name = name;
+            scene.add(gltf.scene);
+        }
+    );
 }
 
 // models
 loadCharacter("./assets/3DObjects/dodoco_king/dodoco.glb", "dodoco");  
-loadStructure("./assets/3DObjects/kitty_donout_shop/scene2.glb", "kittydonoutshop");
+loadStructure("./assets/3DObjects/kitty_donout_shop/kitty_donout_shop.glb", "kittydonoutshop");
+const sphereHDR = loadHDRTexture("./assets/textures/venice_sunset_1k.hdr");
+loadCity("./assets/3DObjects/City/scene.gltf", "cityEnv");
+
 
 /* Character Class */
 class Character {
@@ -180,14 +204,14 @@ class DodocoKing extends Character {
 
 /* The 3D World */
 class World {
-    constructor(dodocoKing, kittyshop) {
+    constructor(dodocoKing, kittyshop, environment) {
         this.ground;
+        this.sphere;
         this.dodocoKing = dodocoKing;
+        this.kittyshop = kittyshop;
+        this.environment = environment;
 
         this.sound;
-
-        this.kittyshop = kittyshop;
-
 
         this.init();
 
@@ -210,11 +234,39 @@ class World {
     }
 
     createPlane() {
-        const geometry = new THREE.PlaneGeometry(200, 200);
+        const geometry = new THREE.CircleGeometry(100, 100);
         const material = new THREE.MeshBasicMaterial( {color: 0xffb366, side: THREE.DoubleSide} );
         this.ground = new THREE.Mesh( geometry, material );
         this.ground.rotateX(-Math.PI / 2);
         scene.add(this.ground);
+    }
+
+    createGlassSphere() {
+        const params = {
+            color: 0xffffff,
+            transmission: 1,
+            opacity: 1,
+            metalness: 0,
+            roughness: 0,
+            envMapIntensity: 1,
+        };
+        
+        const geometry = new THREE.SphereGeometry( 100, 64, 64 );
+
+        const material = new THREE.MeshPhysicalMaterial( {
+            color: params.color,
+            metalness: params.metalness,
+            roughness: params.roughness,
+            envMap: sphereHDR,
+            envMapIntensity: params.envMapIntensity,
+            transmission: params.transmission, // use material.transmission for glass materials
+            opacity: params.opacity,
+            side: THREE.DoubleSide,
+            transparent: true
+        } );
+
+        this.sphere = new THREE.Mesh( geometry, material );
+        scene.add(this.sphere);
     }
 
     checkCollision() {
@@ -227,6 +279,12 @@ class World {
         return {id: -1, boxBB: null};
     }
 
+    updateEnv() {
+        this.environment.rotateX(Math.PI);
+        this.environment.position.set(0, 800, 0);
+        this.environment.scale.multiplyScalar(5);
+    }
+
     init() {
         scene.background = new THREE.Color(0xdddddd);
 
@@ -234,6 +292,8 @@ class World {
         scene.add(ambientLight);
         
         this.createPlane();
+        this.createGlassSphere();
+        this.updateEnv();
 
         // create an AudioListener and add it to the camera
         const listener = new THREE.AudioListener();
@@ -249,7 +309,7 @@ class World {
             self.sound.setBuffer( buffer );
             self.sound.setLoop( true );
             self.sound.setVolume( 0.5 );
-            self.sound.play()
+            self.sound.play();
         });
     }
 }
@@ -260,9 +320,10 @@ function main() {
 
     var dodocoKing = new DodocoKing(get3DObjectByName("dodoco"));
     var kittyshop = new Structure(get3DObjectByName("kittydonoutshop"));
-    var world = new World(dodocoKing, kittyshop);
+    var city = get3DObjectByName("cityEnv");
+    var world = new World(dodocoKing, kittyshop, city);
 
-    kittyshop.init(new THREE.Vector3(20, 0, 20), [3, 3, 3],  Math.PI);
+    kittyshop.init(new THREE.Vector3(20, 3, 20), [3, 3, 3],  Math.PI);
 
 
     var kittydonoutshopPage = new KittyDonoutShop();
@@ -340,7 +401,6 @@ function main() {
     }
     animate();
 }
-
 
 
 /* Other helper functions */
