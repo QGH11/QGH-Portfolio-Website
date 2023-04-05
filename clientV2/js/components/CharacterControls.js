@@ -1,5 +1,5 @@
 import * as THREE from '../../../node_modules/three/build/three.module.js';
-
+import Joystick from "./joystick.js"
 
 // https://github.com/simondevyoutube/ThreeJS_Tutorial_CharacterController
 class BasicCharacterControllerProxy {
@@ -175,8 +175,32 @@ class BasicCharacterControllerInput {
             shift: false
         };
 
-        document.addEventListener('keydown', (e) => this._onKeyDown(e), false);
-        document.addEventListener('keyup', (e) => this._onKeyUp(e), false);
+        this.joystick = null;
+
+        // initiate movile control
+        if (detectMob()) {
+            this.joystick = new Joystick();
+        }
+        else { // PC Controls
+            document.addEventListener('keydown', (e) => this._onKeyDown(e), false);
+            document.addEventListener('keyup', (e) => this._onKeyUp(e), false);
+        }
+
+        function detectMob() {
+            const toMatch = [
+                /Android/i,
+                /webOS/i,
+                /iPhone/i,
+                /iPad/i,
+                /iPod/i,
+                /BlackBerry/i,
+                /Windows Phone/i
+            ];
+            
+            return toMatch.some((toMatchItem) => {
+                return navigator.userAgent.match(toMatchItem);
+            });
+        }
     }
 
     _onKeyDown(event) {
@@ -548,9 +572,12 @@ export class ThirdPersonCamera {
             self._pauseCameraFollow = false;
         });
 
+        this._joystick_dragstart = null;
+
         this._scroll = 35; // max=370, min=-30
         this._lookAt = 0;
-        window.addEventListener("wheel", function(e) {
+
+        document.addEventListener("wheel", function(e) {
             // adjust the camera based on scroll
             if (e.deltaY < 0) {
                 // scroll up
@@ -589,6 +616,60 @@ export class ThirdPersonCamera {
                 document.getElementById("projects-wrapper").className = "off";
             }
         }, true);
+
+
+        
+        this.touchPos = 0;
+
+        document.addEventListener('touchstart', function(e) {    
+            self.touchPos = e.changedTouches[0].clientY;
+        });
+        document.addEventListener("touchmove", function(e){
+            if (self._joystick_dragstart == null) {
+                
+                // detect wether the "old" touchPos is 
+                // greater or smaller than the newTouchPos
+                var newTouchPos = e.changedTouches[0].clientY;
+                if(newTouchPos > self.touchPos) {
+                    //finger moving down
+                    if (self._scroll >= 10) {
+                        self._scroll -= Math.abs(self.touchPos - newTouchPos) / 300;
+
+                        if (self._scroll >= 80) {
+                            self._lookAt -= Math.abs(self.touchPos - newTouchPos) / 100;
+                        }
+                        else {
+                            self._lookAt = 0;
+                        }
+                    }
+                }
+                else if(newTouchPos < self.touchPos) {
+                    // finger moving up
+                    if (self._scroll <= 225) {
+                        self._scroll += Math.abs(self.touchPos - newTouchPos) / 300;
+
+                        if (self._scroll >= 80) {
+                            self._lookAt += Math.abs(self.touchPos - newTouchPos) / 100;
+                        }
+                        else {
+                            self._lookAt = 0;
+                        }
+                    }
+                }
+                
+                console.log(self._scroll)
+                // show the project screen
+                if (self._scroll >= 120 && self._scroll <= 130) {
+                    document.getElementById("projects-wrapper").style.opacity = 1;
+                    document.getElementById("projects-wrapper").className = "on";
+                }
+                else {
+                    document.getElementById("projects-wrapper").style.opacity= 0;
+                    document.getElementById("projects-wrapper").className = "off";
+                }
+                
+            }
+        });
     }
   
     _CalculateIdealOffset() {
@@ -605,7 +686,9 @@ export class ThirdPersonCamera {
         return idealLookat;
     }
   
-    Update(timeElapsed) {
+    Update(timeElapsed, joystick_dragstart) {
+        this._joystick_dragstart = joystick_dragstart;
+        
         if (!this._pauseCameraFollow) {
             const idealOffset = this._CalculateIdealOffset();
             const idealLookat = this._CalculateIdealLookat();

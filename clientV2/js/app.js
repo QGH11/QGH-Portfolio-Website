@@ -144,7 +144,7 @@ class Character {
         this.thirdPersonCamera = new ThirdPersonCamera({
             camera: camera,
             target: this.controls,
-            orbitControl: orbit,
+            orbitControl: orbit
         });
     }
 
@@ -172,7 +172,7 @@ class Character {
             this.controls.Update(timeElapsedS);
         }
 
-        this.thirdPersonCamera.Update(timeElapsedS);
+        this.thirdPersonCamera.Update(timeElapsedS, this.controls._input.joystick.dragStart);
     }
 }
 
