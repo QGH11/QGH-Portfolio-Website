@@ -171,8 +171,8 @@ class Character {
         if (this.controls) {    
             this.controls.Update(timeElapsedS);
         }
-
-        this.thirdPersonCamera.Update(timeElapsedS, this.controls._input.joystick.dragStart);
+        
+        this.thirdPersonCamera.Update(timeElapsedS, this.controls._input._joystick);
     }
 }
 
@@ -345,10 +345,46 @@ function main() {
         var hash = window.location.hash;
         var pageview = document.getElementById("page-view");
 
+        // close the joystick
+        if (hash.localeCompare("#/") && hash !== "") {
+            if (dodocoKing.controls._input._joystick != null) {
+                document.getElementById("joystick").style.display = "none";
+            }
+        }
+
         // create a client-sider "router": single-page application
         if (!hash.localeCompare("#/") || hash === "") {        
             emptyDOM(pageview);
             document.getElementById("page-view").style.zIndex = "-10"
+
+            // show the joystick
+            if (dodocoKing.controls._input._joystick != null) {
+                document.getElementById("joystick").style.display = "block";
+            }
+
+            // reset the scroll to origin
+            const offset = dodocoKing.thirdPersonCamera._scroll / 5;
+
+            if (offset >= 0) {
+                let wheelEvent = new WheelEvent('wheel', {
+                    deltaY: -1,  
+                    deltaMode: 1
+                });
+
+                for (let i = 0; i < offset-7; i++) {
+                    document.getElementById('selector').dispatchEvent(wheelEvent);
+                }
+            }   
+            else {
+                let wheelEvent = new WheelEvent('wheel', {
+                    deltaY: 1,  
+                    deltaMode: 1
+                });
+
+                for (let i = -offset-7; i > 0; i--) {
+                    document.getElementById('selector').dispatchEvent(wheelEvent);
+                }
+            }
         } 
         else if (!hash.localeCompare("#/kittydonoutshop")) {        
             emptyDOM(pageview);
@@ -361,6 +397,7 @@ function main() {
             });
         } 
         else if (!hash.localeCompare("#/projects")) {
+            // scroll to projects camera position
             const offset = (120 - dodocoKing.thirdPersonCamera._scroll) / 5;
 
             if (offset >= 0) {

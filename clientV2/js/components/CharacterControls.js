@@ -108,7 +108,6 @@ export default class BasicCharacterController {
 
         // key control 
         if (this._input._keys.forward) {
-
             // prevent collision
             if (this._collision != null) {
                 if (oldPosition.x > this._collision.min.x && oldPosition.x < this._collision.max.x && oldPosition.z > this._collision.min.z && oldPosition.z < this._collision.max.z) {
@@ -175,11 +174,101 @@ class BasicCharacterControllerInput {
             shift: false
         };
 
-        this.joystick = null;
+        this._joystick = null;
 
-        // initiate movile control
-        if (detectMob()) {
-            this.joystick = new Joystick();
+        if (detectMob()) { //movile control
+            this._joystick = new Joystick();
+            var self = this;
+            document.addEventListener('touchmove', function() {
+                if (self._joystick.dragStart != null) {
+                    var coordinate = self._joystick.joystick.getPosition();
+                    var theta = Math.atan2(coordinate.y, coordinate.x); // range (-PI, PI]
+                    theta *= 180 / Math.PI;
+                    
+                    if (theta > -22.5 && theta <= 22.5) {
+                        // D
+                        self._keys = {
+                            forward: false,
+                            backward: false,
+                            left: false,
+                            right: true,
+                        }
+                    }
+                    else if (theta > 22.5 && theta <= 67.5) {
+                        // DS
+                        self._keys = {
+                            forward: false,
+                            backward: true,
+                            left: false,
+                            right: true,
+                        }
+                    }
+                    else if (theta > 67.5 && theta <= 112.5) {
+                        // S
+                        self._keys = {
+                            forward: false,
+                            backward: true,
+                            left: false,
+                            right: false,
+                        }
+                    }
+                    else if (theta > 112.5 && theta <= 157.5) {
+                        // SA
+                        self._keys = {
+                            forward: false,
+                            backward: true,
+                            left: true,
+                            right: false,
+                        }
+                    }
+                    else if ((theta > 157.5 && theta <= 180) || (theta > -180 && theta <= -157.5)) {
+                        // A
+                        self._keys = {
+                            forward: false,
+                            backward: false,
+                            left: true,
+                            right: false,
+                        }
+                    }
+                    else if (theta > -157.5 && theta <-112.5) {
+                        // AW
+                        self._keys = {
+                            forward: true,
+                            backward: false,
+                            left: true,
+                            right: false,
+                        }
+                    }
+                    else if (theta > -112.5 && theta <-67.5) {
+                        // W
+                        self._keys = {
+                            forward: true,
+                            backward: false,
+                            left: false,
+                            right: false,
+                        }
+                    }
+                    else if (theta > -67.5 && theta <-22.5) {
+                        // WD
+                        self._keys = {
+                            forward: true,
+                            backward: false,
+                            left: false,
+                            right: true,
+                        }
+                    }
+                }
+            }, false);
+            document.addEventListener('touchend', function() {
+                self._keys = {
+                    forward: false,
+                    backward: false,
+                    left: false,
+                    right: false,
+                    space: false,
+                    shift: false
+                }
+            }, false);
         }
         else { // PC Controls
             document.addEventListener('keydown', (e) => this._onKeyDown(e), false);
@@ -202,6 +291,8 @@ class BasicCharacterControllerInput {
             });
         }
     }
+
+    
 
     _onKeyDown(event) {
         switch (event.keyCode) {
@@ -609,10 +700,12 @@ export class ThirdPersonCamera {
             // show the project screen
             if (self._scroll >= 120 && self._scroll <= 130) {
                 document.getElementById("projects-wrapper").style.opacity = 1;
+                document.getElementById("projects-wrapper").style.zIndex = 15;
                 document.getElementById("projects-wrapper").className = "on";
             }
             else {
                 document.getElementById("projects-wrapper").style.opacity= 0;
+                document.getElementById("projects-wrapper").style.zIndex = 5;
                 document.getElementById("projects-wrapper").className = "off";
             }
         }, true);
@@ -657,14 +750,16 @@ export class ThirdPersonCamera {
                     }
                 }
                 
-                console.log(self._scroll)
+                // console.log(self._scroll)
                 // show the project screen
                 if (self._scroll >= 120 && self._scroll <= 130) {
                     document.getElementById("projects-wrapper").style.opacity = 1;
+                    document.getElementById("projects-wrapper").style.zIndex = 15;
                     document.getElementById("projects-wrapper").className = "on";
                 }
                 else {
                     document.getElementById("projects-wrapper").style.opacity= 0;
+                    document.getElementById("projects-wrapper").style.zIndex = 5;
                     document.getElementById("projects-wrapper").className = "off";
                 }
                 
@@ -686,8 +781,8 @@ export class ThirdPersonCamera {
         return idealLookat;
     }
   
-    Update(timeElapsed, joystick_dragstart) {
-        this._joystick_dragstart = joystick_dragstart;
+    Update(timeElapsed, joystick) {
+        this._joystick_dragstart = joystick == null ? null : joystick.dragStart;
         
         if (!this._pauseCameraFollow) {
             const idealOffset = this._CalculateIdealOffset();

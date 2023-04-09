@@ -135,17 +135,20 @@ Distributed under the MIT License. See [LICENSE.md][license-url] for more inform
 ### 3D Model
 
 - ["Dodoco King - Genshin Impact"](https://skfb.ly/ooGx8) by copycatypo is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/).
-- ["Kitty Donut Shop"](https://skfb.ly/oqSyM) by Mikkel Garde Blaase is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/). -["Futuristic City Pano"](https://sketchfab.com/3d-models/futuristic-city-pano-3f8ec55a41984bcf9642bb7a15154804) by ["Elin"](https://sketchfab.com/ElinHohler) licensed under [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
+- ["Kitty Donut Shop"](https://skfb.ly/oqSyM) by Mikkel Garde Blaase is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/).
+- ["Futuristic City Pano"](https://sketchfab.com/3d-models/futuristic-city-pano-3f8ec55a41984bcf9642bb7a15154804) by ["Elin"](https://sketchfab.com/ElinHohler) licensed under [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/).
 
 ### Code Template (Modified From)
 
-- [3rd Person Controller + Camera](https://github.com/simondevyoutube/ThreeJS_Tutorial_CharacterController)
+- [3rd Person Controller + Camera Template](https://github.com/simondevyoutube/ThreeJS_Tutorial_CharacterController)
 - [Music play and pause button](https://codepen.io/abikuk/pen/pGzJGy)
 - ["The Green Button"](https://codepen.io/seme332/pen/reJOwo)
 - [Contact Button](https://codepen.io/FrankieDoodie/pen/dqmKrb)
-- [Text Hover Effect](https://codepen.io/team/css-tricks/pen/gOXMLLY)
 - [Bongo Cat](https://codepen.io/Sloth_Sonal/pen/JjYWobO)
 - [Mouse Instruction](https://codepen.io/qgh11/pen/RwYrbRq)
+- [Joystick Template](https://jsfiddle.net/aa0et7tr/5/)
+- [Joystick Instruction](https://codepen.io/defaultsimon/pen/vwLVrL)
+- [Projects Screen Effect](https://codepen.io/MatheusAvellar/pen/vKXwjy)
 
 ### Images
 
@@ -166,6 +169,7 @@ Distributed under the MIT License. See [LICENSE.md][license-url] for more inform
 - [CodePen](https://codepen.io/trending)
 - [StackOverFlow](https://stackoverflow.com/)
 - [W3Schools](https://www.w3schools.com/)
+- [Youtube](https://www.youtube.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

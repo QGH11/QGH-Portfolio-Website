@@ -14,6 +14,7 @@ body {
   margin: 0;
   font-family: cursive;
   overflow: hidden;
+  position: fixed;
 } 
 
 p {
@@ -82,9 +83,6 @@ p {
 /* Loading Screen-------------- */
 .progress-container {
   position: absolute;
-  /* left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%); */
   width: 100%;
   height: 100%;
   background-color:rgba(0, 0, 0, 0.88);
@@ -221,7 +219,6 @@ p {
   animation-play-state: running;
 }
 
-
 @keyframes swinging{
     0%{transform: rotate(-10deg) translate3d(-15px, 0, 0) }
     100%{transform: rotate(10deg) translate3d(15px, 0, 0) }
@@ -244,6 +241,7 @@ p {
 label {
   color: whitesmoke;
   font-size: 2rem;
+  text-align: center;
 }
 
 #progress-bar {
@@ -251,6 +249,483 @@ label {
   width: 80%;
   background: linear-gradient(to right, rgb(117, 114, 114) 0%, white 100%);
 }
+
+/* Mobile & Ipad Instruction */
+/* https://codepen.io/defaultsimon/pen/vwLVrL */
+.mobile-instruction {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.mobile-control {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  font-size: 1.5rem;
+  color: whitesmoke;
+  font-size: 1.5rem;
+}
+
+.joystick {
+  margin: 40px;
+}
+.joystick {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+.joystick .outer {
+  border-radius: 45%;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(236, 204, 204, 0.5);
+}
+.joystick .inner {
+  transform-origin: left center;
+  position: absolute;
+  top: calc(50% - 120px/2);
+  left: calc(50% - 120px/2);
+}
+.joystick .thumb {
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+  background-color: rgba(242, 236, 236, 0.6);
+  transform: translate(91.6666666667px, 0);
+}
+@keyframes rotationAnim {
+  0% {
+    transform: rotate(0deg);
+ }
+  9% {
+    transform: rotate(50deg);
+ }
+  23% {
+    transform: rotate(90deg);
+ }
+  33% {
+    transform: rotate(-10deg);
+ }
+  38% {
+    transform: rotate(101deg);
+ }
+  55% {
+    transform: rotate(53deg);
+ }
+  69% {
+    transform: rotate(175deg);
+ }
+  75% {
+    transform: rotate(283deg);
+ }
+  91% {
+    transform: rotate(162deg);
+ }
+  100% {
+    transform: rotate(0deg);
+ }
+}
+.joystick .inner {
+  animation: rotationAnim 7.5s infinite;
+  transform-origin: center;
+}
+.joystick .thumb {
+  animation: thumbAnim 7.9s infinite;
+}
+
+/* Gesture */
+/* https://codepen.io/gracelle/pen/MeNjQR */
+.mobile-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  font-size: 1.5rem;
+  color: whitesmoke;
+  font-size: 1.5rem;
+}
+
+svg {
+	display: inline-block;
+	width: 250px;
+	/* margin: 3% auto; */
+	/* padding: 0px 100px; */
+}
+
+.hand, 
+.hand-double, 
+.hand-flick, 
+.hand-hold, 
+.hand-rock, 
+.hand-tap, 
+.hand-x, 
+.hand-y {
+	fill: #fff;
+	stroke: #e98787;
+	stroke-width: 3px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.arrow-down, 
+.arrow-head, 
+.arrow-left, 
+.arrow-right, 
+.arrow-up, 
+.arrow-up-1, 
+.arrow-up-2, 
+.arrow-up-3,   
+.hold-1,
+.hold-2, 
+.line-horizontal, 
+.line-rotate, 
+.line-vertical, 
+.notes, 
+.tap-1, 
+.tap-2 {
+	fill: transparent;
+	stroke: #e7cfcf;
+	stroke-width: 3px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.arrow-up-2, 
+.hold-1, 
+.tap-1 {
+	opacity: .5;
+}
+
+.arrow-up-1, 
+.hold-2, 
+.tap-2 {
+	opacity: .25;
+}
+
+.arrow-up-3, 
+.swipe-horizontal, 
+.swipe-rotate, 
+.swipe-vertical {
+	opacity: .75;
+}
+
+.hold-1, 
+.hold-2, 
+.notes {
+	opacity: 0;
+}
+
+/* ANIMATION KEYFRAMES */
+
+@keyframes tap-double {
+	0% {
+		transform: rotateX(0deg);
+	}
+	10% {
+		transform: rotateX(12.5deg);
+	}
+	25% {
+		transform: rotateX(25deg);
+	}
+	35% {
+		transform: rotateX(10deg);
+	}
+	50% {
+		transform: rotateX(25deg);
+	}
+}
+
+@keyframes tap {
+	0% {
+		transform: rotateX(0deg);
+	}
+	10% {
+		transform: rotateX(12.5deg);
+	}
+	25% {
+		transform: rotateX(25deg);
+	}
+}
+
+@keyframes tap-circle {
+	0% {
+		transform: scale(0);
+		opacity: 0;
+	}
+	75% {
+		transform: scale(1.05);
+		opacity: .6;
+	}
+	80% {
+		transform: scale(1);
+		opacity: .5;
+	}
+}
+
+@keyframes hold {
+	0% {
+		transform: rotateX(0deg);
+	}
+	10% {
+		transform: rotateX(12.5deg);
+	}
+	30% {
+		transform: rotateX(25deg);
+	}
+	80% {
+		transform: rotateX(25deg);
+	}
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+	30% {
+		opacity: .75
+	}
+	80% {
+		opacity: .75;
+	}
+}
+
+@keyframes swipe-x {
+	0% {
+		transform: translateX(0px);
+	}
+	25% {
+		transform: translateX(50px) rotateZ(10deg);
+	}
+	50% {
+		transform: translateX(0px);
+	}
+	75% {
+		transform: translateX(-50px) rotateZ(-10deg);
+	}
+}
+
+@keyframes swipe-y {
+	0% {
+		transform: translateY(0px);
+	}
+	25% {
+		transform: translateY(50px) rotateZ(-10deg);
+	}
+	50% {
+		transform: translateY(0px);
+	}
+	75% {
+		transform: translateY(-50px) rotateZ(10deg);
+	}
+}
+
+@keyframes flick-fade {
+	0% {
+		opacity: 0;
+	}
+	25% {
+		opacity: 1;
+	}
+}
+
+@keyframes flick {
+	0% {
+		transform: rotateZ(0deg);
+	}
+	10% {
+		transform: translateY(-12px) rotateZ(50deg);
+	}
+	25% {
+		transform: rotateZ(5deg);
+	}
+}
+
+@keyframes spin {
+	0% {
+		transform: rotateZ(0deg);
+	}
+	10% {
+		transform: translateY(-10deg) rotateZ(-20deg);
+	}
+	50% {
+		transform: rotateZ(45deg);
+	}
+}
+
+@keyframes rock-on {
+	0% {
+		transform: scale(1);
+	}
+	25% {
+		transform: scale(1.1);
+	}
+	50% {
+		transform: scale(1);
+	}
+	75% {
+		transform: scale(1.1);
+	}
+}
+
+@keyframes note {
+	0% {
+		transform: scale(0) rotateZ(0deg);
+		opacity: 0;
+	}
+	20% {
+		transform: scale(1.1) rotateZ(10deg);
+	}
+	40% {
+		transform: scale(0.9) rotateZ(-10deg);
+	}
+	50% {
+		opacity: .75;
+	}
+	60% {
+		transform: scale(1.1) rotateZ(10deg);
+	}
+	80% {
+		transform: scale(0.9) rotateZ(-10deg);
+	}
+}
+
+/* SVG ANIMATION */
+
+.wrapper * {
+	transform-origin: 50% 50%;
+	perspective: 100px;
+}
+
+.hand {
+	transform-origin: 25% 50%;
+}
+
+.hand-tap {
+	animation: tap 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.hand-double {
+	animation: tap-double 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.tap-1,
+.tap-2 {
+	animation: tap-circle 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.hand-hold {
+	animation: hold 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.hold-1, .hold-2 {
+	animation: fade 1.25s ease-in backwards;
+	animation-iteration-count:infinite;
+}
+
+.tap-2 {
+	animation-delay: 0.2s;
+}
+
+.hand-x {
+	animation: swipe-x 1.25s ease-in-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.hand-y {
+	animation: swipe-y 1.25s ease-in-out backwards;
+	animation-iteration-count:infinite;
+}
+ 
+.hand-flick {
+	animation: flick 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.arrows {
+	opacity: 0;
+	animation: flick-fade 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.hand, 
+.swipe-rotate {
+	animation: spin 1.25s ease-in-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.hand-rock {
+	animation: rock-on 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.notes {
+	animation: note 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+/* For Ipad */
+@media only screen and (max-width: 850px) {
+  .instruction {
+    display: none;
+  }
+
+  .mobile-instruction {
+    display: flex;
+  }
+
+  label {
+    color: whitesmoke;
+  }
+
+  /* #progress-bar {
+    width: 30%;
+  } */
+}
+
+/* For Phones */
+@media only screen and (max-width: 480px) {
+  .instruction {
+    display: none;
+  }
+
+  .mobile-instruction {
+    display: flex;
+  }
+
+  label {
+    color: whitesmoke;
+  }
+
+  /* #progress-bar {
+    width: 80%;
+  } */
+
+  .joystick {
+    width: 150px;
+    height: 150px;
+  }
+
+  .thumb {
+    width: 90px !important;
+    height: 90px !important;
+  }
+
+  svg {
+    width: 150px;
+  }
+}
+
 /* Loading Screen End---------- */
 
 /* Menu ----------------------- */
@@ -308,10 +783,24 @@ label {
     margin-left: 50px;
   }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
+/* For Ipad */
+@media only screen and (max-width: 850px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 25px;}
+
+  #menu-button i {
+    font-size: 50px;
+  }
+}
+
+/* For Phones */
+@media only screen and (max-width: 480px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
+
+  #menu-button i {
+    font-size: 30px;
+  }
 }
 /* Menu End-------------------- */
 
@@ -319,7 +808,7 @@ label {
 #play-pause {
   position: fixed;  
   right: 0;
-  margin-right: 30px;
+  margin-right: 5%;
   margin-top: 30px;
   width: 40px;
   height: 40px;
@@ -342,6 +831,24 @@ label {
 .pause {
    background-image: url(./assets/images/circle-pause-regular.svg)!important;
 }
+
+/* For Ipad */
+@media only screen and (max-width: 850px) {
+  #play-pause {
+    width: 60px;
+    height: 60px;
+    background-size: 48px;
+  }
+}
+
+/* For Phones */
+@media only screen and (max-width: 480px) {
+  #play-pause {
+    width: 40px;
+    height: 40px;
+    background-size: 32px;
+  }
+}
 /* Music End------------------- */
 
 /* Three.js Canvas------------- */
@@ -363,6 +870,28 @@ label {
 	bottom: 0;
 	margin-right: 100px;
   margin-bottom: 100px;
+}
+
+/* For Ipad */
+@media only screen and (max-width: 850px) {
+  .structure-info a button{
+    width: 200px;
+    height: 85px;
+    font-size: 16sdpx;
+  }
+}
+
+/* For Phones */
+@media only screen and (max-width: 480px) {
+  .structure-info {
+    margin-bottom: 200px;
+  }
+
+  .structure-info a button{
+    width: 140px;
+    height: 45px;
+    font-size: 11px;
+  }
 }
 /* Strucutre Button End-------- */
 
@@ -413,6 +942,32 @@ label {
 .page-control { 
   position: fixed;
 }
+
+/* For Ipad */
+@media only screen and (max-width: 850px) {
+  .About-Me-Content {
+    width: 75%;
+  }
+
+  .page-control { 
+    position: fixed;
+    margin-right: 5%;
+    right: 0;
+  }
+}
+
+/* For Phones */
+@media only screen and (max-width: 480px) {
+  .About-Me-Content {
+    width: 100%;
+  }
+
+  .page-control { 
+    position: fixed;
+    margin-right: 5%;
+    right: 0;
+  }
+}
 /* AboutMe End----------------- */
 
 /* https://codepen.io/FrankieDoodie/pen/dqmKrb */
@@ -428,23 +983,6 @@ label {
   align-items: center;
 }
 
-@media (max-width: 600px) {
-  .contact ul {
-    transform: scale(0.6);
-  }
-}
-
-@media (min-width: 601px) and (max-width: 700px) {
-  .contact ul {
-    transform: scale(0.7);
-  }
-}
-
-@media (min-width: 701px) and (max-width: 800px) {
-  .contact ul {
-    transform: scale(0.8);
-  }
-}
 
 .contact ul {
   margin: 0;
@@ -570,6 +1108,17 @@ label {
 .contact ul li:hover:nth-child(5) a::after {
   background-color: #374A5A;
 }
+
+/* For Phones */
+@media only screen and (max-width: 480px) {
+  .contact ul {
+    flex-direction: column;
+  }
+
+  .contact ul li {
+    padding: 15px
+  }
+}
 /* COntact End----------------- */
 
 /* Legal----------------------- */
@@ -580,10 +1129,11 @@ label {
   color: white;
   background-color: #2d2d2d;
   line-height: 2rem;
+  overflow-y: auto;
 }
 
 .legal p {
-  padding: 1rem 0 1rem 0;
+  padding: 1rem 0 0 0;
 }
 
 .legal ul {
@@ -596,8 +1146,6 @@ label {
   overflow: hidden;
   position: relative;
   color: #54b3d6;
-  margin: 0 -.25rem;
-  padding: 0 .25rem;
 }
 
 .legal .page-control {
@@ -605,6 +1153,19 @@ label {
   float: right;
 }
 
+/* For Ipad */
+@media only screen and (max-width: 850px) {
+  .legal {
+    padding: 4rem 5rem 5rem 5rem;
+  }
+}
+
+/* For Phones */
+@media only screen and (max-width: 480px) {
+  .legal {
+    padding: 2rem 3rem 3rem 3rem;
+  }
+}
 /* Legal End------------------- */
 
 /* https://codepen.io/Sloth_Sonal/pen/JjYWobO */
@@ -1271,10 +1832,11 @@ path#f3-l9 {
   position: fixed;
   left: 50%;
   transform: translate(-50%, 0);
-  z-index: 15;
+  z-index: 5;
   padding: 30px;
   opacity: 0;
   transition: visibility 0s, opacity 0.5s linear;
+  margin-top: 50px;
 }
 #screen {
   box-sizing: border-box;
@@ -1331,14 +1893,19 @@ path#f3-l9 {
 .on #content {
   animation: screen-turn-on .4s linear .5s 1 forwards;
 }
+
+.screen-control-container {
+  display: flex;
+  align-items: center;
+}
+
 #power {
   bottom: 12px;
   width: 35px;
   height: 15px;
-  position: absolute;
-  right: 45px;
   background-color: #f5f0f0;
   cursor: pointer;
+  margin-left: auto;
 }
 .on #power {
   background-color: #0035ff;
@@ -1382,9 +1949,68 @@ path#f3-l9 {
   font-family: "VT323", monospace;
   font-size: 2vw;
   animation: shiver 1s linear .5s infinite;
+  height: 30%;
 }
 
 .item img {
   height: 50%;
+  width: 100%;
 }
+
+@media only screen and (max-width: 850px) {
+  #projects-wrapper {
+    width: 90% !important;
+  }
+
+  .item p {
+    font-size: 1rem;
+  }
+}
+
+/* For Phones */
+@media only screen and (max-width: 480px) {
+  #projects-wrapper {
+    width: 90% !important;
+  }
+
+  .item p {
+    font-size: 1rem;
+  }
+}
+
 /* Projects End---------- */
+
+/* Mobile Joystick------- */
+#joystick {
+  position: absolute;
+  align-items: center;
+  display: flex;
+  height: 25vh;
+  justify-content: center;
+  margin: auto;
+  width: 25vw;
+  z-index: 999;
+  bottom: 0;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto;
+  margin-bottom: 10%;
+  display: none;
+}
+
+#joystick-wrapper {
+  width: 100px;
+  height: 100px;
+}
+
+.joystick-stick {
+  background-color: rgb(158, 158, 162);
+  opacity: 0.5;
+  border-radius: 100%;
+  cursor: pointer;
+  height: 100%;
+  user-select: none;
+  width: 100%;
+}
+/* Mobile Joystick End--- */
