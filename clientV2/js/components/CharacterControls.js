@@ -726,10 +726,10 @@ export class ThirdPersonCamera {
                 if(newTouchPos > self.touchPos) {
                     //finger moving down
                     if (self._scroll >= 10) {
-                        self._scroll -= Math.abs(self.touchPos - newTouchPos) / 300;
+                        self._scroll -= Math.abs(self.touchPos - newTouchPos) / 150;
 
                         if (self._scroll >= 80) {
-                            self._lookAt -= Math.abs(self.touchPos - newTouchPos) / 100;
+                            self._lookAt -= Math.abs(self.touchPos - newTouchPos) / 50;
                         }
                         else {
                             self._lookAt = 0;
@@ -739,10 +739,10 @@ export class ThirdPersonCamera {
                 else if(newTouchPos < self.touchPos) {
                     // finger moving up
                     if (self._scroll <= 225) {
-                        self._scroll += Math.abs(self.touchPos - newTouchPos) / 300;
+                        self._scroll += Math.abs(self.touchPos - newTouchPos) / 150;
 
                         if (self._scroll >= 80) {
-                            self._lookAt += Math.abs(self.touchPos - newTouchPos) / 100;
+                            self._lookAt += Math.abs(self.touchPos - newTouchPos) / 50;
                         }
                         else {
                             self._lookAt = 0;
