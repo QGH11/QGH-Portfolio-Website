@@ -114,7 +114,8 @@ The website can be view at [here](https://qghportfolio.vercel.app/)
 - [x] Verson 2.0 Published with many changes: 3d character control, character animation, background music, more interesting pages that introduce me,....
 - [x] Add instructions on loading page
 - [x] Add Projects page / 3d parts
-- [ ] Dynamic Web (Mobile Control)
+- [x] Dynamic Web (Mobile Control)
+- [ ] Debug + Further Polish
 
 See the [open issues](https://github.com/QGH11/QGH-Portfolio-Website/issues) for a full list of proposed features (and known issues).
 
