@@ -79,9 +79,8 @@ export class Contact {
         this.elem = createDOM(
             `<div class="contact">
                 <ul>
-                    <li><a href="https://www.linkedin.com/in/antonio-qiao/" target="_blank"><i class="fa-brands fa-github" aria-hidden="true"></i></a></li>
-                    <li><a href="https://github.com/QGH11" target="_blank"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a></li>
-                    <li><a href="mailto:Guanhua.Qiao@outlook.com" target="_blank"><i class="fa-regular fa-envelope" aria-hidden="true"></i></a></li>
+                    <li><a href="https://github.com/QGH11" target="_blank"><i class="fa-brands fa-github" aria-hidden="true"></i></a></li>
+                    <li><a href="https://www.linkedin.com/in/antonio-qiao/" target="_blank"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a></li>
                     <li><a href="https://github.com/QGH11/QGH-Portfolio-Website/issues" target="_blank"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i></a></li>
                     <li><a class="page-control" href="#/"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a></li>
                 </ul>
