@@ -56,13 +56,13 @@ export class KittyDonoutShop {
                     <div class="About-Me-Content">
                         <h1>Hello I'm Antonio</h1>
                         <p>
-                            Currently, I am a 3rd year Computer Engineering student at UBC
+                            Currently, I am studies at UBC Computer Engineering
                         </p>
                         <p>
-                            I love developing games, websites, applications that solve problems, ...
+                            I love developing games, websites, applications... ...
                         </p>
                         <p>
-                            (Looking for Coop positions...)
+                            (Looking for jobs...)
                         </p>
                         <div class="page-control">
                             <a href="#/"><button class="button">Return</button><a/>

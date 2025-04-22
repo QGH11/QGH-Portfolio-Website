@@ -22,8 +22,9 @@
     "three": "^0.120.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.10",
     "@babel/preset-env": "^7.20.2",
-    "babel-loader": "^9.1.2",
+    "babel-loader": "^8.4.1",
     "cannon-es": "^0.20.0",
     "imagemin-cli": "^7.0.0",
     "mini-css-extract-plugin": "^2.7.2",
