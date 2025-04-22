@@ -56,7 +56,7 @@ export class KittyDonoutShop {
                     <div class="About-Me-Content">
                         <h1>Hello I'm Antonio</h1>
                         <p>
-                            Currently, I am studies at UBC Computer Engineering
+                            I am from UBC Computer Engineering, Coop
                         </p>
                         <p>
                             I love developing games, websites, applications... ...
